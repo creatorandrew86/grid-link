@@ -10,7 +10,7 @@ else {
     $node = Get-ChildItem -Path "$runtime\*\bin\node.exe" -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1 -ExpandProperty FullName
 }
 if (-not $node) { throw 'Install Node.js 22.12 or newer first.' }
-if (-not (Test-Path -LiteralPath (Join-Path $root 'frontend\node_modules\vite\bin\vite.js'))) { throw 'Run npm install in frontend first.' }
+if (-not (Test-Path -LiteralPath (Join-Path $root 'node_modules\vite\bin\vite.js'))) { throw 'Run npm install in the repository root first.' }
 New-Item -ItemType Directory -Path (Join-Path $root '.tools') -Force | Out-Null
 foreach ($port in @(8000, 5173)) {
     $listener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
@@ -18,7 +18,7 @@ foreach ($port in @(8000, 5173)) {
     if ($port -eq 8000) {
         $process = Start-Process -FilePath $python -ArgumentList @('-m', 'uvicorn', 'app.main:app', '--app-dir', 'backend', '--host', '127.0.0.1', '--port', '8000') -WorkingDirectory $root -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $root '.tools\backend.log') -RedirectStandardError (Join-Path $root '.tools\backend-error.log')
     } else {
-        $process = Start-Process -FilePath $node -ArgumentList @('node_modules\vite\bin\vite.js', '--host', '127.0.0.1', '--port', '5173', '--strictPort') -WorkingDirectory (Join-Path $root 'frontend') -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $root '.tools\frontend.log') -RedirectStandardError (Join-Path $root '.tools\frontend-error.log')
+        $process = Start-Process -FilePath $node -ArgumentList @('node_modules\vite\bin\vite.js', '--host', '127.0.0.1', '--port', '5173', '--strictPort') -WorkingDirectory $root -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $root '.tools\frontend.log') -RedirectStandardError (Join-Path $root '.tools\frontend-error.log')
     }
     if ($process.WaitForExit(1500)) { throw "Server on port $port exited. See the error log in .tools." }
     Write-Output "Started port $port (PID $($process.Id))."

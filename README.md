@@ -31,9 +31,7 @@ For a fresh checkout, use Python 3.11+ and Node.js 22.12+:
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r backend\requirements.lock.txt
-cd frontend
-npm ci
-cd ..
+npm.cmd ci
 .\dev.cmd
 ```
 
@@ -42,11 +40,13 @@ Or run two terminals manually:
 ```powershell
 # Backend, from the repository root
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000
-# Frontend, from frontend/
-npm run dev
+# Frontend, from the repository root
+npm.cmd run dev
 ```
 
 This machine's MSYS Python cannot load the required native wheels, so the prepared launcher uses an isolated CPython environment in `.tools/venv/`.
+
+Frontend npm commands run from the repository root, where `package.json`, `package-lock.json`, and `vite.config.js` live. In PowerShell, use `npm.cmd` if script execution blocks `npm.ps1`. Vite serves `frontend/index.html` and `frontend/src/`, reads static assets from the root `public/` folder, and writes production output to the root `dist/` folder.
 
 ## Implemented functionality
 
@@ -221,10 +221,11 @@ grid-link/
 │   │   ├── App.jsx         Dashboard, signup, ledger, and settings
 │   │   ├── index.css       Design tokens and responsive styling
 │   │   └── main.jsx        React entry point
-│   ├── public/             Static assets
-│   ├── vite.config.js      Build configuration and API proxy
-│   ├── package.json
-│   └── package-lock.json
+│   └── index.html          HTML entry point
+├── public/                 Static assets
+├── vite.config.js          Build configuration and API proxy
+├── package.json            Frontend dependencies and npm scripts
+├── package-lock.json       Locked frontend dependency versions
 ├── dev.cmd                 Windows launcher entry point
 ├── dev.ps1                 Local process startup and logging
 └── README.md
@@ -315,8 +316,7 @@ The prototype is suitable for demonstrating and tuning the model with sample dat
 ```powershell
 .\.tools\venv\Scripts\python.exe -m unittest discover -s backend -v
 # For a standard environment, use .venv\Scripts\python.exe instead.
-cd frontend
-npm run build
+npm.cmd run build
 ```
 
 The checks exercise accounting and energy conservation across varied communities, transport splits, empty/night markets, uncompetitive prices, API validation, persistence, preview isolation, and duplicate clearing requests.
