@@ -1,117 +1,119 @@
-"""SQLite locally; the same rows can be stored through Supabase's REST API."""
-import json
+"""Supabase REST client for GridLink."""
 import os
-import sqlite3
-from contextlib import contextmanager
 from pathlib import Path
 from uuid import uuid4
 
 import httpx
 
-from .models import MarketSettings, Participant, ParticipantInput
-
-
-DEMO_MEMBERS = [
-    {"name": "Solar workshop", "type": "prosumer", "load_kw": 1.2, "solar_kwp": 9},
-    {"name": "Florin's home", "type": "prosumer", "load_kw": 0.8, "solar_kwp": 5.5},
-    {"name": "Shared rooftop", "type": "prosumer", "load_kw": 1.6, "solar_kwp": 3.6},
-    {"name": "Apartment 04", "type": "consumer", "load_kw": 2.4, "solar_kwp": 0},
-    {"name": "Corner cafe", "type": "consumer", "load_kw": 4.5, "solar_kwp": 0},
-    {"name": "Neighbourhood library", "type": "consumer", "load_kw": 1.8, "solar_kwp": 0},
-]
+from .models import MarketSettings, Participant
 
 
 class Database:
     def __init__(self):
-        self.url = os.getenv("SUPABASE_URL", "").rstrip("/")
-        self.key = os.getenv("SUPABASE_SECRET_KEY") or os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
-        if bool(self.url) != bool(self.key):
-            raise RuntimeError("Set both SUPABASE_URL and the server-side Supabase key, or neither.")
-        self.path = Path(os.getenv("GRIDLINK_DB_PATH", str(Path(__file__).resolve().parents[1] / "data/gridlink.db")))
+        env_file = Path(__file__).resolve().parents[2] / ".env.local"
+        if env_file.exists():
+            for line in env_file.read_text(encoding="utf-8").splitlines():
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    os.environ.setdefault(k.strip(), v.strip())
+
+        self.url = (os.getenv("SUPABASE_URL") or os.getenv("VITE_SUPABASE_URL", "")).rstrip("/")
+        self.key = (
+            os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+            or os.getenv("SUPABASE_SECRET_KEY")
+            or os.getenv("VITE_SUPABASE_PUBLISHABLE_KEY", "")
+        )
+
+        if not self.url or not self.key:
+            raise RuntimeError("Missing Supabase credentials in .env.local.")
+
+        self._community_id = None
 
     @property
     def mode(self):
-        return "supabase" if self.url else "local"
+        return "supabase"
 
-    def remote(self, method, table, payload=None, query=""):
-        headers = {"apikey": self.key, "Prefer": "return=representation"}
-        if self.key.startswith("eyJ"):
-            headers["Authorization"] = f"Bearer {self.key}"
-        response = httpx.request(method, f"{self.url}/rest/v1/{table}{query}",
-                                 headers=headers, json=payload, timeout=10)
-        if response.status_code == 409:
-            raise ValueError("A member with this name already exists.")
-        response.raise_for_status()
-        return response.json()
+    @property
+    def community_id(self):
+        if self._community_id is None:
+            try:
+                communities = self.remote("GET", "communities", query="?slug=eq.gridlink-community&limit=1")
+                if not communities:
+                    communities = self.remote("GET", "communities", query="?limit=1")
+                if communities:
+                    self._community_id = communities[0]["id"]
+                else:
+                    new_com = self.remote("POST", "communities", {"slug": "default", "name": "GridLink Community"})
+                    self._community_id = new_com[0]["id"]
+            except Exception:
+                self._community_id = None
+        return self._community_id
 
-    @contextmanager
-    def connect(self):
-        connection = sqlite3.connect(self.path, timeout=10)
-        connection.row_factory = sqlite3.Row
-        try:
-            with connection:
-                yield connection
-        finally:
-            connection.close()
+    def remote(self, method: str, table: str, payload=None, query=""):
+        headers = {
+            "apikey": self.key,
+            "Authorization": f"Bearer {self.key}",
+            "Prefer": "return=representation",
+            "Content-Type": "application/json",
+        }
+        res = httpx.request(
+            method,
+            f"{self.url}/rest/v1/{table}{query}",
+            headers=headers,
+            json=payload,
+            timeout=10,
+        )
+        if res.status_code == 409:
+            raise ValueError("A record with this identifier already exists.")
+        res.raise_for_status()
+        return res.json()
 
     def initialize(self):
-        if self.url:
-            self.settings()  # Fail visibly if the migration has not been applied.
-            return
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        with self.connect() as db:
-            db.executescript("""
-                CREATE TABLE IF NOT EXISTS participants (
-                    id TEXT PRIMARY KEY, name TEXT NOT NULL COLLATE NOCASE UNIQUE,
-                    type TEXT NOT NULL, load_kw REAL NOT NULL, solar_kwp REAL NOT NULL);
-                CREATE TABLE IF NOT EXISTS market_settings (id INTEGER PRIMARY KEY CHECK(id=1), value TEXT NOT NULL);
-                CREATE TABLE IF NOT EXISTS clearing_events (interval_start TEXT PRIMARY KEY, summary TEXT NOT NULL);
-            """)
-            fresh = db.execute("SELECT COUNT(*) FROM market_settings").fetchone()[0] == 0
-            db.execute("INSERT OR IGNORE INTO market_settings VALUES (1, ?)", (MarketSettings().model_dump_json(),))
-            if fresh and os.getenv("GRIDLINK_SEED_DEMO", "1") == "1":
-                db.executemany("INSERT INTO participants VALUES (?, ?, ?, ?, ?)",
-                               [(str(uuid4()), m["name"], m["type"], m["load_kw"], m["solar_kwp"]) for m in DEMO_MEMBERS])
+        self.settings()
 
     def participants(self):
-        if self.url:
-            rows = self.remote("GET", "participants", query="?select=*&order=name")
-        else:
-            with self.connect() as db:
-                rows = [dict(row) for row in db.execute("SELECT * FROM participants ORDER BY name COLLATE NOCASE")]
+        cid = self.community_id
+        query = f"?community_id=eq.{cid}&select=*&order=name" if cid else "?select=*&order=name"
+        rows = self.remote("GET", "participants", query=query)
         return [Participant.model_validate(row) for row in rows]
 
-    def signup(self, member: ParticipantInput):
-        row = {"id": str(uuid4()), **member.model_dump()}
-        if self.url:
-            return Participant.model_validate(self.remote("POST", "participants", row)[0])
-        try:
-            with self.connect() as db:
-                db.execute("INSERT INTO participants VALUES (?, ?, ?, ?, ?)", tuple(row.values()))
-        except sqlite3.IntegrityError as error:
-            raise ValueError("A member with this name already exists.") from error
-        return Participant(**row)
+    def insert_participant(self, row: dict) -> Participant:
+        if "id" not in row:
+            row["id"] = str(uuid4())
+        if self.community_id:
+            row["community_id"] = self.community_id
+        return Participant.model_validate(self.remote("POST", "participants", row)[0])
+
+    def get_participant_by_email(self, email: str) -> dict | None:
+        rows = self.remote("GET", "participants", query=f"?email=eq.{email.strip().lower()}&limit=1")
+        return rows[0] if rows else None
 
     def settings(self):
-        if self.url:
-            return MarketSettings.model_validate(self.remote("GET", "market_settings", query="?id=eq.1&select=value")[0]["value"])
-        with self.connect() as db:
-            return MarketSettings.model_validate_json(db.execute("SELECT value FROM market_settings WHERE id=1").fetchone()[0])
+        cid = self.community_id
+        query = f"?community_id=eq.{cid}&select=value&limit=1" if cid else "?select=value&limit=1"
+        rows = self.remote("GET", "market_settings", query=query)
+        if not rows:
+            default = MarketSettings()
+            payload = {"community_id": cid, "value": default.model_dump()} if cid else {"id": 1, "value": default.model_dump()}
+            self.remote("POST", "market_settings", payload)
+            return default
+        return MarketSettings.model_validate(rows[0]["value"])
 
     def save_settings(self, settings: MarketSettings):
-        if self.url:
-            self.remote("PATCH", "market_settings", {"value": settings.model_dump()}, "?id=eq.1")
-        else:
-            with self.connect() as db:
-                db.execute("UPDATE market_settings SET value=? WHERE id=1", (settings.model_dump_json(),))
+        cid = self.community_id
+        query = f"?community_id=eq.{cid}" if cid else "?id=eq.1"
+        self.remote("PATCH", "market_settings", {"value": settings.model_dump()}, query=query)
 
     def save_clearing(self, interval_start, summary):
-        if self.url:
-            # Ignore a duplicate scheduler retry; the first snapshot for a slot is immutable.
-            try:
-                return self.remote("POST", "clearing_events", {"interval_start": interval_start, "summary": summary})[0]["summary"]
-            except ValueError:
-                return self.remote("GET", "clearing_events", query=f"?interval_start=eq.{interval_start}&select=summary")[0]["summary"]
-        with self.connect() as db:
-            db.execute("INSERT OR IGNORE INTO clearing_events VALUES (?, ?)", (interval_start, json.dumps(summary)))
-            return json.loads(db.execute("SELECT summary FROM clearing_events WHERE interval_start=?", (interval_start,)).fetchone()[0])
+        cid = self.community_id
+        payload = {"interval_start": interval_start, "summary": summary}
+        if cid:
+            payload["community_id"] = cid
+            query = f"?community_id=eq.{cid}&interval_start=eq.{interval_start}&select=summary"
+        else:
+            query = f"?interval_start=eq.{interval_start}&select=summary"
+        try:
+            return self.remote("POST", "clearing_events", payload)[0]["summary"]
+        except Exception:
+            return self.remote("GET", "clearing_events", query=query)[0]["summary"]

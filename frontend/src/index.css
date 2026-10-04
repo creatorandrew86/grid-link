@@ -116,6 +116,18 @@ th:last-child, td:last-child { padding-right: 0; }
 .role-label { font-size: 11px; }
 .you-tag { font-size: 9px; color: #555; }
 .selected-row { background: #e1e1e1; }
+.dark .flow-main, .dark .bill-panel { border-color: var(--line); background: #0d0d0d; }
+.dark .flow-connector span { color: var(--muted); }
+.dark .flow-connector svg { border-bottom-color: var(--line); stroke: var(--muted); }
+.dark .flow-footer { border-top-color: var(--carbon); }
+.dark .bill-bar { background: var(--carbon); }
+.dark .bill-bar.local span { background: var(--yellow); }
+.dark .bill-panel .form-note { color: var(--muted); }
+.dark table th, .dark table td { border-bottom-color: var(--carbon); color: var(--white); }
+.dark thead th { color: var(--muted); }
+.dark .member-button { color: var(--white); }
+.dark .selected-row { background: #1a1a1a; }
+.dark .member-avatar { border-color: var(--line); color: var(--white); }
 .personal-bill { border: 1px solid #000; border-radius: 9px; display: flex; gap: 30px; justify-content: space-between; align-items: center; padding: 20px; margin-bottom: 24px; }
 .personal-bill h3 { margin-top: 8px; }
 .personal-bill p { font-size: 11px; }

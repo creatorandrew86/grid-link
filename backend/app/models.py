@@ -9,6 +9,8 @@ class ParticipantInput(BaseModel):
     type: Literal["consumer", "prosumer"]
     load_kw: float = Field(ge=0, le=1000)
     solar_kwp: float = Field(default=0, ge=0, le=1000)
+    email: str | None = None
+    pod: str | None = None
 
     @model_validator(mode="after")
     def check_solar(self):
@@ -20,7 +22,9 @@ class ParticipantInput(BaseModel):
 
 
 class Participant(ParticipantInput):
+    model_config = ConfigDict(extra="ignore")
     id: str
+    community_id: str | None = None
 
 
 class MarketSettings(BaseModel):
