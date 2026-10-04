@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.venv/
+.tools/
+__pycache__/
+*.pyc
+backend/data/
+.env
+*.log
+qa/
