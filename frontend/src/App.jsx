@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import BatteryPlanner from './BatteryPlanner.jsx';
 
 const money = (value, digits = 3) => new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR', minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value);
 const amount = (value) => Number(value).toLocaleString('en-IE', { maximumFractionDigits: 3 });
@@ -133,7 +134,7 @@ export default function App() {
   return <>
     <header className="site-header">
       <a className="brand" href="#overview" aria-label="GridLink home"><span className="brand-mark">GL</span><span>gridlink<span className="brand-period">.</span></span></a>
-      <nav aria-label="Main navigation"><a href="#overview">Overview</a><a href="#community">Community</a><a href="#pricing">Market settings</a></nav>
+      <nav aria-label="Main navigation"><a href="#overview">Overview</a><a href="#community">Community</a><a href="#pricing">Market settings</a><a href="#battery">Battery simulator</a></nav>
       <button className="button primary" onClick={() => setShowSignup(true)} disabled={!summary || busy}>Join community<Arrow diagonal /></button>
     </header>
     <main id="overview">
@@ -181,6 +182,7 @@ export default function App() {
           </fieldset></form></div>
         </section>
       </>}
+      <BatteryPlanner api={api} />
     </main>
     <footer><a className="brand" href="#overview">gridlink.</a><p>Community energy, one interval at a time.</p><span>Prototype 0.1 · {summary?.storage === 'supabase' ? 'Supabase storage' : 'Local storage'}</span></footer>
     {showSignup && <Signup onClose={() => setShowSignup(false)} onJoined={joined} />}

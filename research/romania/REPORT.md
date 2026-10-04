@@ -2,6 +2,8 @@
 
 Research date: 4 October 2026. Location: Bucharest. Requested contract: a price linked to the Romanian day-ahead market.
 
+Implementation update: the application now includes a battery replay and an experimental local/regional-weather price comparison. See [the implementation and export-opportunity analysis](BATTERY_OPTIMISER.md) for its assumptions, results and forecast limitations.
+
 The evidence supports a battery that charges when the full delivered price is low and discharges into expensive, unavoidable demand. An overnight-only rule would miss much of the opportunity in Romania. In the sampled spring, summer and September periods, midday prices were much lower than overnight prices. Winter behaved differently.
 
 For GridLink, the most useful next step is a replay tool that combines real interval prices with measured member imports, exports and solar production. Start with a simple day-ahead schedule, then add weather forecasts and frequent updates. The analysis below provides market evidence and a reproducible price benchmark. It does not establish the financial return of a particular battery or measure savings for the demo community.
@@ -258,6 +260,8 @@ Each row is an hour starting in Bucharest time. Values are sample averages in le
 | 23:00 | 0.624 | 0.680 | 0.937 | 1.199 |
 
 ## Reproducing the calculations
+
+For the subsequent replay using public measured household consumption, including bill reductions, profitable-day rates and conditional battery ROI, see [CONSUMER_BACKTEST.md](CONSUMER_BACKTEST.md). The original benchmark below uses assumed demand; the measured-consumption analysis is a separate experiment.
 
 Files in this folder:
 
