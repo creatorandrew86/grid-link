@@ -300,6 +300,8 @@ Other possible extensions include measured consumption and production, multiple 
 
 ## Current limitations
 
+For a researched comparison of Romanian dynamic prices, weather, battery dispatch and EV charging, see [the Romanian market analysis](research/romania/REPORT.md). It includes 120 historical days, hourly price/weather data and a reproducible battery benchmark. These research files do not change the current application's pricing or add battery control.
+
 - Demand and generation are estimates. There are no smart-meter feeds, weather forecasts, or time-varying participant profiles.
 - Registration adds a member to a shared demo. There are no authenticated user accounts, private member views, or administrator permissions.
 - Saved market settings affect the entire community. The current UI has no role-based restriction on changing them.
