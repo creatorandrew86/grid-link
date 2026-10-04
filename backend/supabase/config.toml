@@ -1,0 +1,7 @@
+project_id = "gridlink"
+
+[functions.clearing]
+verify_jwt = false
+
+[functions.participant-sync]
+verify_jwt = false

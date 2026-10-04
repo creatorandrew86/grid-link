@@ -1,2 +1,17 @@
-password.txt
+# Dependencies & Build
+node_modules/
+dist/
+.venv/
+.tools/
+__pycache__/
+*.pyc
+
+# Data & Logs
+backend/data/
+*.log
+qa/
+
+# Secrets & Env
+.env
 .env.local
+password.txt
