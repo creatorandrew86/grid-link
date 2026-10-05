@@ -1,0 +1,2365 @@
+{
+  "method": "28 earlier available data days, excluding the preceding day; ridge regression. Target-day weather is ERA5 reanalysis, not an issued forecast. Demand/PV and export contract are assumptions. Separate local and coastal features; no national generation model.",
+  "default_config": {
+    "day": "2026-07-30",
+    "daily_load_kwh": 50.0,
+    "load_profile": "evening",
+    "solar_kwp": 20.0,
+    "pv_performance_ratio": 0.8,
+    "capacity_kwh": 20.0,
+    "charge_kw": 5.0,
+    "discharge_kw": 5.0,
+    "round_trip_efficiency": 0.9,
+    "reserve_fraction": 0.1,
+    "initial_soc_fraction": 0.1,
+    "max_soc_fraction": 0.9,
+    "wear_ron_per_kwh": 0.15,
+    "import_fee_ron_per_kwh": 0.5879032,
+    "vat_fraction": 0.21,
+    "export_price_factor": 1.0,
+    "export_fee_ron_per_kwh": 0.05,
+    "grid_import_kw": 100.0,
+    "grid_export_kw": 100.0,
+    "allow_battery_export": false
+  },
+  "summary": [
+    {
+      "month": "2026-01",
+      "battery_exports": false,
+      "evaluated_days": 23,
+      "calendar_mae_ron_kwh": 0.2668381147855842,
+      "local_mae_ron_kwh": 0.27831190894906077,
+      "weather_mae_ron_kwh": 0.27491345128170164,
+      "weather_advantage_ron": -0.060281720812291904,
+      "regional_advantage_ron": 0.0038283420739273683,
+      "optimised_savings_ron": 12.845857275856659,
+      "days_regional_weather_helped": 6
+    },
+    {
+      "month": "2026-01",
+      "battery_exports": true,
+      "evaluated_days": 23,
+      "calendar_mae_ron_kwh": 0.2668381147855842,
+      "local_mae_ron_kwh": 0.27831190894906077,
+      "weather_mae_ron_kwh": 0.27491345128170164,
+      "weather_advantage_ron": -0.06028172081229082,
+      "regional_advantage_ron": 0.003828342073927677,
+      "optimised_savings_ron": 12.846073653794143,
+      "days_regional_weather_helped": 6
+    },
+    {
+      "month": "2026-04",
+      "battery_exports": false,
+      "evaluated_days": 30,
+      "calendar_mae_ron_kwh": 0.373102242722565,
+      "local_mae_ron_kwh": 0.3447103652032037,
+      "weather_mae_ron_kwh": 0.33087062324462413,
+      "weather_advantage_ron": 0.10460803076575591,
+      "regional_advantage_ron": 0.3359303539687094,
+      "optimised_savings_ron": 21.458456793628326,
+      "days_regional_weather_helped": 14
+    },
+    {
+      "month": "2026-04",
+      "battery_exports": true,
+      "evaluated_days": 30,
+      "calendar_mae_ron_kwh": 0.373102242722565,
+      "local_mae_ron_kwh": 0.3447103652032037,
+      "weather_mae_ron_kwh": 0.33087062324462413,
+      "weather_advantage_ron": 0.0715596387441191,
+      "regional_advantage_ron": 0.31653158233803974,
+      "optimised_savings_ron": 21.458456793628322,
+      "days_regional_weather_helped": 15
+    },
+    {
+      "month": "2026-07",
+      "battery_exports": false,
+      "evaluated_days": 31,
+      "calendar_mae_ron_kwh": 0.3275135330448472,
+      "local_mae_ron_kwh": 0.3366667205138083,
+      "weather_mae_ron_kwh": 0.3321394960248132,
+      "weather_advantage_ron": -0.24985806974378105,
+      "regional_advantage_ron": 0.11632008236659021,
+      "optimised_savings_ron": 24.811650013633948,
+      "days_regional_weather_helped": 6
+    },
+    {
+      "month": "2026-07",
+      "battery_exports": true,
+      "evaluated_days": 31,
+      "calendar_mae_ron_kwh": 0.3275135330448472,
+      "local_mae_ron_kwh": 0.3366667205138083,
+      "weather_mae_ron_kwh": 0.3321394960248132,
+      "weather_advantage_ron": -0.38019890545879637,
+      "regional_advantage_ron": 0.4447503885643625,
+      "optimised_savings_ron": 24.811683861385045,
+      "days_regional_weather_helped": 6
+    },
+    {
+      "month": "2026-09",
+      "battery_exports": false,
+      "evaluated_days": 28,
+      "calendar_mae_ron_kwh": 0.21988646033497428,
+      "local_mae_ron_kwh": 0.20614038536877627,
+      "weather_mae_ron_kwh": 0.20022678048872128,
+      "weather_advantage_ron": 1.5318641916905757,
+      "regional_advantage_ron": 0.8948804901400156,
+      "optimised_savings_ron": 29.720754650704926,
+      "days_regional_weather_helped": 7
+    },
+    {
+      "month": "2026-09",
+      "battery_exports": true,
+      "evaluated_days": 28,
+      "calendar_mae_ron_kwh": 0.21988646033497428,
+      "local_mae_ron_kwh": 0.20614038536877627,
+      "weather_mae_ron_kwh": 0.20022678048872128,
+      "weather_advantage_ron": 1.5318641916905769,
+      "regional_advantage_ron": 0.8948804901400154,
+      "optimised_savings_ron": 29.73823198644022,
+      "days_regional_weather_helped": 7
+    }
+  ],
+  "days": [
+    {
+      "day": "2026-01-09",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.19425965357414018,
+      "local_mae_ron_kwh": 0.12413026767190415,
+      "weather_mae_ron_kwh": 0.1187558693881839,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 15.432066730156606
+    },
+    {
+      "day": "2026-01-09",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.19425965357414018,
+      "local_mae_ron_kwh": 0.12413026767190415,
+      "weather_mae_ron_kwh": 0.1187558693881839,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 15.432066730156606
+    },
+    {
+      "day": "2026-01-10",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.31767666330918093,
+      "local_mae_ron_kwh": 0.28341431128191424,
+      "weather_mae_ron_kwh": 0.2595354197402977,
+      "weather_advantage_ron": -0.03613598065182799,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 7.680450267095999
+    },
+    {
+      "day": "2026-01-10",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.31767666330918093,
+      "local_mae_ron_kwh": 0.28341431128191424,
+      "weather_mae_ron_kwh": 0.2595354197402977,
+      "weather_advantage_ron": -0.03613598065182089,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 7.680450267095999
+    },
+    {
+      "day": "2026-01-11",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.3145076929702189,
+      "local_mae_ron_kwh": 0.3341233109892661,
+      "weather_mae_ron_kwh": 0.31964053090505495,
+      "weather_advantage_ron": 0.07578381704133363,
+      "regional_advantage_ron": 0.17000840913320303,
+      "optimised_savings_ron": 5.859607567255999
+    },
+    {
+      "day": "2026-01-11",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.3145076929702189,
+      "local_mae_ron_kwh": 0.3341233109892661,
+      "weather_mae_ron_kwh": 0.31964053090505495,
+      "weather_advantage_ron": 0.07578381704133363,
+      "regional_advantage_ron": 0.17000840913320303,
+      "optimised_savings_ron": 5.859607567255999
+    },
+    {
+      "day": "2026-01-12",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.3307187423272868,
+      "local_mae_ron_kwh": 0.3677782307002493,
+      "weather_mae_ron_kwh": 0.37633446284971156,
+      "weather_advantage_ron": -0.19458327303843603,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 19.41436985340684
+    },
+    {
+      "day": "2026-01-12",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.3307187423272868,
+      "local_mae_ron_kwh": 0.3677782307002493,
+      "weather_mae_ron_kwh": 0.37633446284971156,
+      "weather_advantage_ron": -0.19458327303843959,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 19.41436985340684
+    },
+    {
+      "day": "2026-01-13",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.5479409141059531,
+      "local_mae_ron_kwh": 0.5710248393517651,
+      "weather_mae_ron_kwh": 0.5939481997547481,
+      "weather_advantage_ron": -0.11688211415287952,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 20.86175659289514
+    },
+    {
+      "day": "2026-01-13",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.5479409141059531,
+      "local_mae_ron_kwh": 0.5710248393517651,
+      "weather_mae_ron_kwh": 0.5939481997547481,
+      "weather_advantage_ron": -0.11688211415288663,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 20.86673328545723
+    },
+    {
+      "day": "2026-01-14",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.16360816196564823,
+      "local_mae_ron_kwh": 0.17198500961963056,
+      "weather_mae_ron_kwh": 0.1702835389726115,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.49822719647058733,
+      "optimised_savings_ron": 19.41562583784291
+    },
+    {
+      "day": "2026-01-14",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.16360816196564823,
+      "local_mae_ron_kwh": 0.17198500961963056,
+      "weather_mae_ron_kwh": 0.1702835389726115,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.49822719647058733,
+      "optimised_savings_ron": 19.41562583784291
+    },
+    {
+      "day": "2026-01-15",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.2976647274912589,
+      "local_mae_ron_kwh": 0.3563002489714056,
+      "weather_mae_ron_kwh": 0.3561482885692044,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 20.563537863294705
+    },
+    {
+      "day": "2026-01-15",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.2976647274912589,
+      "local_mae_ron_kwh": 0.3563002489714056,
+      "weather_mae_ron_kwh": 0.3561482885692044,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 20.563537863294705
+    },
+    {
+      "day": "2026-01-16",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.4128239569480832,
+      "local_mae_ron_kwh": 0.43586656948219354,
+      "weather_mae_ron_kwh": 0.4350802256221948,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 5.168043609445334
+    },
+    {
+      "day": "2026-01-16",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.4128239569480832,
+      "local_mae_ron_kwh": 0.43586656948219354,
+      "weather_mae_ron_kwh": 0.4350802256221948,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 5.168043609445334
+    },
+    {
+      "day": "2026-01-17",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.3613524080336303,
+      "local_mae_ron_kwh": 0.36697083886932297,
+      "weather_mae_ron_kwh": 0.3670613422515006,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 12.489408068239232
+    },
+    {
+      "day": "2026-01-17",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.3613524080336303,
+      "local_mae_ron_kwh": 0.36697083886932297,
+      "weather_mae_ron_kwh": 0.3670613422515006,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 12.489408068239236
+    },
+    {
+      "day": "2026-01-18",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.24188262315982703,
+      "local_mae_ron_kwh": 0.2664614268786379,
+      "weather_mae_ron_kwh": 0.264076428460345,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 12.762325921195192
+    },
+    {
+      "day": "2026-01-18",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.24188262315982703,
+      "local_mae_ron_kwh": 0.2664614268786379,
+      "weather_mae_ron_kwh": 0.264076428460345,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 12.762325921195192
+    },
+    {
+      "day": "2026-01-19",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.23426407461223644,
+      "local_mae_ron_kwh": 0.22839997854064284,
+      "weather_mae_ron_kwh": 0.2162956823801128,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 21.013618964411066
+    },
+    {
+      "day": "2026-01-19",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.23426407461223644,
+      "local_mae_ron_kwh": 0.22839997854064284,
+      "weather_mae_ron_kwh": 0.2162956823801128,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 21.013618964411066
+    },
+    {
+      "day": "2026-01-20",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.2450151635942224,
+      "local_mae_ron_kwh": 0.2379437190345767,
+      "weather_mae_ron_kwh": 0.23762344482882578,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 30.34626605851438
+    },
+    {
+      "day": "2026-01-20",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.2450151635942224,
+      "local_mae_ron_kwh": 0.2379437190345767,
+      "weather_mae_ron_kwh": 0.23762344482882578,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 30.34626605851438
+    },
+    {
+      "day": "2026-01-21",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.07399444395286123,
+      "local_mae_ron_kwh": 0.06757953344340742,
+      "weather_mae_ron_kwh": 0.08071828020031609,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 17.124830747248346
+    },
+    {
+      "day": "2026-01-21",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.07399444395286123,
+      "local_mae_ron_kwh": 0.06757953344340742,
+      "weather_mae_ron_kwh": 0.08071828020031609,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 17.124830747248346
+    },
+    {
+      "day": "2026-01-22",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.5514651635185309,
+      "local_mae_ron_kwh": 0.5740991815700719,
+      "weather_mae_ron_kwh": 0.5831975311881054,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 25.007787550866297
+    },
+    {
+      "day": "2026-01-22",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.5514651635185309,
+      "local_mae_ron_kwh": 0.5740991815700719,
+      "weather_mae_ron_kwh": 0.5831975311881054,
+      "weather_advantage_ron": 1.4210854715202004e-14,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 25.007787550866297
+    },
+    {
+      "day": "2026-01-23",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.3061415153852862,
+      "local_mae_ron_kwh": 0.33969005170366423,
+      "weather_mae_ron_kwh": 0.34597337397568767,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 9.195016153488154
+    },
+    {
+      "day": "2026-01-23",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.3061415153852862,
+      "local_mae_ron_kwh": 0.33969005170366423,
+      "weather_mae_ron_kwh": 0.34597337397568767,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 9.195016153488154
+    },
+    {
+      "day": "2026-01-24",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.14193485009158982,
+      "local_mae_ron_kwh": 0.17225641503691538,
+      "weather_mae_ron_kwh": 0.16971684847308519,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 2.0854441138132174
+    },
+    {
+      "day": "2026-01-24",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.14193485009158982,
+      "local_mae_ron_kwh": 0.17225641503691538,
+      "weather_mae_ron_kwh": 0.16971684847308519,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 2.0854441138132174
+    },
+    {
+      "day": "2026-01-25",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.2414040505738976,
+      "local_mae_ron_kwh": 0.2686698844145429,
+      "weather_mae_ron_kwh": 0.2899525918243903,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0026908072064486532,
+      "optimised_savings_ron": 8.343237729226146
+    },
+    {
+      "day": "2026-01-25",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.2414040505738976,
+      "local_mae_ron_kwh": 0.2686698844145429,
+      "weather_mae_ron_kwh": 0.2899525918243903,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0026908072064486532,
+      "optimised_savings_ron": 8.343237729226153
+    },
+    {
+      "day": "2026-01-26",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.32765180435572233,
+      "local_mae_ron_kwh": 0.38954601490665336,
+      "weather_mae_ron_kwh": 0.35999214128300694,
+      "weather_advantage_ron": -0.035186994027725405,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 3.1818870924691254
+    },
+    {
+      "day": "2026-01-26",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.32765180435572233,
+      "local_mae_ron_kwh": 0.38954601490665336,
+      "weather_mae_ron_kwh": 0.35999214128300694,
+      "weather_advantage_ron": -0.035186994027725405,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 3.1818870924691254
+    },
+    {
+      "day": "2026-01-27",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1503923238050116,
+      "local_mae_ron_kwh": 0.186153947929505,
+      "weather_mae_ron_kwh": 0.1821936579684054,
+      "weather_advantage_ron": -0.1602968636753701,
+      "regional_advantage_ron": 0.09450830896561513,
+      "optimised_savings_ron": 10.077810179820105
+    },
+    {
+      "day": "2026-01-27",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1503923238050116,
+      "local_mae_ron_kwh": 0.186153947929505,
+      "weather_mae_ron_kwh": 0.1821936579684054,
+      "weather_advantage_ron": -0.1602968636753701,
+      "regional_advantage_ron": 0.09450830896561513,
+      "optimised_savings_ron": 10.077810179820105
+    },
+    {
+      "day": "2026-01-28",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.16805064935894543,
+      "local_mae_ron_kwh": 0.16156539382696847,
+      "weather_mae_ron_kwh": 0.15413626217659848,
+      "weather_advantage_ron": -0.32398624074822635,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 12.32448639518308
+    },
+    {
+      "day": "2026-01-28",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.16805064935894543,
+      "local_mae_ron_kwh": 0.16156539382696847,
+      "weather_mae_ron_kwh": 0.15413626217659848,
+      "weather_advantage_ron": -0.32398624074821925,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 12.32448639518308
+    },
+    {
+      "day": "2026-01-29",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.18930377495700682,
+      "local_mae_ron_kwh": 0.1666896082020836,
+      "weather_mae_ron_kwh": 0.15987218952068502,
+      "weather_advantage_ron": 0.047861645705673084,
+      "regional_advantage_ron": 0.047861645705673084,
+      "optimised_savings_ron": 9.918003735556766
+    },
+    {
+      "day": "2026-01-29",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.18930377495700682,
+      "local_mae_ron_kwh": 0.1666896082020836,
+      "weather_mae_ron_kwh": 0.15987218952068502,
+      "weather_advantage_ron": 0.047861645705673084,
+      "regional_advantage_ron": 0.047861645705673084,
+      "optimised_savings_ron": 9.91800373555677
+    },
+    {
+      "day": "2026-01-30",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.21067440630269954,
+      "local_mae_ron_kwh": 0.20811810994135213,
+      "weather_mae_ron_kwh": 0.13558333559542615,
+      "weather_advantage_ron": 0.04012096484704131,
+      "regional_advantage_ron": 0.04012096484704131,
+      "optimised_savings_ron": 3.5066588899335756
+    },
+    {
+      "day": "2026-01-30",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.21067440630269954,
+      "local_mae_ron_kwh": 0.20811810994135213,
+      "weather_mae_ron_kwh": 0.13558333559542615,
+      "weather_advantage_ron": 0.04012096484704131,
+      "regional_advantage_ron": 0.04012096484704131,
+      "optimised_savings_ron": 3.5066588899335827
+    },
+    {
+      "day": "2026-01-31",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.11454887567519974,
+      "local_mae_ron_kwh": 0.12240701346172457,
+      "weather_mae_ron_kwh": 0.1468897335506398,
+      "weather_advantage_ron": -0.6831745399822964,
+      "regional_advantage_ron": -0.7653654646282391,
+      "optimised_savings_ron": 3.682477423344949
+    },
+    {
+      "day": "2026-01-31",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.11454887567519974,
+      "local_mae_ron_kwh": 0.12240701346172457,
+      "weather_mae_ron_kwh": 0.1468897335506398,
+      "weather_advantage_ron": -0.6831745399822893,
+      "regional_advantage_ron": -0.765365464628232,
+      "optimised_savings_ron": 3.682477423344949
+    },
+    {
+      "day": "2026-04-01",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 2.8000201041666664,
+      "local_mae_ron_kwh": 2.8000201041666664,
+      "weather_mae_ron_kwh": 2.7819726077225777,
+      "weather_advantage_ron": -0.22744431772616736,
+      "regional_advantage_ron": -0.22744431772616736,
+      "optimised_savings_ron": 17.057731710447506
+    },
+    {
+      "day": "2026-04-01",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 2.8000201041666664,
+      "local_mae_ron_kwh": 2.8000201041666664,
+      "weather_mae_ron_kwh": 2.7819726077225777,
+      "weather_advantage_ron": 0.6411800918625801,
+      "regional_advantage_ron": 0.6411800918625801,
+      "optimised_savings_ron": 17.057731710447506
+    },
+    {
+      "day": "2026-04-02",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 2.697101875,
+      "local_mae_ron_kwh": 2.697101875,
+      "weather_mae_ron_kwh": 2.695904094071468,
+      "weather_advantage_ron": -0.488189411814858,
+      "regional_advantage_ron": -0.488189411814858,
+      "optimised_savings_ron": 1.5583800972165989
+    },
+    {
+      "day": "2026-04-02",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 2.697101875,
+      "local_mae_ron_kwh": 2.697101875,
+      "weather_mae_ron_kwh": 2.695904094071468,
+      "weather_advantage_ron": -1.953223519608386,
+      "regional_advantage_ron": -1.953223519608386,
+      "optimised_savings_ron": 1.5583800972165989
+    },
+    {
+      "day": "2026-04-03",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.20415366708813598,
+      "local_mae_ron_kwh": 0.18962017537283263,
+      "weather_mae_ron_kwh": 0.19502308089881074,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 16.043751827010034
+    },
+    {
+      "day": "2026-04-03",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.20415366708813598,
+      "local_mae_ron_kwh": 0.18962017537283263,
+      "weather_mae_ron_kwh": 0.19502308089881074,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 16.043751827010027
+    },
+    {
+      "day": "2026-04-04",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.3445561527234384,
+      "local_mae_ron_kwh": 0.28112803533526837,
+      "weather_mae_ron_kwh": 0.24344351380553111,
+      "weather_advantage_ron": 0.19304056116949653,
+      "regional_advantage_ron": 0.021193131019607847,
+      "optimised_savings_ron": 21.93378938131481
+    },
+    {
+      "day": "2026-04-04",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.3445561527234384,
+      "local_mae_ron_kwh": 0.28112803533526837,
+      "weather_mae_ron_kwh": 0.24344351380553111,
+      "weather_advantage_ron": 0.19304056116949653,
+      "regional_advantage_ron": 0.021193131019607847,
+      "optimised_savings_ron": 21.933789381314803
+    },
+    {
+      "day": "2026-04-05",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.3581287283214512,
+      "local_mae_ron_kwh": 0.2524726285998468,
+      "weather_mae_ron_kwh": 0.23267469909262548,
+      "weather_advantage_ron": 2.5476193801113745,
+      "regional_advantage_ron": 2.5476193801113745,
+      "optimised_savings_ron": 19.613965928831373
+    },
+    {
+      "day": "2026-04-05",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.3581287283214512,
+      "local_mae_ron_kwh": 0.2524726285998468,
+      "weather_mae_ron_kwh": 0.23267469909262548,
+      "weather_advantage_ron": 2.5476193801113745,
+      "regional_advantage_ron": 2.5476193801113745,
+      "optimised_savings_ron": 19.61396592883137
+    },
+    {
+      "day": "2026-04-06",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.4169309616057008,
+      "local_mae_ron_kwh": 0.27757835062152597,
+      "weather_mae_ron_kwh": 0.2383268303111449,
+      "weather_advantage_ron": -0.5370450015424062,
+      "regional_advantage_ron": -0.5370450015424062,
+      "optimised_savings_ron": 22.12864551985181
+    },
+    {
+      "day": "2026-04-06",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.4169309616057008,
+      "local_mae_ron_kwh": 0.27757835062152597,
+      "weather_mae_ron_kwh": 0.2383268303111449,
+      "weather_advantage_ron": -0.5370450015424062,
+      "regional_advantage_ron": -0.5370450015424062,
+      "optimised_savings_ron": 22.128645519851805
+    },
+    {
+      "day": "2026-04-07",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.321767953498798,
+      "local_mae_ron_kwh": 0.18952157605290285,
+      "weather_mae_ron_kwh": 0.17889566775071442,
+      "weather_advantage_ron": 0.12613637479185869,
+      "regional_advantage_ron": 0.1006195226837221,
+      "optimised_savings_ron": 24.16848850144163
+    },
+    {
+      "day": "2026-04-07",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.321767953498798,
+      "local_mae_ron_kwh": 0.18952157605290285,
+      "weather_mae_ron_kwh": 0.17889566775071442,
+      "weather_advantage_ron": 0.12613637479185869,
+      "regional_advantage_ron": 0.1006195226837221,
+      "optimised_savings_ron": 24.16848850144163
+    },
+    {
+      "day": "2026-04-08",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.33701780689345956,
+      "local_mae_ron_kwh": 0.17858149469501086,
+      "weather_mae_ron_kwh": 0.0927727294875499,
+      "weather_advantage_ron": 3.207416964540659,
+      "regional_advantage_ron": 3.1724302067698353,
+      "optimised_savings_ron": 23.57854803931197
+    },
+    {
+      "day": "2026-04-08",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.33701780689345956,
+      "local_mae_ron_kwh": 0.17858149469501086,
+      "weather_mae_ron_kwh": 0.0927727294875499,
+      "weather_advantage_ron": 3.207416964540659,
+      "regional_advantage_ron": 3.1724302067698353,
+      "optimised_savings_ron": 23.578548039311965
+    },
+    {
+      "day": "2026-04-09",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.2701036261915251,
+      "local_mae_ron_kwh": 0.1444312174466664,
+      "weather_mae_ron_kwh": 0.13930657365004764,
+      "weather_advantage_ron": -0.44086896588376945,
+      "regional_advantage_ron": 0.5359723341176483,
+      "optimised_savings_ron": 25.58341869856163
+    },
+    {
+      "day": "2026-04-09",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.2701036261915251,
+      "local_mae_ron_kwh": 0.1444312174466664,
+      "weather_mae_ron_kwh": 0.13930657365004764,
+      "weather_advantage_ron": -0.44086896588376945,
+      "regional_advantage_ron": 0.5359723341176448,
+      "optimised_savings_ron": 25.58341869856163
+    },
+    {
+      "day": "2026-04-10",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.21669211874734265,
+      "local_mae_ron_kwh": 0.1303585352444337,
+      "weather_mae_ron_kwh": 0.0967116281609306,
+      "weather_advantage_ron": -1.375981819465487,
+      "regional_advantage_ron": 2.304297326152941,
+      "optimised_savings_ron": 25.557295337783756
+    },
+    {
+      "day": "2026-04-10",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.21669211874734265,
+      "local_mae_ron_kwh": 0.1303585352444337,
+      "weather_mae_ron_kwh": 0.0967116281609306,
+      "weather_advantage_ron": -1.3759818194654887,
+      "regional_advantage_ron": 2.304297326152941,
+      "optimised_savings_ron": 25.557295337783756
+    },
+    {
+      "day": "2026-04-11",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.32976312455826357,
+      "local_mae_ron_kwh": 0.2507551721769263,
+      "weather_mae_ron_kwh": 0.21259476706577055,
+      "weather_advantage_ron": 2.211434171658862,
+      "regional_advantage_ron": 0.4872866529411759,
+      "optimised_savings_ron": 23.42711794578083
+    },
+    {
+      "day": "2026-04-11",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.32976312455826357,
+      "local_mae_ron_kwh": 0.2507551721769263,
+      "weather_mae_ron_kwh": 0.21259476706577055,
+      "weather_advantage_ron": 2.211434171658862,
+      "regional_advantage_ron": 0.4872866529411759,
+      "optimised_savings_ron": 23.42711794578083
+    },
+    {
+      "day": "2026-04-12",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.27947146502585546,
+      "local_mae_ron_kwh": 0.19175024263372206,
+      "weather_mae_ron_kwh": 0.16558436584205197,
+      "weather_advantage_ron": 1.6668199375474693,
+      "regional_advantage_ron": -0.019894134117645734,
+      "optimised_savings_ron": 21.518493669052702
+    },
+    {
+      "day": "2026-04-12",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.27947146502585546,
+      "local_mae_ron_kwh": 0.19175024263372206,
+      "weather_mae_ron_kwh": 0.16558436584205197,
+      "weather_advantage_ron": 1.6668199375474693,
+      "regional_advantage_ron": -0.019894134117645734,
+      "optimised_savings_ron": 21.518493669052702
+    },
+    {
+      "day": "2026-04-13",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.18877911235107006,
+      "local_mae_ron_kwh": 0.07429330347031103,
+      "weather_mae_ron_kwh": 0.1128831651461709,
+      "weather_advantage_ron": 0.5642625858823536,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.23623605620193
+    },
+    {
+      "day": "2026-04-13",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.18877911235107006,
+      "local_mae_ron_kwh": 0.07429330347031103,
+      "weather_mae_ron_kwh": 0.1128831651461709,
+      "weather_advantage_ron": 0.5642625858823536,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.23623605620193
+    },
+    {
+      "day": "2026-04-14",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.16486233161974276,
+      "local_mae_ron_kwh": 0.18009547865328315,
+      "weather_mae_ron_kwh": 0.17673430472046656,
+      "weather_advantage_ron": -3.15195247450993,
+      "regional_advantage_ron": 0.33270666621742295,
+      "optimised_savings_ron": 17.236527005464367
+    },
+    {
+      "day": "2026-04-14",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.16486233161974276,
+      "local_mae_ron_kwh": 0.18009547865328315,
+      "weather_mae_ron_kwh": 0.17673430472046656,
+      "weather_advantage_ron": -3.1519524745099283,
+      "regional_advantage_ron": 0.33270666621742206,
+      "optimised_savings_ron": 17.236527005464367
+    },
+    {
+      "day": "2026-04-15",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1441523915033964,
+      "local_mae_ron_kwh": 0.21207804347523865,
+      "weather_mae_ron_kwh": 0.1992021489501069,
+      "weather_advantage_ron": -10.731557463489228,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 21.67978269631359
+    },
+    {
+      "day": "2026-04-15",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1441523915033964,
+      "local_mae_ron_kwh": 0.21207804347523865,
+      "weather_mae_ron_kwh": 0.1992021489501069,
+      "weather_advantage_ron": -10.73155746348923,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 21.679782696313588
+    },
+    {
+      "day": "2026-04-16",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.10926278661428447,
+      "local_mae_ron_kwh": 0.14190122266686003,
+      "weather_mae_ron_kwh": 0.1457507478989076,
+      "weather_advantage_ron": -7.080591663583089,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 22.224857328517764
+    },
+    {
+      "day": "2026-04-16",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.10926278661428447,
+      "local_mae_ron_kwh": 0.14190122266686003,
+      "weather_mae_ron_kwh": 0.1457507478989076,
+      "weather_advantage_ron": -7.080591663583089,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 22.224857328517764
+    },
+    {
+      "day": "2026-04-17",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.14068811482301674,
+      "local_mae_ron_kwh": 0.07947618545737224,
+      "weather_mae_ron_kwh": 0.11696967030094278,
+      "weather_advantage_ron": 0.6149703217803886,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 22.222543142993196
+    },
+    {
+      "day": "2026-04-17",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.14068811482301674,
+      "local_mae_ron_kwh": 0.07947618545737224,
+      "weather_mae_ron_kwh": 0.11696967030094278,
+      "weather_advantage_ron": 0.6149703217803903,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 22.222543142993196
+    },
+    {
+      "day": "2026-04-18",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.2122935451435587,
+      "local_mae_ron_kwh": 0.1410901331168279,
+      "weather_mae_ron_kwh": 0.12988060872336862,
+      "weather_advantage_ron": 1.823970165301386,
+      "regional_advantage_ron": 1.5894654323263566,
+      "optimised_savings_ron": 21.575912152994643
+    },
+    {
+      "day": "2026-04-18",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.2122935451435587,
+      "local_mae_ron_kwh": 0.1410901331168279,
+      "weather_mae_ron_kwh": 0.12988060872336862,
+      "weather_advantage_ron": 1.823970165301386,
+      "regional_advantage_ron": 1.5894654323263566,
+      "optimised_savings_ron": 21.57591215299464
+    },
+    {
+      "day": "2026-04-19",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.22552531368430032,
+      "local_mae_ron_kwh": 0.11968667226158029,
+      "weather_mae_ron_kwh": 0.15535337925060747,
+      "weather_advantage_ron": 0.6478252988235305,
+      "regional_advantage_ron": 0.15490955882352964,
+      "optimised_savings_ron": 22.28601034350775
+    },
+    {
+      "day": "2026-04-19",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.22552531368430032,
+      "local_mae_ron_kwh": 0.11968667226158029,
+      "weather_mae_ron_kwh": 0.15535337925060747,
+      "weather_advantage_ron": 0.6478252988235305,
+      "regional_advantage_ron": 0.15490955882352964,
+      "optimised_savings_ron": 22.28601034350775
+    },
+    {
+      "day": "2026-04-20",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.10040544366688592,
+      "local_mae_ron_kwh": 0.15206643680403728,
+      "weather_mae_ron_kwh": 0.13776885170245215,
+      "weather_advantage_ron": -1.6305241516673181,
+      "regional_advantage_ron": -1.1982432953543078,
+      "optimised_savings_ron": 18.24992893493798
+    },
+    {
+      "day": "2026-04-20",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.10040544366688592,
+      "local_mae_ron_kwh": 0.15206643680403728,
+      "weather_mae_ron_kwh": 0.13776885170245215,
+      "weather_advantage_ron": -1.6305241516673181,
+      "regional_advantage_ron": -1.1982432953543087,
+      "optimised_savings_ron": 18.24992893493798
+    },
+    {
+      "day": "2026-04-21",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.053781232727878936,
+      "local_mae_ron_kwh": 0.17404677700971785,
+      "weather_mae_ron_kwh": 0.12811594399711632,
+      "weather_advantage_ron": -0.09398991917030841,
+      "regional_advantage_ron": 1.320292454119862,
+      "optimised_savings_ron": 21.91562786887287
+    },
+    {
+      "day": "2026-04-21",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.053781232727878936,
+      "local_mae_ron_kwh": 0.17404677700971785,
+      "weather_mae_ron_kwh": 0.12811594399711632,
+      "weather_advantage_ron": -0.09398991917031907,
+      "regional_advantage_ron": 1.3202924541198513,
+      "optimised_savings_ron": 21.91562786887287
+    },
+    {
+      "day": "2026-04-22",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.10647296569840164,
+      "local_mae_ron_kwh": 0.11297605447793226,
+      "weather_mae_ron_kwh": 0.1281615918423102,
+      "weather_advantage_ron": 0.045144636672398875,
+      "regional_advantage_ron": 0.045144636672398875,
+      "optimised_savings_ron": 26.327956780811185
+    },
+    {
+      "day": "2026-04-22",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.10647296569840164,
+      "local_mae_ron_kwh": 0.11297605447793226,
+      "weather_mae_ron_kwh": 0.1281615918423102,
+      "weather_advantage_ron": 0.0451446366723971,
+      "regional_advantage_ron": 0.0451446366723971,
+      "optimised_savings_ron": 26.32795678081118
+    },
+    {
+      "day": "2026-04-23",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.17863618544417834,
+      "local_mae_ron_kwh": 0.16250278320375566,
+      "weather_mae_ron_kwh": 0.10412266183716991,
+      "weather_advantage_ron": 0.8131801292522916,
+      "regional_advantage_ron": 0.2566320783801004,
+      "optimised_savings_ron": 25.63729697977965
+    },
+    {
+      "day": "2026-04-23",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.17863618544417834,
+      "local_mae_ron_kwh": 0.16250278320375566,
+      "weather_mae_ron_kwh": 0.10412266183716991,
+      "weather_advantage_ron": 0.8131801292522916,
+      "regional_advantage_ron": 0.2566320783801004,
+      "optimised_savings_ron": 25.63729697977964
+    },
+    {
+      "day": "2026-04-24",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.19796889352258695,
+      "local_mae_ron_kwh": 0.16581848624372483,
+      "weather_mae_ron_kwh": 0.1753799408694955,
+      "weather_advantage_ron": -1.1524669666905147,
+      "regional_advantage_ron": -0.6087832779750713,
+      "optimised_savings_ron": 28.482477567953172
+    },
+    {
+      "day": "2026-04-24",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.19796889352258695,
+      "local_mae_ron_kwh": 0.16581848624372483,
+      "weather_mae_ron_kwh": 0.1753799408694955,
+      "weather_advantage_ron": -1.1524669666905218,
+      "regional_advantage_ron": -0.6087832779750748,
+      "optimised_savings_ron": 28.482477567953172
+    },
+    {
+      "day": "2026-04-25",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.19416197984166741,
+      "local_mae_ron_kwh": 0.12131772222294658,
+      "weather_mae_ron_kwh": 0.1286965644389876,
+      "weather_advantage_ron": 9.16881305791554,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 22.14672362878121
+    },
+    {
+      "day": "2026-04-25",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.19416197984166741,
+      "local_mae_ron_kwh": 0.12131772222294658,
+      "weather_mae_ron_kwh": 0.1286965644389876,
+      "weather_advantage_ron": 9.168813057915546,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 22.14672362878121
+    },
+    {
+      "day": "2026-04-26",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.2315515691808779,
+      "local_mae_ron_kwh": 0.4472286305574073,
+      "weather_mae_ron_kwh": 0.3342303037268905,
+      "weather_advantage_ron": 7.339849187736103,
+      "regional_advantage_ron": 0.7380132105882353,
+      "optimised_savings_ron": 18.624334554594775
+    },
+    {
+      "day": "2026-04-26",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.2315515691808779,
+      "local_mae_ron_kwh": 0.4472286305574073,
+      "weather_mae_ron_kwh": 0.3342303037268905,
+      "weather_advantage_ron": 6.944807125291796,
+      "regional_advantage_ron": 0.752459759872945,
+      "optimised_savings_ron": 18.624334554594775
+    },
+    {
+      "day": "2026-04-27",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.10648377376249629,
+      "local_mae_ron_kwh": 0.0722646673423584,
+      "weather_mae_ron_kwh": 0.07521786659905037,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.482537256281756
+    },
+    {
+      "day": "2026-04-27",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.10648377376249629,
+      "local_mae_ron_kwh": 0.0722646673423584,
+      "weather_mae_ron_kwh": 0.07521786659905037,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.482537256281752
+    },
+    {
+      "day": "2026-04-28",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.0960502169073813,
+      "local_mae_ron_kwh": 0.10579947211657677,
+      "weather_mae_ron_kwh": 0.11766333814556278,
+      "weather_advantage_ron": -0.11133937931308324,
+      "regional_advantage_ron": -0.373083952941176,
+      "optimised_savings_ron": 22.526826512146343
+    },
+    {
+      "day": "2026-04-28",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.0960502169073813,
+      "local_mae_ron_kwh": 0.10579947211657677,
+      "weather_mae_ron_kwh": 0.11766333814556278,
+      "weather_advantage_ron": -0.11133937931308324,
+      "regional_advantage_ron": -0.373083952941176,
+      "optimised_savings_ron": 22.526826512146346
+    },
+    {
+      "day": "2026-04-29",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.08590629039403162,
+      "local_mae_ron_kwh": 0.07945267101141772,
+      "weather_mae_ron_kwh": 0.07563406499861104,
+      "weather_advantage_ron": -0.43412499999999987,
+      "regional_advantage_ron": -0.07598858039129652,
+      "optimised_savings_ron": 25.961249702566562
+    },
+    {
+      "day": "2026-04-29",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.08590629039403162,
+      "local_mae_ron_kwh": 0.07945267101141772,
+      "weather_mae_ron_kwh": 0.07563406499861104,
+      "weather_advantage_ron": -0.4341250000000034,
+      "regional_advantage_ron": -0.07598858039129475,
+      "optimised_savings_ron": 25.961249702566562
+    },
+    {
+      "day": "2026-04-30",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.08037755097055654,
+      "local_mae_ron_kwh": 0.2158968086589607,
+      "weather_mae_ron_kwh": 0.21114298633128392,
+      "weather_advantage_ron": -0.37616531535487496,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 17.767248639526343
+    },
+    {
+      "day": "2026-04-30",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.08037755097055654,
+      "local_mae_ron_kwh": 0.2158968086589607,
+      "weather_mae_ron_kwh": 0.21114298633128392,
+      "weather_advantage_ron": -0.37616531535487496,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 17.767248639526343
+    },
+    {
+      "day": "2026-07-01",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 2.929954658099941,
+      "local_mae_ron_kwh": 3.131323874782982,
+      "weather_mae_ron_kwh": 3.092355986464074,
+      "weather_advantage_ron": -4.2343821043049985,
+      "regional_advantage_ron": 4.339466331494634,
+      "optimised_savings_ron": 46.485783839541
+    },
+    {
+      "day": "2026-07-01",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 2.929954658099941,
+      "local_mae_ron_kwh": 3.131323874782982,
+      "weather_mae_ron_kwh": 3.092355986464074,
+      "weather_advantage_ron": -2.729807201687521,
+      "regional_advantage_ron": 14.386288474657789,
+      "optimised_savings_ron": 46.485783839541
+    },
+    {
+      "day": "2026-07-02",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 2.548114753941206,
+      "local_mae_ron_kwh": 2.7597148356142363,
+      "weather_mae_ron_kwh": 2.700998416728952,
+      "weather_advantage_ron": -0.5084715608464307,
+      "regional_advantage_ron": 0.35668861772548155,
+      "optimised_savings_ron": 23.84535586008609
+    },
+    {
+      "day": "2026-07-02",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 2.548114753941206,
+      "local_mae_ron_kwh": 2.7597148356142363,
+      "weather_mae_ron_kwh": 2.700998416728952,
+      "weather_advantage_ron": -6.053612370629395,
+      "regional_advantage_ron": 0.4912059666932578,
+      "optimised_savings_ron": 23.845355860086087
+    },
+    {
+      "day": "2026-07-03",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.6134497541323731,
+      "local_mae_ron_kwh": 0.6259016673202508,
+      "weather_mae_ron_kwh": 0.6394775927450084,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 27.234061070397598
+    },
+    {
+      "day": "2026-07-03",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.6134497541323731,
+      "local_mae_ron_kwh": 0.6259016673202508,
+      "weather_mae_ron_kwh": 0.6394775927450084,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 27.234061070397598
+    },
+    {
+      "day": "2026-07-04",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.40342438926096075,
+      "local_mae_ron_kwh": 0.41649820353793987,
+      "weather_mae_ron_kwh": 0.33275522013698805,
+      "weather_advantage_ron": -0.00019479710603675926,
+      "regional_advantage_ron": -0.00019479710603675926,
+      "optimised_savings_ron": 22.121496466597335
+    },
+    {
+      "day": "2026-07-04",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.40342438926096075,
+      "local_mae_ron_kwh": 0.41649820353793987,
+      "weather_mae_ron_kwh": 0.33275522013698805,
+      "weather_advantage_ron": -0.00019479710603675926,
+      "regional_advantage_ron": -0.00019479710603675926,
+      "optimised_savings_ron": 22.12149646659733
+    },
+    {
+      "day": "2026-07-05",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.30283909990500385,
+      "local_mae_ron_kwh": 0.3220725961812079,
+      "weather_mae_ron_kwh": 0.3141271567927828,
+      "weather_advantage_ron": 0.00016399110640819003,
+      "regional_advantage_ron": 0.00011697331921922682,
+      "optimised_savings_ron": 21.731740178937667
+    },
+    {
+      "day": "2026-07-05",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.30283909990500385,
+      "local_mae_ron_kwh": 0.3220725961812079,
+      "weather_mae_ron_kwh": 0.3141271567927828,
+      "weather_advantage_ron": 0.00016399110640819003,
+      "regional_advantage_ron": 0.00011697331922277954,
+      "optimised_savings_ron": 21.731740178937663
+    },
+    {
+      "day": "2026-07-06",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.19352899547742394,
+      "local_mae_ron_kwh": 0.18980740441422086,
+      "weather_mae_ron_kwh": 0.2065682949321396,
+      "weather_advantage_ron": -1.0409211554180846,
+      "regional_advantage_ron": -0.45488141843394736,
+      "optimised_savings_ron": 22.881853013204164
+    },
+    {
+      "day": "2026-07-06",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.19352899547742394,
+      "local_mae_ron_kwh": 0.18980740441422086,
+      "weather_mae_ron_kwh": 0.2065682949321396,
+      "weather_advantage_ron": -1.0409211554180828,
+      "regional_advantage_ron": -0.4548814184339456,
+      "optimised_savings_ron": 22.881853013204164
+    },
+    {
+      "day": "2026-07-07",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.23807411241028223,
+      "local_mae_ron_kwh": 0.2363302222636632,
+      "weather_mae_ron_kwh": 0.2519283110672582,
+      "weather_advantage_ron": -0.3460934318421165,
+      "regional_advantage_ron": -0.011062302786160494,
+      "optimised_savings_ron": 23.87084418520153
+    },
+    {
+      "day": "2026-07-07",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.23807411241028223,
+      "local_mae_ron_kwh": 0.2363302222636632,
+      "weather_mae_ron_kwh": 0.2519283110672582,
+      "weather_advantage_ron": -0.34609343184211383,
+      "regional_advantage_ron": -0.011062302786158718,
+      "optimised_savings_ron": 23.87084418520153
+    },
+    {
+      "day": "2026-07-08",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.12244250422648324,
+      "local_mae_ron_kwh": 0.1212796923505954,
+      "weather_mae_ron_kwh": 0.1228890215029108,
+      "weather_advantage_ron": -0.9310071698870743,
+      "regional_advantage_ron": 8.881784197001252e-16,
+      "optimised_savings_ron": 17.822392866686645
+    },
+    {
+      "day": "2026-07-08",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.12244250422648324,
+      "local_mae_ron_kwh": 0.1212796923505954,
+      "weather_mae_ron_kwh": 0.1228890215029108,
+      "weather_advantage_ron": -0.9310071698870752,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 17.82239286668664
+    },
+    {
+      "day": "2026-07-09",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.10703777812255288,
+      "local_mae_ron_kwh": 0.09092418239957423,
+      "weather_mae_ron_kwh": 0.08953618419794308,
+      "weather_advantage_ron": -0.4289866185502724,
+      "regional_advantage_ron": -0.5924241185502743,
+      "optimised_savings_ron": 23.533969287361707
+    },
+    {
+      "day": "2026-07-09",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.10703777812255288,
+      "local_mae_ron_kwh": 0.09092418239957423,
+      "weather_mae_ron_kwh": 0.08953618419794308,
+      "weather_advantage_ron": -0.42898661855027376,
+      "regional_advantage_ron": -0.5924241185502739,
+      "optimised_savings_ron": 23.5339692873617
+    },
+    {
+      "day": "2026-07-10",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.11832824073562558,
+      "local_mae_ron_kwh": 0.10140693034993754,
+      "weather_mae_ron_kwh": 0.09986336391482793,
+      "weather_advantage_ron": -0.46711937611084764,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 22.51955066270757
+    },
+    {
+      "day": "2026-07-10",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.11832824073562558,
+      "local_mae_ron_kwh": 0.10140693034993754,
+      "weather_mae_ron_kwh": 0.09986336391482793,
+      "weather_advantage_ron": -0.4671193761108485,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 22.519550662707566
+    },
+    {
+      "day": "2026-07-11",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1050711043332558,
+      "local_mae_ron_kwh": 0.1314216535376387,
+      "weather_mae_ron_kwh": 0.12717353333623607,
+      "weather_advantage_ron": -0.42654603663285684,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.52480105396928
+    },
+    {
+      "day": "2026-07-11",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1050711043332558,
+      "local_mae_ron_kwh": 0.1314216535376387,
+      "weather_mae_ron_kwh": 0.12717353333623607,
+      "weather_advantage_ron": -0.42654603663285684,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.524801053969277
+    },
+    {
+      "day": "2026-07-12",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1113872461617062,
+      "local_mae_ron_kwh": 0.12014451618050133,
+      "weather_mae_ron_kwh": 0.12469662270405696,
+      "weather_advantage_ron": -0.1949559741176472,
+      "regional_advantage_ron": -0.3472459529411758,
+      "optimised_savings_ron": 21.962978822287994
+    },
+    {
+      "day": "2026-07-12",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1113872461617062,
+      "local_mae_ron_kwh": 0.12014451618050133,
+      "weather_mae_ron_kwh": 0.12469662270405696,
+      "weather_advantage_ron": -0.1949559741176472,
+      "regional_advantage_ron": -0.3472459529411758,
+      "optimised_savings_ron": 21.962978822287994
+    },
+    {
+      "day": "2026-07-13",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.14667228353573014,
+      "local_mae_ron_kwh": 0.13909110213951756,
+      "weather_mae_ron_kwh": 0.13136496000685743,
+      "weather_advantage_ron": 0.8507010197832079,
+      "regional_advantage_ron": 1.3269845856558176,
+      "optimised_savings_ron": 22.068326325706952
+    },
+    {
+      "day": "2026-07-13",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.14667228353573014,
+      "local_mae_ron_kwh": 0.13909110213951756,
+      "weather_mae_ron_kwh": 0.13136496000685743,
+      "weather_advantage_ron": 0.8507010197832088,
+      "regional_advantage_ron": 1.3269845856558184,
+      "optimised_savings_ron": 22.068326325706952
+    },
+    {
+      "day": "2026-07-14",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1273481561291087,
+      "local_mae_ron_kwh": 0.11476187748044982,
+      "weather_mae_ron_kwh": 0.10171329578375006,
+      "weather_advantage_ron": 0.9887696067231189,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 22.65817439468793
+    },
+    {
+      "day": "2026-07-14",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1273481561291087,
+      "local_mae_ron_kwh": 0.11476187748044982,
+      "weather_mae_ron_kwh": 0.10171329578375006,
+      "weather_advantage_ron": 0.9887696067231189,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 22.658174394687926
+    },
+    {
+      "day": "2026-07-15",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.12792456632198904,
+      "local_mae_ron_kwh": 0.09805201896335686,
+      "weather_mae_ron_kwh": 0.09963917953676628,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.552107945621565
+    },
+    {
+      "day": "2026-07-15",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.12792456632198904,
+      "local_mae_ron_kwh": 0.09805201896335686,
+      "weather_mae_ron_kwh": 0.09963917953676628,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.552107945621565
+    },
+    {
+      "day": "2026-07-16",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1500853441739667,
+      "local_mae_ron_kwh": 0.11928543023192724,
+      "weather_mae_ron_kwh": 0.120296164921124,
+      "weather_advantage_ron": -0.2170999981133095,
+      "regional_advantage_ron": 8.881784197001252e-16,
+      "optimised_savings_ron": 26.858421283292948
+    },
+    {
+      "day": "2026-07-16",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1500853441739667,
+      "local_mae_ron_kwh": 0.11928543023192724,
+      "weather_mae_ron_kwh": 0.120296164921124,
+      "weather_advantage_ron": -0.21709999811331127,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 26.858421283292945
+    },
+    {
+      "day": "2026-07-17",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1511443416579096,
+      "local_mae_ron_kwh": 0.09909158173806998,
+      "weather_mae_ron_kwh": 0.10187806892537841,
+      "weather_advantage_ron": -0.6190040564602537,
+      "regional_advantage_ron": 1.7763568394002505e-15,
+      "optimised_savings_ron": 23.810781209392722
+    },
+    {
+      "day": "2026-07-17",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1511443416579096,
+      "local_mae_ron_kwh": 0.09909158173806998,
+      "weather_mae_ron_kwh": 0.10187806892537841,
+      "weather_advantage_ron": -0.6190040564602537,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.810781209392722
+    },
+    {
+      "day": "2026-07-18",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.13943300027866806,
+      "local_mae_ron_kwh": 0.14582171447584985,
+      "weather_mae_ron_kwh": 0.1402951759183199,
+      "weather_advantage_ron": -0.011835001195269257,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 27.59952079503506
+    },
+    {
+      "day": "2026-07-18",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.13943300027866806,
+      "local_mae_ron_kwh": 0.14582171447584985,
+      "weather_mae_ron_kwh": 0.1402951759183199,
+      "weather_advantage_ron": -0.011835001195269257,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 27.599520795035055
+    },
+    {
+      "day": "2026-07-19",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.0861128195174632,
+      "local_mae_ron_kwh": 0.11659146847056788,
+      "weather_mae_ron_kwh": 0.11520965533174736,
+      "weather_advantage_ron": -0.31463617279095146,
+      "regional_advantage_ron": -0.19024963955242669,
+      "optimised_savings_ron": 22.87175902242309
+    },
+    {
+      "day": "2026-07-19",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.0861128195174632,
+      "local_mae_ron_kwh": 0.11659146847056788,
+      "weather_mae_ron_kwh": 0.11520965533174736,
+      "weather_advantage_ron": -0.31463617279095146,
+      "regional_advantage_ron": -0.19024963955242669,
+      "optimised_savings_ron": 22.871759022423085
+    },
+    {
+      "day": "2026-07-20",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.08253101152775787,
+      "local_mae_ron_kwh": 0.08555771025288583,
+      "weather_mae_ron_kwh": 0.07324639621026417,
+      "weather_advantage_ron": 2.220446049250313e-16,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 22.79625228404359
+    },
+    {
+      "day": "2026-07-20",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.08253101152775787,
+      "local_mae_ron_kwh": 0.08555771025288583,
+      "weather_mae_ron_kwh": 0.07324639621026417,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 22.79625228404359
+    },
+    {
+      "day": "2026-07-21",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.06463772567360433,
+      "local_mae_ron_kwh": 0.07682313894537325,
+      "weather_mae_ron_kwh": 0.07828706845294708,
+      "weather_advantage_ron": -0.5938374999999976,
+      "regional_advantage_ron": -0.009521101905272555,
+      "optimised_savings_ron": 21.6688818018905
+    },
+    {
+      "day": "2026-07-21",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.06463772567360433,
+      "local_mae_ron_kwh": 0.07682313894537325,
+      "weather_mae_ron_kwh": 0.07828706845294708,
+      "weather_advantage_ron": -0.5938375000000002,
+      "regional_advantage_ron": -0.009521101905271667,
+      "optimised_savings_ron": 21.668881801890496
+    },
+    {
+      "day": "2026-07-22",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.09089442273531238,
+      "local_mae_ron_kwh": 0.05164778309276861,
+      "weather_mae_ron_kwh": 0.05342072581934679,
+      "weather_advantage_ron": 0.006519021403349257,
+      "regional_advantage_ron": -0.23887713235294683,
+      "optimised_savings_ron": 20.492175787991016
+    },
+    {
+      "day": "2026-07-22",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.09089442273531238,
+      "local_mae_ron_kwh": 0.05164778309276861,
+      "weather_mae_ron_kwh": 0.05342072581934679,
+      "weather_advantage_ron": 0.006519021403349257,
+      "regional_advantage_ron": -0.23887713235293973,
+      "optimised_savings_ron": 20.49217578799101
+    },
+    {
+      "day": "2026-07-23",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.10656505815346205,
+      "local_mae_ron_kwh": 0.06942306464980484,
+      "weather_mae_ron_kwh": 0.10346707904590886,
+      "weather_advantage_ron": 0.4448694919923559,
+      "regional_advantage_ron": -0.8211348570860251,
+      "optimised_savings_ron": 24.628315108882994
+    },
+    {
+      "day": "2026-07-23",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.10656505815346205,
+      "local_mae_ron_kwh": 0.06942306464980484,
+      "weather_mae_ron_kwh": 0.10346707904590886,
+      "weather_advantage_ron": 0.44486949199235504,
+      "regional_advantage_ron": -0.8211348570860268,
+      "optimised_savings_ron": 24.629364389167044
+    },
+    {
+      "day": "2026-07-24",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.08861516233057946,
+      "local_mae_ron_kwh": 0.0877616294793231,
+      "weather_mae_ron_kwh": 0.09224147079759183,
+      "weather_advantage_ron": 0.13518886029411936,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 25.498942534027595
+    },
+    {
+      "day": "2026-07-24",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.08861516233057946,
+      "local_mae_ron_kwh": 0.0877616294793231,
+      "weather_mae_ron_kwh": 0.09224147079759183,
+      "weather_advantage_ron": 0.13518886029411936,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 25.4989425340276
+    },
+    {
+      "day": "2026-07-25",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.164244095826178,
+      "local_mae_ron_kwh": 0.15561803210677722,
+      "weather_mae_ron_kwh": 0.1703032090889858,
+      "weather_advantage_ron": 1.5687519623941064,
+      "regional_advantage_ron": 0.398507438823529,
+      "optimised_savings_ron": 24.35837176042594
+    },
+    {
+      "day": "2026-07-25",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.164244095826178,
+      "local_mae_ron_kwh": 0.15561803210677722,
+      "weather_mae_ron_kwh": 0.1703032090889858,
+      "weather_advantage_ron": 1.5687519623941064,
+      "regional_advantage_ron": 0.398507438823529,
+      "optimised_savings_ron": 24.358371760425936
+    },
+    {
+      "day": "2026-07-26",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.11132472557975197,
+      "local_mae_ron_kwh": 0.10972219597319638,
+      "weather_mae_ron_kwh": 0.11526054434930637,
+      "weather_advantage_ron": 0.7841232463614887,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.58113027147634
+    },
+    {
+      "day": "2026-07-26",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.11132472557975197,
+      "local_mae_ron_kwh": 0.10972219597319638,
+      "weather_mae_ron_kwh": 0.11526054434930637,
+      "weather_advantage_ron": 0.7841232463614887,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.58113027147634
+    },
+    {
+      "day": "2026-07-27",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1864708190734734,
+      "local_mae_ron_kwh": 0.21711929361593765,
+      "weather_mae_ron_kwh": 0.21532610674371536,
+      "weather_advantage_ron": -0.6266625912576185,
+      "regional_advantage_ron": 0.3823909292024794,
+      "optimised_savings_ron": 24.210678215121526
+    },
+    {
+      "day": "2026-07-27",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1864708190734734,
+      "local_mae_ron_kwh": 0.21711929361593765,
+      "weather_mae_ron_kwh": 0.21532610674371536,
+      "weather_advantage_ron": -0.6266625912576131,
+      "regional_advantage_ron": 0.38239092920247764,
+      "optimised_savings_ron": 24.210678215121526
+    },
+    {
+      "day": "2026-07-28",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.12617870776479392,
+      "local_mae_ron_kwh": 0.1330179947330116,
+      "weather_mae_ron_kwh": 0.12822741641682414,
+      "weather_advantage_ron": -0.07731313063022327,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 28.61954907950465
+    },
+    {
+      "day": "2026-07-28",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.12617870776479392,
+      "local_mae_ron_kwh": 0.1330179947330116,
+      "weather_mae_ron_kwh": 0.12822741641682414,
+      "weather_advantage_ron": -0.07731313063021616,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 28.619549079504644
+    },
+    {
+      "day": "2026-07-29",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1206913707582274,
+      "local_mae_ron_kwh": 0.1206560817617363,
+      "weather_mae_ron_kwh": 0.11915284499332851,
+      "weather_advantage_ron": -1.0785483244146605,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 31.19838064599838
+    },
+    {
+      "day": "2026-07-29",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1206913707582274,
+      "local_mae_ron_kwh": 0.1206560817617363,
+      "weather_mae_ron_kwh": 0.11915284499332851,
+      "weather_advantage_ron": -1.0785483244146556,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 31.198380645998377
+    },
+    {
+      "day": "2026-07-30",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.08753276298016299,
+      "local_mae_ron_kwh": 0.07264884787323901,
+      "weather_mae_ron_kwh": 0.07550395461426342,
+      "weather_advantage_ron": -0.5110789800837807,
+      "regional_advantage_ron": -0.5326410021426025,
+      "optimised_savings_ron": 30.837928849499896
+    },
+    {
+      "day": "2026-07-30",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.08753276298016299,
+      "local_mae_ron_kwh": 0.07264884787323901,
+      "weather_mae_ron_kwh": 0.07550395461426342,
+      "weather_advantage_ron": -0.5110789800837798,
+      "regional_advantage_ron": -0.5326410021426016,
+      "optimised_savings_ron": 30.837928849499896
+    },
+    {
+      "day": "2026-07-31",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.2008605135653091,
+      "local_mae_ron_kwh": 0.1771515910115169,
+      "weather_mae_ron_kwh": 0.15912135528960544,
+      "weather_advantage_ron": 0.10400661764706243,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 24.31662580065111
+    },
+    {
+      "day": "2026-07-31",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.2008605135653091,
+      "local_mae_ron_kwh": 0.1771515910115169,
+      "weather_mae_ron_kwh": 0.15912135528960544,
+      "weather_advantage_ron": 0.10400661764705887,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 24.316625800651117
+    },
+    {
+      "day": "2026-09-01",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.671200998984952,
+      "local_mae_ron_kwh": 0.537862292185168,
+      "weather_mae_ron_kwh": 0.4736414017374839,
+      "weather_advantage_ron": 18.151639665416685,
+      "regional_advantage_ron": 10.010994371299041,
+      "optimised_savings_ron": 27.700524772348828
+    },
+    {
+      "day": "2026-09-01",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.671200998984952,
+      "local_mae_ron_kwh": 0.537862292185168,
+      "weather_mae_ron_kwh": 0.4736414017374839,
+      "weather_advantage_ron": 18.15163966541669,
+      "regional_advantage_ron": 10.010994371299041,
+      "optimised_savings_ron": 27.700524772348828
+    },
+    {
+      "day": "2026-09-02",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.8029825787343428,
+      "local_mae_ron_kwh": 0.6680460921150143,
+      "weather_mae_ron_kwh": 0.6008300183371699,
+      "weather_advantage_ron": 26.723194826905484,
+      "regional_advantage_ron": 14.495703776317251,
+      "optimised_savings_ron": 27.525919370006697
+    },
+    {
+      "day": "2026-09-02",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.8029825787343428,
+      "local_mae_ron_kwh": 0.6680460921150143,
+      "weather_mae_ron_kwh": 0.6008300183371699,
+      "weather_advantage_ron": 26.72319482690549,
+      "regional_advantage_ron": 14.495703776317253,
+      "optimised_savings_ron": 27.525919370006697
+    },
+    {
+      "day": "2026-09-03",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.12294762798887969,
+      "local_mae_ron_kwh": 0.13386043666401426,
+      "weather_mae_ron_kwh": 0.12793744844461283,
+      "weather_advantage_ron": 0.43481705882352273,
+      "regional_advantage_ron": -0.2990252902084638,
+      "optimised_savings_ron": 25.484458991585853
+    },
+    {
+      "day": "2026-09-03",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.12294762798887969,
+      "local_mae_ron_kwh": 0.13386043666401426,
+      "weather_mae_ron_kwh": 0.12793744844461283,
+      "weather_advantage_ron": 0.4348170588235307,
+      "regional_advantage_ron": -0.2990252902084647,
+      "optimised_savings_ron": 25.484458991585853
+    },
+    {
+      "day": "2026-09-04",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.100781405932642,
+      "local_mae_ron_kwh": 0.0948591135154227,
+      "weather_mae_ron_kwh": 0.09690126117852131,
+      "weather_advantage_ron": -0.5701540221646617,
+      "regional_advantage_ron": 1.5193414932559488,
+      "optimised_savings_ron": 29.293124722825112
+    },
+    {
+      "day": "2026-09-04",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.100781405932642,
+      "local_mae_ron_kwh": 0.0948591135154227,
+      "weather_mae_ron_kwh": 0.09690126117852131,
+      "weather_advantage_ron": -0.5701540221646546,
+      "regional_advantage_ron": 1.5193414932559506,
+      "optimised_savings_ron": 29.293124722825116
+    },
+    {
+      "day": "2026-09-05",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.18737011978572782,
+      "local_mae_ron_kwh": 0.1958120303551907,
+      "weather_mae_ron_kwh": 0.1939582356719166,
+      "weather_advantage_ron": 1.1800701284448394,
+      "regional_advantage_ron": -0.43437980363609086,
+      "optimised_savings_ron": 28.50026814122819
+    },
+    {
+      "day": "2026-09-05",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.18737011978572782,
+      "local_mae_ron_kwh": 0.1958120303551907,
+      "weather_mae_ron_kwh": 0.1939582356719166,
+      "weather_advantage_ron": 1.18007012844485,
+      "regional_advantage_ron": -0.43437980363609086,
+      "optimised_savings_ron": 28.50026814122819
+    },
+    {
+      "day": "2026-09-06",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.22573121824849884,
+      "local_mae_ron_kwh": 0.19478407009343787,
+      "weather_mae_ron_kwh": 0.19300501887225066,
+      "weather_advantage_ron": -0.0601286332518427,
+      "regional_advantage_ron": -0.11468986293079197,
+      "optimised_savings_ron": 29.373059133397494
+    },
+    {
+      "day": "2026-09-06",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.22573121824849884,
+      "local_mae_ron_kwh": 0.19478407009343787,
+      "weather_mae_ron_kwh": 0.19300501887225066,
+      "weather_advantage_ron": -0.060128633251835595,
+      "regional_advantage_ron": -0.11468986293079197,
+      "optimised_savings_ron": 29.37305913339749
+    },
+    {
+      "day": "2026-09-07",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1338093451637191,
+      "local_mae_ron_kwh": 0.1208137666492476,
+      "weather_mae_ron_kwh": 0.11023518577536197,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 28.59386287970375
+    },
+    {
+      "day": "2026-09-07",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1338093451637191,
+      "local_mae_ron_kwh": 0.1208137666492476,
+      "weather_mae_ron_kwh": 0.11023518577536197,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 28.59386287970375
+    },
+    {
+      "day": "2026-09-08",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1396189035130382,
+      "local_mae_ron_kwh": 0.14092106569580176,
+      "weather_mae_ron_kwh": 0.14739190431524282,
+      "weather_advantage_ron": -0.5777866911764775,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 33.14717842148865
+    },
+    {
+      "day": "2026-09-08",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1396189035130382,
+      "local_mae_ron_kwh": 0.14092106569580176,
+      "weather_mae_ron_kwh": 0.14739190431524282,
+      "weather_advantage_ron": -0.5777866911764704,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 33.147178421488654
+    },
+    {
+      "day": "2026-09-09",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1547252614878333,
+      "local_mae_ron_kwh": 0.14924941586445425,
+      "weather_mae_ron_kwh": 0.15665845203887854,
+      "weather_advantage_ron": 0.19812857515934645,
+      "regional_advantage_ron": -0.09452142484065362,
+      "optimised_savings_ron": 30.11934700674353
+    },
+    {
+      "day": "2026-09-09",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1547252614878333,
+      "local_mae_ron_kwh": 0.14924941586445425,
+      "weather_mae_ron_kwh": 0.15665845203887854,
+      "weather_advantage_ron": 0.19812857515934645,
+      "regional_advantage_ron": -0.09452142484065362,
+      "optimised_savings_ron": 30.119347006743528
+    },
+    {
+      "day": "2026-09-10",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1877069638264864,
+      "local_mae_ron_kwh": 0.19061216084269436,
+      "weather_mae_ron_kwh": 0.19749660563633528,
+      "weather_advantage_ron": -0.3247129682592229,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 31.557487398449748
+    },
+    {
+      "day": "2026-09-10",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1877069638264864,
+      "local_mae_ron_kwh": 0.19061216084269436,
+      "weather_mae_ron_kwh": 0.19749660563633528,
+      "weather_advantage_ron": -0.32471296825922114,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 31.55748739844975
+    },
+    {
+      "day": "2026-09-11",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.18217186377200575,
+      "local_mae_ron_kwh": 0.16345545539206177,
+      "weather_mae_ron_kwh": 0.16330688239328597,
+      "weather_advantage_ron": -0.10294070655351106,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 20.841619487674652
+    },
+    {
+      "day": "2026-09-11",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.18217186377200575,
+      "local_mae_ron_kwh": 0.16345545539206177,
+      "weather_mae_ron_kwh": 0.16330688239328597,
+      "weather_advantage_ron": -0.10294070655351462,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 20.841619487674652
+    },
+    {
+      "day": "2026-09-12",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.15434631026813542,
+      "local_mae_ron_kwh": 0.14681953842446224,
+      "weather_mae_ron_kwh": 0.14208823335507956,
+      "weather_advantage_ron": -0.13829520102174087,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 28.470157918740746
+    },
+    {
+      "day": "2026-09-12",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.15434631026813542,
+      "local_mae_ron_kwh": 0.14681953842446224,
+      "weather_mae_ron_kwh": 0.14208823335507956,
+      "weather_advantage_ron": -0.13829520102174797,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 28.470157918740746
+    },
+    {
+      "day": "2026-09-13",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.06390441469630613,
+      "local_mae_ron_kwh": 0.0846923854180423,
+      "weather_mae_ron_kwh": 0.09534212420688731,
+      "weather_advantage_ron": -0.07526989614078161,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 20.328968955459906
+    },
+    {
+      "day": "2026-09-13",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.06390441469630613,
+      "local_mae_ron_kwh": 0.0846923854180423,
+      "weather_mae_ron_kwh": 0.09534212420688731,
+      "weather_advantage_ron": -0.0752698961407745,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 20.3289689554599
+    },
+    {
+      "day": "2026-09-14",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.28566243288271037,
+      "local_mae_ron_kwh": 0.3132872671480072,
+      "weather_mae_ron_kwh": 0.30341965964256123,
+      "weather_advantage_ron": -1.0354108563383697,
+      "regional_advantage_ron": 0.022017484419937006,
+      "optimised_savings_ron": 40.81859023379707
+    },
+    {
+      "day": "2026-09-14",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.28566243288271037,
+      "local_mae_ron_kwh": 0.3132872671480072,
+      "weather_mae_ron_kwh": 0.30341965964256123,
+      "weather_advantage_ron": -1.0354108563383804,
+      "regional_advantage_ron": 0.022017484419937006,
+      "optimised_savings_ron": 41.166514662032355
+    },
+    {
+      "day": "2026-09-15",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.12401598670809703,
+      "local_mae_ron_kwh": 0.1168034725617101,
+      "weather_mae_ron_kwh": 0.1167499130690074,
+      "weather_advantage_ron": -0.6692723529411673,
+      "regional_advantage_ron": -0.039350595136422584,
+      "optimised_savings_ron": 29.14608338241377
+    },
+    {
+      "day": "2026-09-15",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.12401598670809703,
+      "local_mae_ron_kwh": 0.1168034725617101,
+      "weather_mae_ron_kwh": 0.1167499130690074,
+      "weather_advantage_ron": -0.6692723529411744,
+      "regional_advantage_ron": -0.039350595136422584,
+      "optimised_savings_ron": 29.14608338241377
+    },
+    {
+      "day": "2026-09-16",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.20657143834821257,
+      "local_mae_ron_kwh": 0.2023551993196752,
+      "weather_mae_ron_kwh": 0.19702951716505013,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 32.08185678129874
+    },
+    {
+      "day": "2026-09-16",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.20657143834821257,
+      "local_mae_ron_kwh": 0.2023551993196752,
+      "weather_mae_ron_kwh": 0.19702951716505013,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 32.08185678129874
+    },
+    {
+      "day": "2026-09-17",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.19003533956792026,
+      "local_mae_ron_kwh": 0.17544847278716016,
+      "weather_mae_ron_kwh": 0.1632781980473568,
+      "weather_advantage_ron": 0.005477572207229997,
+      "regional_advantage_ron": 0.005477572207229997,
+      "optimised_savings_ron": 29.64593187001491
+    },
+    {
+      "day": "2026-09-17",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.19003533956792026,
+      "local_mae_ron_kwh": 0.17544847278716016,
+      "weather_mae_ron_kwh": 0.1632781980473568,
+      "weather_advantage_ron": 0.005477572207229997,
+      "regional_advantage_ron": 0.005477572207229997,
+      "optimised_savings_ron": 29.64593187001491
+    },
+    {
+      "day": "2026-09-18",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.14921869134937252,
+      "local_mae_ron_kwh": 0.13956705606208578,
+      "weather_mae_ron_kwh": 0.14055841270828,
+      "weather_advantage_ron": -0.2389443944819405,
+      "regional_advantage_ron": -0.2389443944819405,
+      "optimised_savings_ron": 30.833947477922848
+    },
+    {
+      "day": "2026-09-18",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.14921869134937252,
+      "local_mae_ron_kwh": 0.13956705606208578,
+      "weather_mae_ron_kwh": 0.14055841270828,
+      "weather_advantage_ron": -0.23894439448194404,
+      "regional_advantage_ron": -0.23894439448194404,
+      "optimised_savings_ron": 30.83394747792285
+    },
+    {
+      "day": "2026-09-19",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.24717059387786577,
+      "local_mae_ron_kwh": 0.2537774442723413,
+      "weather_mae_ron_kwh": 0.2597066624423829,
+      "weather_advantage_ron": -0.047017787186533155,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 32.28454015156743
+    },
+    {
+      "day": "2026-09-19",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.24717059387786577,
+      "local_mae_ron_kwh": 0.2537774442723413,
+      "weather_mae_ron_kwh": 0.2597066624423829,
+      "weather_advantage_ron": -0.047017787186533155,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 32.28454015156742
+    },
+    {
+      "day": "2026-09-20",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.2459403435492816,
+      "local_mae_ron_kwh": 0.2558987230288868,
+      "weather_mae_ron_kwh": 0.2624694884545421,
+      "weather_advantage_ron": -0.0004936867654521393,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 30.957302205715834
+    },
+    {
+      "day": "2026-09-20",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.2459403435492816,
+      "local_mae_ron_kwh": 0.2558987230288868,
+      "weather_mae_ron_kwh": 0.2624694884545421,
+      "weather_advantage_ron": -0.0004936867654521393,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 30.957302205715834
+    },
+    {
+      "day": "2026-09-21",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1610255659437785,
+      "local_mae_ron_kwh": 0.1728015679708249,
+      "weather_mae_ron_kwh": 0.18339110666639832,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 31.779593031335423
+    },
+    {
+      "day": "2026-09-21",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1610255659437785,
+      "local_mae_ron_kwh": 0.1728015679708249,
+      "weather_mae_ron_kwh": 0.18339110666639832,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 31.779593031335423
+    },
+    {
+      "day": "2026-09-22",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.21899649041246202,
+      "local_mae_ron_kwh": 0.20468527817805646,
+      "weather_mae_ron_kwh": 0.2088184246250359,
+      "weather_advantage_ron": -3.552713678800501e-15,
+      "regional_advantage_ron": 0.2922233836621473,
+      "optimised_savings_ron": 37.5073608201337
+    },
+    {
+      "day": "2026-09-22",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.21899649041246202,
+      "local_mae_ron_kwh": 0.20468527817805646,
+      "weather_mae_ron_kwh": 0.2088184246250359,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.29222338366214373,
+      "optimised_savings_ron": 37.64880179248664
+    },
+    {
+      "day": "2026-09-23",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.10987047251800268,
+      "local_mae_ron_kwh": 0.10611336926133497,
+      "weather_mae_ron_kwh": 0.10488870796739735,
+      "weather_advantage_ron": 0.033171048860097585,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 30.4645668394462
+    },
+    {
+      "day": "2026-09-23",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.10987047251800268,
+      "local_mae_ron_kwh": 0.10611336926133497,
+      "weather_mae_ron_kwh": 0.10488870796739735,
+      "weather_advantage_ron": 0.033171048860097585,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 30.4645668394462
+    },
+    {
+      "day": "2026-09-24",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1946678972673869,
+      "local_mae_ron_kwh": 0.16917481868200582,
+      "weather_mae_ron_kwh": 0.1697540042310365,
+      "weather_advantage_ron": 0.07431867380737955,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 28.31811694384259
+    },
+    {
+      "day": "2026-09-24",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1946678972673869,
+      "local_mae_ron_kwh": 0.16917481868200582,
+      "weather_mae_ron_kwh": 0.1697540042310365,
+      "weather_advantage_ron": 0.07431867380737955,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 28.31811694384259
+    },
+    {
+      "day": "2026-09-25",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.1679535793138999,
+      "local_mae_ron_kwh": 0.14670741513307375,
+      "weather_mae_ron_kwh": 0.13028155520601017,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.21513341646477
+    },
+    {
+      "day": "2026-09-25",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.1679535793138999,
+      "local_mae_ron_kwh": 0.14670741513307375,
+      "weather_mae_ron_kwh": 0.13028155520601017,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 23.215133416464763
+    },
+    {
+      "day": "2026-09-26",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.15068156993774687,
+      "local_mae_ron_kwh": 0.154101093435642,
+      "weather_mae_ron_kwh": 0.14763538197539083,
+      "weather_advantage_ron": 0.3877705286933306,
+      "regional_advantage_ron": 0.3877705286933306,
+      "optimised_savings_ron": 29.334834574855666
+    },
+    {
+      "day": "2026-09-26",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.15068156993774687,
+      "local_mae_ron_kwh": 0.154101093435642,
+      "weather_mae_ron_kwh": 0.14763538197539083,
+      "weather_advantage_ron": 0.3877705286933306,
+      "regional_advantage_ron": 0.3877705286933306,
+      "optimised_savings_ron": 29.334834574855666
+    },
+    {
+      "day": "2026-09-27",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.2569826340311747,
+      "local_mae_ron_kwh": 0.2473419347928547,
+      "weather_mae_ron_kwh": 0.23746876011650045,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 27.29910069549429
+    },
+    {
+      "day": "2026-09-27",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.2569826340311747,
+      "local_mae_ron_kwh": 0.2473419347928547,
+      "weather_mae_ron_kwh": 0.23746876011650045,
+      "weather_advantage_ron": 0.0,
+      "regional_advantage_ron": 0.0,
+      "optimised_savings_ron": 27.299100695494317
+    },
+    {
+      "day": "2026-09-28",
+      "battery_exports": false,
+      "calendar_mae_ron_kwh": 0.32073084126880086,
+      "local_mae_ron_kwh": 0.292079854477064,
+      "weather_mae_ron_kwh": 0.28210728940421925,
+      "weather_advantage_ron": -0.45596351470008756,
+      "regional_advantage_ron": -0.45596351470008756,
+      "optimised_savings_ron": 37.558194595781515
+    },
+    {
+      "day": "2026-09-28",
+      "battery_exports": true,
+      "calendar_mae_ron_kwh": 0.32073084126880086,
+      "local_mae_ron_kwh": 0.292079854477064,
+      "weather_mae_ron_kwh": 0.28210728940421925,
+      "weather_advantage_ron": -0.45596351470008756,
+      "regional_advantage_ron": -0.45596351470008756,
+      "optimised_savings_ron": 37.558194595781515
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "retrieved_on": "2026-10-04",
+  "price_source": "https://www.opcom.ro/rapoarte-pzu-raportPIP-export-csv",
+  "weather_source": "https://archive-api.open-meteo.com/v1/archive",
+  "weather_model": "ERA5; gridded reanalysis, not rooftop measurements",
+  "selection": [
+    [
+      2026,
+      1,
+      31
+    ],
+    [
+      2026,
+      4,
+      30
+    ],
+    [
+      2026,
+      7,
+      31
+    ],
+    [
+      2026,
+      9,
+      28
+    ]
+  ],
+  "local_days": 120,
+  "price_intervals": 11520,
+  "paired_hours": 2880,
+  "clock": "OPCOM Europe/Brussels converted via UTC to Europe/Bucharest",
+  "radiation_alignment": "ERA5 preceding-hour mean at t+1 paired with price starting at t"
+}

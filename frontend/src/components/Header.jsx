@@ -46,6 +46,14 @@ export default function Header({ page, onNavigate, activeMember, busy }) {
         >
           Market settings
         </a>
+        <a
+          href="#battery"
+          onClick={() => {
+            if (page !== 'home') onNavigate('home');
+          }}
+        >
+          Battery simulator
+        </a>
       </nav>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

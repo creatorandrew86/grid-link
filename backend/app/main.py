@@ -10,8 +10,10 @@ from fastapi.responses import JSONResponse
 
 from .database import Database
 from .engine import clear_market
-from .models import MarketSettings
+from .models import MarketSettings, ParticipantInput
 from .sign_up import SignupInput, register_participant, verify_password
+from .battery import BatteryScenario, dataset_info, simulate
+from .weather import live_outlook
 
 
 def create_app():
@@ -114,6 +116,24 @@ def create_app():
     @app.post("/api/clearing-preview")
     def clearing_preview(settings: MarketSettings):
         return summary(settings)
+
+    @app.get("/api/battery/dataset")
+    def battery_dataset():
+        return dataset_info()
+
+    @app.post("/api/battery/simulate")
+    def battery_simulate(scenario: BatteryScenario):
+        try:
+            return simulate(scenario)
+        except ValueError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+
+    @app.get("/api/battery/weather-outlook")
+    def weather_outlook():
+        try:
+            return live_outlook()
+        except (httpx.HTTPError, ValueError, KeyError, TypeError, IndexError) as error:
+            raise HTTPException(status_code=503, detail="Weather forecasts are unavailable. Historical simulations still work; try the outlook again later.") from error
 
     @app.post("/api/clearing-run")
     def clearing_run(x_clearing_token: str = Header(default="")):

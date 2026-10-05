@@ -1,0 +1,126 @@
+{
+  "01": {
+    "days": 31,
+    "wholesale_mean": 0.7663634979838709,
+    "night": 0.5308870295698924,
+    "midday": 0.8226377419354839,
+    "evening": 0.933148306451613,
+    "negative_hourly_means": 0,
+    "min_hourly": 0.1310275,
+    "max_hourly": 2.318495,
+    "mean_daily_ghi": 1.3239032258064516,
+    "midday_cheaper_days": 2,
+    "cheapest_hour_midday_days": 4,
+    "fixed_night": {
+      "raw_mean_lei_day": 3.7264202832497015,
+      "mean_with_unprofitable_cycles_skipped": 4.718824207144563,
+      "unprofitable_full_cycles": 15,
+      "period_savings_with_skips": 146.28355042148146
+    },
+    "price_aware_night": {
+      "raw_mean_lei_day": 5.241098048333335,
+      "mean_with_unprofitable_cycles_skipped": 5.909144196057348,
+      "unprofitable_full_cycles": 11,
+      "period_savings_with_skips": 183.18347007777777
+    },
+    "price_aware_day": {
+      "raw_mean_lei_day": 5.568418390179213,
+      "mean_with_unprofitable_cycles_skipped": 6.112130310967742,
+      "unprofitable_full_cycles": 10,
+      "period_savings_with_skips": 189.47603964
+    }
+  },
+  "04": {
+    "days": 30,
+    "wholesale_mean": 0.4871113819444444,
+    "night": 0.5778226944444445,
+    "midday": 0.1535314523809524,
+    "evening": 0.7660669833333333,
+    "negative_hourly_means": 77,
+    "min_hourly": -0.4968,
+    "max_hourly": 1.2570575,
+    "mean_daily_ghi": 5.116033333333333,
+    "midday_cheaper_days": 29,
+    "cheapest_hour_midday_days": 30,
+    "fixed_night": {
+      "raw_mean_lei_day": -1.5789956139506167,
+      "mean_with_unprofitable_cycles_skipped": 0.45284552224691316,
+      "unprofitable_full_cycles": 21,
+      "period_savings_with_skips": 13.585365667407395
+    },
+    "price_aware_night": {
+      "raw_mean_lei_day": 0.5359627997222242,
+      "mean_with_unprofitable_cycles_skipped": 1.4141981776296308,
+      "unprofitable_full_cycles": 14,
+      "period_savings_with_skips": 42.42594532888893
+    },
+    "price_aware_day": {
+      "raw_mean_lei_day": 12.77905336638889,
+      "mean_with_unprofitable_cycles_skipped": 12.77905336638889,
+      "unprofitable_full_cycles": 0,
+      "period_savings_with_skips": 383.3716009916667
+    }
+  },
+  "07": {
+    "days": 31,
+    "wholesale_mean": 0.6296607963709677,
+    "night": 0.7524730376344086,
+    "midday": 0.25775997695852537,
+    "evening": 0.9445187741935485,
+    "negative_hourly_means": 27,
+    "min_hourly": -0.0482475,
+    "max_hourly": 2.86919,
+    "mean_daily_ghi": 6.312258064516129,
+    "midday_cheaper_days": 31,
+    "cheapest_hour_midday_days": 30,
+    "fixed_night": {
+      "raw_mean_lei_day": -1.9566159475746707,
+      "mean_with_unprofitable_cycles_skipped": 1.3130080562962965,
+      "unprofitable_full_cycles": 22,
+      "period_savings_with_skips": 40.7032497451852
+    },
+    "price_aware_night": {
+      "raw_mean_lei_day": 0.565398483817205,
+      "mean_with_unprofitable_cycles_skipped": 2.375851152670252,
+      "unprofitable_full_cycles": 19,
+      "period_savings_with_skips": 73.65138573277781
+    },
+    "price_aware_day": {
+      "raw_mean_lei_day": 14.34834720469534,
+      "mean_with_unprofitable_cycles_skipped": 14.34834720469534,
+      "unprofitable_full_cycles": 0,
+      "period_savings_with_skips": 444.7987633455556
+    }
+  },
+  "09": {
+    "days": 28,
+    "wholesale_mean": 0.9339455580357143,
+    "night": 1.0152570982142857,
+    "midday": 0.4476062117346939,
+    "evening": 1.3659313035714287,
+    "negative_hourly_means": 13,
+    "min_hourly": -0.01414,
+    "max_hourly": 3.236635,
+    "mean_daily_ghi": 4.537535714285714,
+    "midday_cheaper_days": 28,
+    "cheapest_hour_midday_days": 28,
+    "fixed_night": {
+      "raw_mean_lei_day": 1.1755958566666693,
+      "mean_with_unprofitable_cycles_skipped": 2.8873812055026473,
+      "unprofitable_full_cycles": 11,
+      "period_savings_with_skips": 80.84667375407412
+    },
+    "price_aware_night": {
+      "raw_mean_lei_day": 3.272166301805557,
+      "mean_with_unprofitable_cycles_skipped": 4.452879962103174,
+      "unprofitable_full_cycles": 8,
+      "period_savings_with_skips": 124.68063893888888
+    },
+    "price_aware_day": {
+      "raw_mean_lei_day": 19.769868267579366,
+      "mean_with_unprofitable_cycles_skipped": 19.769868267579366,
+      "unprofitable_full_cycles": 0,
+      "period_savings_with_skips": 553.5563114922222
+    }
+  }
+}

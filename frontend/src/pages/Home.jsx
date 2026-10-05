@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { api, money, amount, percent } from '../apiClient';
+import BatteryPlanner from '../BatteryPlanner';
 
 export function Arrow({ diagonal = false }) {
   return (
@@ -361,6 +362,7 @@ export default function Home({ summary, refresh, busy, error, setError, notice, 
               </div>
             </section>
           )}
+          <BatteryPlanner api={api} />
         </>
       )}
     </main>

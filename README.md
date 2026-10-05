@@ -6,6 +6,8 @@ Members join as consumers or prosumers. For each 15-minute interval, GridLink es
 
 The application has a React/Vite/Tailwind frontend, a Python FastAPI backend, and a persistent SQLite database for local use. Supabase storage integration, database migrations, and functions for scheduled clearing are included for a later connection to a hosted project. The frontend follows `.codex/DESIGN.md`.
 
+A separate battery simulator now replays real Romanian hourly prices and weather, compares charging/export schedules and tests experimental regional-weather price estimates. Its settings and RON calculations are independent of the original community interval demonstration.
+
 ## Purpose and scope
 
 The project explores a simple question: how much value could a community retain if a producer's surplus were sold to another member at a price between the grid export and import tariffs?
@@ -26,7 +28,7 @@ On this workspace, dependencies are installed. From the repository root:
 
 Open http://127.0.0.1:5173. API documentation is at http://127.0.0.1:8000/docs. The launcher starts hidden local processes and prints their PIDs. Stop them with `Stop-Process -Id <PID>`. Logs are in `.tools/`. The CMD launcher permits its PowerShell script for that invocation only; it does not change the system execution policy.
 
-For a fresh checkout, use Python 3.11+ and Node.js 22.12+:
+For a fresh checkout with the locked scientific dependencies, use Python 3.12+ and Node.js 22.12+:
 
 ```powershell
 python -m venv .venv
@@ -298,13 +300,54 @@ Adding forecasts and evaluating a schedule would require extending the input mod
 
 Other possible extensions include measured consumption and production, multiple communities, historical reporting, participant profiles, and richer allocation policies. These would be separate additions to the working interval model.
 
+## Battery simulator
+
+Open `http://127.0.0.1:5173/#battery` after starting the local servers. The new screen compares no storage, night-only scheduling and a day-ahead battery optimiser using the collected Romanian prices and weather. It also compares calendar, local-weather and local-plus-coastal price estimates, with all resulting schedules billed at actual historical prices.
+
+Choose a research date or an example preset, adjust demand/PV/battery settings, then press **Run comparison**. “Surplus for export” demonstrates storing solar for later sales under an illustrative wholesale-linked export contract. Expand the contract settings to adjust import charges, VAT, export remuneration and connection limits. Results use RON and represent one shared billing meter; the existing community trading screen retains its separate EUR demonstration settings.
+
+Install the updated backend dependencies if using another environment:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r backend/requirements.lock.txt
+.\dev.cmd
+```
+
+This workspace's prepared `.tools/venv` environment is already updated. If the backend was running before the code changed, restart that project's backend process to load the new endpoints. The local launcher reuses running servers and does not enable automatic Python reload.
+
+The battery screen includes cost comparisons, energy/price/state-of-charge charts, an hourly schedule and an optional current 48-hour weather outlook for six Romanian locations. Forecast price estimates remain experimental. Historical weather-model comparisons use ERA5 reanalysis, so their displayed savings do not establish live forecast performance.
+
+See [the implementation and regional-weather analysis](research/romania/BATTERY_OPTIMISER.md) for the constraints, export strategy, experiment results and the data needed for a national forecast. The new API routes are `GET /api/battery/dataset`, `POST /api/battery/simulate` and `GET /api/battery/weather-outlook`.
+
+The [measured-consumption backtest](research/romania/CONSUMER_BACKTEST.md) uses five published German household meter profiles against the Romanian price/weather dataset. It reports bill reductions, profitable-day rates, price-estimation losses and battery-cost/payback assumptions. Its 6,488 scenario-days passed physical checks; annual ROI is a conditional extrapolation from four sampled seasons, and the replay assumes known demand. Run it with:
+
+```powershell
+.\.tools\venv\Scripts\python.exe research/romania/backtest_consumers.py
+```
+
+## Battery product scope and shared-storage ROI
+
+Decision, 5 October 2026: GridLink will offer shared community storage only. Buying a personal battery is excluded from the prosumer product and roadmap. Prosumers can join with their PV; membership does not require buying a battery. The simulator already represents shared storage behind one billing meter and has no personal-battery enrolment option.
+
+The [shared community comparison](research/romania/CONSUMER_BACKTEST.md#shared-community-results) and its reproducible ROI calculations remain part of the project. For four homes behind one meter with existing 20 kWp PV, the 10.24 kWh scenario projects 4,728 RON annual energy-bill cash savings, 2.38-year simple payback and +284.05% ten-year undiscounted cash ROI. Without PV, that size projects 2,851 RON annual savings and 4.00-year simple payback. Assumed installed cost is 11,000.42 RON with an existing compatible inverter; operating cost is 100 RON/year and projected savings fade by 2% annually.
+
+These are conditional research results using an illustrative export tariff, known demand and modelled PV over four sampled seasons. They require validation against the community's actual contract, full installed cost and forecast errors. They do not establish returns for separately billed members or guarantee a profitable shared installation.
+
+The [personal-battery study](research/romania/PROSUMER_BATTERY_ROI.md) and [per-design results](research/romania/prosumer-designs.csv) are retained as the research record supporting exclusion. At published base costs, none of its 840 main designs has positive ten-year ROI. A few optimistic multi-day cases recover nominal cost but still have negative NPV at 6%. Personal storage is not an available or planned GridLink offering.
+
+## PV farms and apartment buildings
+
+The [Romanian PV-farm and apartment-building feasibility study](research/romania/PV_FARMS_AND_APARTMENTS.md), checked on 5 October 2026, documents merchant solar cases, producer membership restrictions, licensed-supplier alternatives and the workflow for separately enrolled apartment meters. It distinguishes adopted community rules from the billing draft still under consultation, and explains how tariffs, matching demand, batteries and EV charging affect the business case. The current prototype does not perform real supplier/distributor settlement.
+
 ## Current limitations
 
-- Demand and generation are estimates. There are no smart-meter feeds, weather forecasts, or time-varying participant profiles.
+For a researched comparison of Romanian dynamic prices, weather, battery dispatch and EV charging, see [the Romanian market analysis](research/romania/REPORT.md). It includes 120 historical days, hourly price/weather data and a reproducible battery benchmark. The battery simulator uses these datasets; real battery control remains unimplemented.
+
+- The app uses assumed hourly demand/PV profiles and an advisory weather outlook. The separate research backtest uses public measured German demand, but there are no live participant smart-meter feeds or measured Romanian participant profiles.
 - Registration adds a member to a shared demo. There are no authenticated user accounts, private member views, or administrator permissions.
 - Saved market settings affect the entire community. The current UI has no role-based restriction on changing them.
 - Participants can be added, but the current public API does not offer editing or removal.
-- Local allocations are proportional. The model does not account for geography, network congestion, electrical losses, storage batteries, or individual contracts.
+- Local allocations are proportional. Community clearing does not model geography, congestion, storage or individual contracts. The separate battery simulator models one shared meter, storage losses and configurable tariff assumptions.
 - Bills are interval calculations. There are no monthly invoices, payment processing, taxes, or actual settlement with a utility or network operator.
 - Supabase setup files are included, but a hosted project and scheduler are not configured by the local launcher.
 - EV charging optimization and control are planned functionality.
@@ -319,7 +362,7 @@ The prototype is suitable for demonstrating and tuning the model with sample dat
 npm.cmd run build
 ```
 
-The checks exercise accounting and energy conservation across varied communities, transport splits, empty/night markets, uncompetitive prices, API validation, persistence, preview isolation, and duplicate clearing requests.
+The checks exercise accounting and energy conservation across varied communities, transport splits, empty/night markets, uncompetitive prices, API validation, persistence, preview isolation, and duplicate clearing requests. Battery checks also cover state-of-charge conservation, physical operating limits, fair end-of-day charge, real seasonal days, negative prices, zero capacity, a hand-calculated scheduling example and forecast-provider failure.
 
 The accounting checks verify that locally bought and sold energy agree, total supply balances total demand after grid exchanges, the summed transport payments equal the collected fee, and no member loses money against the benchmark when local trading is enabled. API checks use a temporary database to verify rejected inputs, saved settings after restart, and the difference between a preview and a persisted change.
 

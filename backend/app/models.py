@@ -3,14 +3,14 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
-class Participant(BaseModel):
-    model_config = ConfigDict(str_strip_whitespace=True, extra="ignore", allow_inf_nan=False)
-    id: str
+class ParticipantInput(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid", allow_inf_nan=False)
     name: str = Field(min_length=2, max_length=80)
     type: Literal["consumer", "prosumer"]
     load_kw: float = Field(ge=0, le=1000)
     solar_kwp: float = Field(default=0, ge=0, le=1000)
-    community_id: str | None = None
+    email: str | None = None
+    pod: str | None = None
 
     @model_validator(mode="after")
     def check_solar(self):
@@ -19,6 +19,12 @@ class Participant(BaseModel):
         if self.type == "prosumer" and self.solar_kwp <= 0:
             raise ValueError("Enter a solar capacity greater than zero for a prosumer.")
         return self
+
+
+class Participant(ParticipantInput):
+    model_config = ConfigDict(extra="ignore")
+    id: str
+    community_id: str | None = None
 
 
 class MarketSettings(BaseModel):

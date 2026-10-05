@@ -1,0 +1,29 @@
+{
+  "checked_on": "2026-10-05",
+  "currency": "RON",
+  "measured_consumption": "https://data.open-power-system-data.org/household_data/2020-04-15/",
+  "price_intervals": "https://www.opcom.ro/rapoarte-pzu-raportPIP-export-csv",
+  "weather_documentation": "https://open-meteo.com/en/docs/historical-weather-api",
+  "weather_endpoint": "https://archive-api.open-meteo.com/v1/archive",
+  "fixed_prosumer_offer": "https://cdn.hidroelectrica.ro/cdn/furnizare/2026/30_09/oferta_tip_casnic_viitor_hidro_c3-0110-3110.pdf",
+  "distribution_tariff_annex": "https://cdn.hidroelectrica.ro/cdn/furnizare/2026/30_09/oferta_tip_casnic_hidrofix_c2-0110-3110-26.pdf",
+  "capped_dynamic_offer": "https://www.yellowgrid.ro/api/cms-file?name=oferta-agregare-si-furnizare-pret-dinamic-pcccp05-05-final.pdf&url=https%3A%2F%2Fprod-ro-website-cms.yellowgrid.ro%2Fmedia%2F5eojupyt%2Foferta-agregare-si-furnizare-pret-dinamic-pcccp05-05-final.pdf",
+  "law_status": "https://www.senat.ro/Legis/Lista.aspx?cod=25551",
+  "law_adopted_text": "https://www.senat.ro/legis/PDF/2023/23L504FP.PDF?nocache=true",
+  "anre_transitional_draft": "https://anre.ro/proiect-de-ordin-privind-stabilirea-unor-masuri-tranzitorii-pentru-aplicarea-mecanismului-de-compensare-cantitativa-in-cazul-contractelor-de-vanzare-cumparare-a-energiei-electrice-aflate-in-derulare-2/",
+  "anre_multi_location_draft": "https://anre.ro/proiect-de-ordin-pentru-aprobarea-metodologiei-privind-regulile-de-comercializare-facturare-decontare-si-alocare-valorica-multi-loc-aplicabile-prosumatorilor-faza-a-ii-a/",
+  "monthly_pzu_reports": {
+    "2026-01": "https://www.opcom.ro/uploads/doc/rapoarte/lunar/R_2601_RO.pdf",
+    "2026-04": "https://www.opcom.ro/uploads/doc/rapoarte/lunar/R_2604_RO.pdf",
+    "2026-07_and_2026-09_announcements": "https://www.opcom.ro/anunturi-stiri-pp/ro/1"
+  },
+  "battery_price": "https://powersense.ro/baterie-deye-se-g5-1-pro-b/",
+  "battery_datasheet": "https://deye.com/wp-content/uploads/2026/01/deye-se-g5.1-pro-b-series_brochure-20260115auv1.0.pdf",
+  "snapshot_notes": [
+    "The VIITOR HIDRO prosumer clause is 0.515 RON/kWh excluding TG; headline non-prosumer pricing is not used.",
+    "Quantitative-compensation exports are valued at active energy only; import network charges and taxes remain.",
+    "Capped dynamic terms last three months. Stored-energy export eligibility, controller cost and actual invoice interpretation need contract confirmation.",
+    "Post-2030 monthly PZU uses observed 2026 volume-weighted means as a scenario, not as a forecast.",
+    "PDF downloads are cached in ignored raw/. Their SHA-256 values and the committed input-data SHA-256 values are in prosumer-backtest.json."
+  ]
+}

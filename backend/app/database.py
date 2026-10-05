@@ -70,7 +70,10 @@ class Database:
         return res.json()
 
     def initialize(self):
-        self.settings()
+        try:
+            self.settings()
+        except Exception:
+            pass
 
     def participants(self):
         cid = self.community_id
