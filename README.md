@@ -330,6 +330,8 @@ The [measured-consumption backtest](research/romania/CONSUMER_BACKTEST.md) uses 
 
 ## Battery product scope and shared-storage ROI
 
+Signed-in members now have **Account → A battery for your community**, with battery chemistry/size comparisons, measured-data coverage, cash ROI/payback/NPV, equal versus consumption-based contributions, interest preferences and voluntary switches to eligible battery-willing communities. Real community measurements are separate from simulated history; an explicit planning preview is available while readings are missing. See [setup, formulas and funding fairness](docs/COMMUNITY_BATTERY.md) and apply the new Supabase migration before using the feature.
+
 Decision, 5 October 2026: GridLink will offer shared community storage only. Buying a personal battery is excluded from the prosumer product and roadmap. Prosumers can join with their PV; membership does not require buying a battery. The simulator already represents shared storage behind one billing meter and has no personal-battery enrolment option.
 
 The [shared community comparison](research/romania/CONSUMER_BACKTEST.md#shared-community-results) and its reproducible ROI calculations remain part of the project. For four homes behind one meter with existing 20 kWp PV, the 10.24 kWh scenario projects 4,728 RON annual energy-bill cash savings, 2.38-year simple payback and +284.05% ten-year undiscounted cash ROI. Without PV, that size projects 2,851 RON annual savings and 4.00-year simple payback. Assumed installed cost is 11,000.42 RON with an existing compatible inverter; operating cost is 100 RON/year and projected savings fade by 2% annually.

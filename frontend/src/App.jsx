@@ -163,6 +163,7 @@ export default function App() {
           busy={busy}
           onNavigate={navigate}
           onLogout={handleLogout}
+          onCommunitySwitched={handleJoined}
         />
       )}
 

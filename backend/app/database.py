@@ -1,5 +1,7 @@
 """Supabase REST client for GridLink."""
 import os
+from datetime import datetime, timedelta, timezone
+from urllib.parse import quote
 from pathlib import Path
 from uuid import uuid4
 
@@ -75,8 +77,8 @@ class Database:
         except Exception:
             pass
 
-    def participants(self):
-        cid = self.community_id
+    def participants(self, community_id=None):
+        cid = community_id or self.community_id
         query = f"?community_id=eq.{cid}&select=*&order=name" if cid else "?select=*&order=name"
         rows = self.remote("GET", "participants", query=query)
         return [Participant.model_validate(row) for row in rows]
@@ -84,7 +86,7 @@ class Database:
     def insert_participant(self, row: dict) -> Participant:
         if "id" not in row:
             row["id"] = str(uuid4())
-        if self.community_id:
+        if not row.get("community_id") and self.community_id:
             row["community_id"] = self.community_id
         return Participant.model_validate(self.remote("POST", "participants", row)[0])
 
@@ -92,8 +94,8 @@ class Database:
         rows = self.remote("GET", "participants", query=f"?email=eq.{email.strip().lower()}&limit=1")
         return rows[0] if rows else None
 
-    def settings(self):
-        cid = self.community_id
+    def settings(self, community_id=None):
+        cid = community_id or self.community_id
         query = f"?community_id=eq.{cid}&select=value&limit=1" if cid else "?select=value&limit=1"
         rows = self.remote("GET", "market_settings", query=query)
         if not rows:
@@ -103,8 +105,68 @@ class Database:
             return default
         return MarketSettings.model_validate(rows[0]["value"])
 
-    def save_settings(self, settings: MarketSettings):
-        cid = self.community_id
+    def community_details(self, community_id):
+        rows = self.remote("GET", "communities", query=f"?id=eq.{community_id}&limit=1")
+        if not rows:
+            raise ValueError("Community not found.")
+        return rows[0]
+
+    def battery_interests(self, community_id):
+        return self.remote("GET", "community_battery_interest",
+                           query=f"?community_id=eq.{community_id}&select=participant_id,interested")
+
+    def save_battery_interest(self, member, interested):
+        # Keep one preference per member, including after a transfer.
+        table = "community_battery_interest"
+        rows = self.remote("GET", table, query=f"?participant_id=eq.{member['id']}&limit=1")
+        payload = {"participant_id": member["id"], "community_id": member["community_id"],
+                   "interested": interested, "updated_at": datetime.now(timezone.utc).isoformat()}
+        return self.remote("PATCH" if rows else "POST", table, payload,
+                           query=f"?participant_id=eq.{member['id']}" if rows else "")[0]
+
+    def battery_candidates(self, community, member):
+        zone = community.get("network_zone")
+        if not zone:
+            return []
+        approvals = self.remote("GET", "approved_pods", query=(
+            f"?pod=eq.{quote(member['pod'], safe='')}&community_id=eq.{community['id']}"
+            "&is_active=eq.true&select=battery_eligible_communities&limit=1"))
+        allowed = set(approvals[0].get("battery_eligible_communities", [])) if approvals else set()
+        if not allowed:
+            return []
+        candidates = self.remote("GET", "communities", query=(
+            f"?id=neq.{community['id']}&network_zone=eq.{quote(zone, safe='')}"
+            "&battery_policy=in.(interested,approved)&battery_accepting_members=eq.true"
+            "&battery_meter_boundary=eq.shared_meter&select=id,name,battery_policy&order=battery_policy,name"))
+        return [c for c in candidates if c["id"] in allowed]
+
+    def accept_battery_transfer(self, participant_id, target_id):
+        return self.remote("POST", "rpc/accept_battery_community_transfer", {
+            "p_participant_id": participant_id, "p_target_id": target_id})
+
+    def measured_history(self, community_id):
+        # ponytail: replay the last 120 days; paginate a longer archive for seasonal studies.
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=120)).isoformat()
+        rows, offset = [], 0
+        while True:
+            page = self.remote("GET", "community_meter_intervals", query=(
+                f"?community_id=eq.{community_id}&interval_start=gte.{quote(cutoff, safe='')}"
+                f"&select=interval_start,summary&order=interval_start&limit=1000&offset={offset}"))
+            rows.extend(page)
+            if len(page) < 1000:
+                return rows
+            offset += len(page)
+
+    def save_measurements(self, batch):
+        payload = [{"community_id": str(batch.community_id), "interval_start": r.interval_start.isoformat(),
+                    "summary": {"mode": "measured", "currency": "RON", "meter_boundary": "shared_meter",
+                                "battery_free_baseline": True, "interval_minutes": r.interval_minutes,
+                                "measurement": r.model_dump(mode="json", exclude={"interval_start", "interval_minutes"})}}
+                   for r in batch.readings]
+        return self.remote("POST", "community_meter_intervals", payload)
+
+    def save_settings(self, settings: MarketSettings, community_id=None):
+        cid = community_id or self.community_id
         query = f"?community_id=eq.{cid}" if cid else "?id=eq.1"
         self.remote("PATCH", "market_settings", {"value": settings.model_dump()}, query=query)
 

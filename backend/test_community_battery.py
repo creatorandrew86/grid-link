@@ -1,0 +1,268 @@
+"""Measured ROI, cost allocation, community isolation, and voluntary-switch checks."""
+import unittest
+from datetime import datetime, timedelta, timezone
+from unittest.mock import MagicMock, patch
+from uuid import UUID
+from zoneinfo import ZoneInfo
+
+import httpx
+from fastapi.testclient import TestClient
+from pydantic import ValidationError
+
+from app.community_battery import (BatteryDesign, ComparisonInput, Measurement, MeasurementBatch,
+                                   compare_batteries, financial_projection, measured_days)
+from app.models import MarketSettings, Participant
+from app.sign_up import SignupInput, hash_password, register_participant
+from app.database import Database
+
+with patch("app.database.Database.__init__", return_value=None):
+    from app.main import create_app
+
+ALICE = "00000000-0000-0000-0000-000000000001"
+BOB = "00000000-0000-0000-0000-000000000002"
+HOME = "00000000-0000-0000-0000-000000000010"
+OTHER = "00000000-0000-0000-0000-000000000020"
+
+
+def design(**changes):
+    return BatteryDesign(chemistry="LFP", capacity_kwh=10, power_kw=5, installed_cost_ron=3000,
+                         efficiency=1, usable_fraction=.9, service_years=10, annual_fade=0,
+                         annual_maintenance_ron=0, **changes)
+
+
+def measured_events(days=30, member_readings=True):
+    start = datetime(2025, 1, 1, tzinfo=timezone.utc)
+    rows = []
+    for hour in range(days * 24):
+        row = {"load_kwh": 1, "generation_kwh": 0,
+               "import_price_ron": .1 if hour % 24 < 6 else 1, "export_price_ron": 0}
+        if member_readings:
+            row["member_loads_kwh"] = {ALICE: .25, BOB: .75}
+        rows.append({"interval_start": (start + timedelta(hours=hour)).isoformat(), "summary": {
+            "mode": "measured", "currency": "RON", "meter_boundary": "shared_meter",
+            "battery_free_baseline": True, "interval_minutes": 60, "measurement": row}})
+    return rows
+
+
+def participants():
+    return [Participant(id=ALICE, community_id=HOME, name="Alice", type="consumer", load_kw=.25),
+            Participant(id=BOB, community_id=HOME, name="Bob", type="consumer", load_kw=.75)]
+
+
+class CommunityBatteryChecks(unittest.TestCase):
+    def test_hand_calculated_cash_projection_and_service_life(self):
+        d = design().model_copy(update={"service_years": 3})
+        request = ComparisonInput(designs=[d], discount_rate=0)
+        result = financial_projection(1000, d, request)
+        self.assertEqual(result["years"], 3)
+        self.assertEqual(result["payback_years"], 3)
+        self.assertEqual(result["roi_pct"], 0)
+        self.assertEqual(result["npv_ron"], 0)
+        self.assertEqual(result["timeline"][-1]["cumulative_ron"], 0)
+        self.assertIsNone(financial_projection(0, d, request)["payback_years"])
+        discounted = financial_projection(1000, d, request.model_copy(update={"discount_rate": .1}))
+        self.assertAlmostEqual(discounted["npv_ron"], 1000 / 1.1 + 1000 / 1.1**2 + 1000 / 1.1**3 - 3000)
+
+    def test_real_optimiser_cash_savings_and_both_funding_allocations(self):
+        request = ComparisonInput(designs=[design()], dispatch_wear_ron_per_kwh=0)
+        result = compare_batteries(request, participants(), measured_events(), "UTC", "shared_meter", ALICE)
+        self.assertEqual(result["status"], "ready")
+        row = result["designs"][0]
+        self.assertAlmostEqual(row["sample_cash_saving_ron"], 30 * 9 * .9, places=5)
+        self.assertAlmostEqual(row["annual_cash_saving_ron"], 365 * 9 * .9, places=5)
+        self.assertEqual(row["member_allocations"]["equal_share"]["contribution_ron"], 1500)
+        self.assertEqual(row["member_allocations"]["consumption_share"]["contribution_ron"], 750)
+        self.assertAlmostEqual(row["member_allocations"]["consumption_share"]["first_year_saving_ron"],
+                               row["projections"]["base"]["first_year_net_saving_ron"] * .25)
+        self.assertNotIn("member_loads_kwh", str(result))
+
+    def test_missing_measurements_and_short_samples_never_manufacture_roi(self):
+        request = ComparisonInput(designs=[design()])
+        result = compare_batteries(request, participants(), [], "UTC", "shared_meter", ALICE)
+        self.assertEqual(result["status"], "no_measured_history")
+        self.assertEqual(result["designs"], [])
+        short = compare_batteries(request, participants(), measured_events(1, False), "UTC", "shared_meter", ALICE)
+        self.assertEqual(short["status"], "limited_history")
+        self.assertIsNone(short["designs"][0]["projections"])
+        self.assertIsNone(short["designs"][0]["annual_cash_saving_ron"])
+        self.assertIsNone(short["designs"][0]["member_allocations"]["consumption_share"]["share"])
+        unverified = compare_batteries(request, participants(), measured_events(1), "UTC", "separate_meters", ALICE)
+        self.assertEqual(unverified["status"], "meter_boundary_unconfirmed")
+        with self.assertRaises(ValueError):
+            compare_batteries(request.model_copy(update={"source": "planning"}), participants(), [], "UTC", "unverified", ALICE)
+
+    def test_simulated_wrong_currency_incomplete_and_duplicate_days_are_excluded(self):
+        events = measured_events(1)
+        days, coverage = measured_days(events, "UTC")
+        self.assertEqual(len(days), 1)
+        for summary in ({"mode": "simulation"}, {"currency": "EUR"}, {"battery_free_baseline": False}):
+            bad = [{**r, "summary": {**r["summary"], **summary}} for r in events]
+            days, coverage = measured_days(bad, "UTC")
+            self.assertEqual(days, [])
+            self.assertEqual(coverage["excluded_intervals"], 24)
+        for bad in (events[:-1], events + [events[0]]):
+            self.assertEqual(measured_days(bad, "UTC")[1]["incomplete_days"], 1)
+
+    def test_dst_day_is_complete_without_inventing_a_missing_hour(self):
+        zone = ZoneInfo("Europe/Bucharest")
+        start = datetime(2025, 3, 30, tzinfo=zone).astimezone(timezone.utc)
+        template = measured_events(1)[0]["summary"]
+        events = [{"interval_start": (start + timedelta(hours=i)).isoformat(), "summary": template} for i in range(23)]
+        days, _ = measured_days(events, "Europe/Bucharest")
+        self.assertEqual(len(days), 1)
+        self.assertEqual(len(days[0]), 23)
+
+    def test_measurements_validate_ownership_totals_time_and_duplicates(self):
+        payload = {"interval_start": "2025-01-01T00:00:00Z", "load_kwh": 1, "generation_kwh": 0,
+                   "import_price_ron": 1, "export_price_ron": 0}
+        for bad in ({"member_loads_kwh": {ALICE: 2}}, {"member_loads_kwh": {ALICE: float("nan")}},
+                    {"interval_start": "2025-01-01T00:01:00Z"}, {"interval_start": "2025-01-01T00:00:00"},
+                    {"interval_start": "2099-01-01T00:00:00Z"}):
+            with self.assertRaises(ValidationError):
+                Measurement(**{**payload, **bad})
+        with self.assertRaises(ValidationError):
+            MeasurementBatch(community_id=HOME, shared_meter_confirmed=True,
+                             battery_free_baseline_confirmed=True, readings=[payload, payload])
+
+    def test_quarter_hour_meter_data_and_all_nine_technology_size_options(self):
+        designs = [design().model_copy(update={"chemistry": chemistry, "capacity_kwh": capacity,
+                   "power_kw": capacity / 2, "efficiency": efficiency, "usable_fraction": usable})
+                   for chemistry, efficiency, usable in (("LFP", .92, .9), ("NMC", .9, .85), ("Lead-acid", .8, .5))
+                   for capacity in (5, 10, 20)]
+        events = []
+        start = datetime(2025, 1, 1, tzinfo=timezone.utc)
+        for i in range(96):
+            events.append({"interval_start": (start + timedelta(minutes=15*i)).isoformat(), "summary": {
+                "mode": "measured", "currency": "RON", "meter_boundary": "shared_meter",
+                "battery_free_baseline": True, "interval_minutes": 15, "measurement": {
+                    "load_kwh": .25, "generation_kwh": 0, "import_price_ron": .1 if i < 24 else 1,
+                    "export_price_ron": 0, "member_loads_kwh": {ALICE: .0625, BOB: .1875}}}})
+        result = compare_batteries(ComparisonInput(designs=designs), participants(), events, "UTC", "shared_meter", ALICE)
+        self.assertEqual(len(result["designs"]), 9)
+        self.assertEqual(result["coverage"]["valid_intervals"], 96)
+        for row in result["designs"]:
+            self.assertNotIn("error", row)
+            self.assertGreater(row["sample_cash_saving_ron"], 0)
+            self.assertGreaterEqual(row["sample_saving_after_wear_ron"], -1e-5)
+
+    def test_signup_and_insert_keep_the_pods_approved_community(self):
+        db = MagicMock()
+        db.remote.side_effect = [[{"community_id": OTHER}], []]
+        form = SignupInput(name="New Member", email="new@example.com", password="correct-password",
+                           pod="NEWPOD123456", type="consumer", load_kw=1)
+        register_participant(db, form)
+        self.assertEqual(db.insert_participant.call_args.args[0]["community_id"], OTHER)
+        with patch.object(Database, "__init__", return_value=None):
+            real = Database()
+        real._community_id = HOME
+        real.remote = MagicMock(side_effect=lambda method, table, payload: [payload])
+        member = real.insert_participant({"id": ALICE, "community_id": OTHER, "name": "Alice",
+                                          "type": "consumer", "load_kw": 1})
+        self.assertEqual(member.community_id, OTHER)
+
+    def test_suggestions_require_explicit_pod_approval_in_addition_to_network_zone(self):
+        with patch.object(Database, "__init__", return_value=None):
+            db = Database()
+        db.remote = MagicMock(side_effect=[[{"battery_eligible_communities": [OTHER]}],
+                                            [{"id": OTHER, "name": "Allowed"}, {"id": HOME, "name": "Not allowed"}]])
+        result = db.battery_candidates({"id": HOME, "network_zone": "zone-a"}, {"id": ALICE, "pod": "ALICEPOD1234"})
+        self.assertEqual([r["id"] for r in result], [OTHER])
+        db.remote = MagicMock(return_value=[{"battery_eligible_communities": []}])
+        self.assertEqual(db.battery_candidates({"id": HOME, "network_zone": "zone-a"}, {"pod": "ALICEPOD1234"}), [])
+        self.assertEqual(db.remote.call_count, 1)
+
+
+class CommunityBatteryApiChecks(unittest.TestCase):
+    def setUp(self):
+        self.member = {**participants()[0].model_dump(), "email": "alice@example.com", "pod": "ALICEPOD1234",
+                       "password_hash": hash_password("correct-password")}
+        with patch("app.main.Database", autospec=True) as factory:
+            self.db = factory.return_value
+            self.db.mode = "test"
+            self.db.get_participant_by_email.return_value = self.member
+            self.db.remote.side_effect = lambda *a, **kw: [self.member]
+            self.db.community_details.return_value = {"id": HOME, "name": "Home Community", "timezone": "UTC",
+                "network_zone": "zone-a", "battery_meter_boundary": "shared_meter", "battery_policy": "declined"}
+            self.db.participants.return_value = participants()
+            self.db.settings.return_value = MarketSettings()
+            self.db.measured_history.return_value = measured_events(1)
+            self.db.battery_interests.return_value = [{"participant_id": ALICE, "interested": True},
+                {"participant_id": BOB, "interested": False}, {"participant_id": "outsider", "interested": True}]
+            self.db.battery_candidates.return_value = [{"id": OTHER, "name": "Battery Community", "battery_policy": "approved"}]
+            self.client = TestClient(create_app())
+        login = self.client.post("/api/login", json={"email": "alice@example.com", "password": "correct-password"})
+        self.headers = {"Authorization": f"Bearer {login.json()['access_token']}"}
+
+    def test_member_context_aggregate_privacy_and_community_scoping(self):
+        self.assertEqual(self.client.get("/api/community-battery").status_code, 401)
+        response = self.client.get("/api/community-battery", headers=self.headers)
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json()["interested_count"], 1)
+        self.assertEqual(response.json()["answered_count"], 2)
+        self.assertNotIn(BOB, response.text)
+        self.assertNotIn("password_hash", response.text)
+        self.db.participants.assert_called_with(HOME)
+        self.db.measured_history.assert_called_with(HOME)
+        self.client.get("/api/clearing-summary", headers=self.headers)
+        self.db.settings.assert_called_with(HOME)
+        self.db.participants.assert_called_with(HOME)
+        self.client.put("/api/market-settings", json={}, headers=self.headers)
+        self.assertEqual(self.db.save_settings.call_args.args[1], HOME)
+
+    def test_preferences_and_roi_cannot_target_someone_elses_community(self):
+        response = self.client.put("/api/community-battery/interest", headers=self.headers, json={"interested": False})
+        self.assertEqual(response.status_code, 200)
+        member, interested = self.db.save_battery_interest.call_args.args
+        self.assertEqual(member["id"], ALICE)
+        self.assertFalse(interested)
+        payload = {"designs": [design().model_dump()], "community_id": OTHER}
+        self.assertEqual(self.client.post("/api/community-battery/compare", headers=self.headers, json=payload).status_code, 422)
+        payload.pop("community_id")
+        response = self.client.post("/api/community-battery/compare", headers=self.headers, json=payload)
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertNotIn(BOB, response.text)
+
+    def test_only_explicit_acceptance_switches_the_signed_in_member(self):
+        self.client.get("/api/community-battery", headers=self.headers)
+        self.db.accept_battery_transfer.assert_not_called()
+        self.db.accept_battery_transfer.return_value = {"status": "accepted", "community_id": OTHER}
+        def accept(*args):
+            self.member["community_id"] = OTHER
+            return {"status": "accepted", "community_id": OTHER}
+        self.db.accept_battery_transfer.side_effect = accept
+        response = self.client.post("/api/community-battery/switch", headers=self.headers,
+                                    json={"target_community_id": OTHER})
+        self.assertEqual(response.status_code, 200, response.text)
+        self.db.accept_battery_transfer.assert_called_once_with(ALICE, OTHER)
+        self.assertEqual(response.json()["user"]["community_id"], OTHER)
+        self.assertNotIn("password_hash", response.text)
+        self.assertEqual(self.client.post("/api/community-battery/switch", json={"target_community_id": OTHER}).status_code, 401)
+
+    def test_ineligible_or_changed_destinations_do_not_switch_members(self):
+        self.db.battery_candidates.return_value = []
+        self.assertEqual(self.client.post("/api/community-battery/switch", headers=self.headers,
+            json={"target_community_id": OTHER}).status_code, 409)
+        self.db.accept_battery_transfer.assert_not_called()
+        self.db.battery_candidates.return_value = [{"id": OTHER}]
+        response = httpx.Response(400, request=httpx.Request("POST", "https://example.com/rpc"))
+        self.db.accept_battery_transfer.side_effect = httpx.HTTPStatusError("Eligibility changed", request=response.request, response=response)
+        self.assertEqual(self.client.post("/api/community-battery/switch", headers=self.headers,
+            json={"target_community_id": OTHER}).status_code, 409)
+        self.assertEqual(self.member["community_id"], HOME)
+
+    def test_metering_requires_server_secret_and_complete_member_coverage(self):
+        reading = {"interval_start": "2025-01-01T00:00:00Z", "interval_minutes": 60, "load_kwh": 1,
+                   "generation_kwh": 0, "import_price_ron": 1, "export_price_ron": 0}
+        payload = {"community_id": HOME, "shared_meter_confirmed": True,
+                   "battery_free_baseline_confirmed": True, "readings": [reading]}
+        self.assertEqual(self.client.post("/api/community-battery/measurements", json=payload, headers=self.headers).status_code, 403)
+        with patch.dict("os.environ", {"METERING_TOKEN": "test-meter-secret"}):
+            headers = {"x-metering-token": "test-meter-secret"}
+            self.db.save_measurements.return_value = [reading]
+            self.assertEqual(self.client.post("/api/community-battery/measurements", json=payload, headers=headers).status_code, 201)
+            payload["readings"][0]["member_loads_kwh"] = {ALICE: 1}
+            self.assertEqual(self.client.post("/api/community-battery/measurements", json=payload, headers=headers).status_code, 422)
+
+
+if __name__ == "__main__":
+    unittest.main()

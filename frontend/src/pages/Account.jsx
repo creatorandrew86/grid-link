@@ -1,7 +1,8 @@
 import { money, amount } from '../apiClient';
 import { Arrow } from './Home';
+import CommunityBatteryPlan from '../CommunityBatteryPlan';
 
-export default function Account({ member, summary, loading, refresh, busy, onNavigate, onLogout }) {
+export default function Account({ member, summary, loading, refresh, busy, onNavigate, onLogout, onCommunitySwitched }) {
   if (loading && !member) {
     return (
       <div className="account-page dark" style={{ minHeight: 'calc(100vh - 85px)', padding: '60px var(--gutter)' }}>
@@ -68,6 +69,7 @@ export default function Account({ member, summary, loading, refresh, busy, onNav
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+          <CommunityBatteryPlan key={`${member.id}-${member.community_id}`} memberId={member.id} onSwitched={onCommunitySwitched} />
           {/* Identity Card */}
           <article style={{ border: '1px solid var(--line)', borderRadius: '9px', padding: '28px', background: '#0d0d0d' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '24px', flexWrap: 'wrap' }}>

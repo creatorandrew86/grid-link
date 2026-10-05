@@ -16,6 +16,8 @@ from .models import MarketSettings, ParticipantInput
 from .sign_up import SignupInput, register_participant, verify_password
 from .battery import BatteryScenario, dataset_info, simulate
 from .weather import live_outlook
+from .community_battery import (BatteryInterest, ComparisonInput, MeasurementBatch, TransferRequest,
+                                compare_batteries, measured_days)
 
 
 def create_app():
@@ -56,6 +58,14 @@ def create_app():
 
     @app.exception_handler(httpx.HTTPError)
     async def database_unavailable(request, error):
+        if isinstance(error, httpx.HTTPStatusError):
+            try:
+                code = error.response.json().get("code")
+            except (ValueError, AttributeError):
+                code = None
+            if code in {"42P01", "42703", "PGRST204", "PGRST205"}:
+                return JSONResponse(status_code=503, content={"detail":
+                    "Community battery planning needs the add_community_battery_planning.sql database migration."})
         return JSONResponse(status_code=503, content={"detail": "The community database is unavailable. Try again shortly."})
 
     @app.get("/api/health")
@@ -117,19 +127,21 @@ def create_app():
         return {k: v for k, v in rows[0].items() if k not in ("password_hash", "password")}
 
     @app.get("/api/market-settings")
-    def settings():
-        return database.settings()
+    def settings(authorization: str = Header(default="")):
+        member = me(authorization) if session_member(authorization) else None
+        return database.settings(member.get("community_id") if member else None)
 
     @app.put("/api/market-settings")
-    def save_settings(settings: MarketSettings):
-        database.save_settings(settings)
+    def save_settings(settings: MarketSettings, authorization: str = Header(default="")):
+        member = me(authorization) if session_member(authorization) else None
+        database.save_settings(settings, member.get("community_id") if member else None)
         return settings
 
-    def summary(settings=None):
+    def summary(settings=None, community_id=None):
         now = datetime.now(timezone.utc)
         slot = now.replace(minute=(now.minute // 15) * 15, second=0, microsecond=0)
         return {
-            **clear_market(database.participants(), settings or database.settings()),
+            **clear_market(database.participants(community_id), settings or database.settings(community_id)),
             "interval_start": slot.isoformat().replace("+00:00", "Z"),
             "mode": "simulation",
             "storage": database.mode,
@@ -137,7 +149,8 @@ def create_app():
 
     def member_summary(settings, authorization):
         participant_id = session_member(authorization)
-        result = summary(settings)
+        member = me(authorization) if participant_id else None
+        result = summary(settings, member.get("community_id") if member else None)
         result["participant_count"] = len(result["participants"])
         result["participants"] = [row for row in result["participants"] if row["id"] == participant_id]
         return result
@@ -160,6 +173,79 @@ def create_app():
             return simulate(scenario)
         except ValueError as error:
             raise HTTPException(status_code=422, detail=str(error)) from error
+
+    def community_member(authorization):
+        member = me(authorization)
+        if not member.get("community_id"):
+            raise HTTPException(status_code=409, detail="Your account is not assigned to a community.")
+        return member
+
+    @app.get("/api/community-battery")
+    def community_battery(authorization: str = Header(default="")):
+        member = community_member(authorization)
+        cid = member["community_id"]
+        community = database.community_details(cid)
+        participants = database.participants(cid)
+        ids = {p.id for p in participants}
+        interests = [r for r in database.battery_interests(cid) if r["participant_id"] in ids]
+        _, coverage = measured_days(database.measured_history(cid), community.get("timezone") or "Europe/Bucharest")
+        return {"community": {"id": cid, "name": community["name"],
+                    "battery_policy": community.get("battery_policy", "undecided"),
+                    "meter_boundary": community.get("battery_meter_boundary", "unverified")},
+                "member_count": len(participants), "interested_count": sum(r["interested"] for r in interests),
+                "answered_count": len(interests), "your_interest": next(
+                    (r["interested"] for r in interests if r["participant_id"] == member["id"]), None),
+                "coverage": coverage, "candidates": database.battery_candidates(community, member)}
+
+    @app.post("/api/community-battery/compare")
+    def community_battery_compare(request: ComparisonInput, authorization: str = Header(default="")):
+        member = community_member(authorization)
+        cid = member["community_id"]
+        community = database.community_details(cid)
+        try:
+            return compare_batteries(request, database.participants(cid),
+                database.measured_history(cid) if request.source == "measured" else [],
+                community.get("timezone") or "Europe/Bucharest", community.get("battery_meter_boundary", "unverified"), member["id"])
+        except ValueError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+
+    @app.put("/api/community-battery/interest")
+    def battery_interest(request: BatteryInterest, authorization: str = Header(default="")):
+        member = community_member(authorization)
+        database.save_battery_interest(member, request.interested)
+        return {"interested": request.interested}
+
+    @app.post("/api/community-battery/switch")
+    def battery_switch(request: TransferRequest, authorization: str = Header(default="")):
+        member = community_member(authorization)
+        community = database.community_details(member["community_id"])
+        target = str(request.target_community_id)
+        if target not in {c["id"] for c in database.battery_candidates(community, member)}:
+            raise HTTPException(status_code=409, detail="This community is no longer eligible or accepting members.")
+        try:
+            transfer = database.accept_battery_transfer(member["id"], target)
+        except httpx.HTTPStatusError as error:
+            if error.response.status_code in (400, 409):
+                raise HTTPException(status_code=409, detail="Membership was not changed. Destination or POD eligibility needs review.") from error
+            raise
+        return {"transfer": transfer, "user": me(authorization)}
+
+    @app.post("/api/community-battery/measurements", status_code=201)
+    def battery_measurements(batch: MeasurementBatch, x_metering_token: str = Header(default="")):
+        token = os.getenv("METERING_TOKEN", "")
+        if not token or not hmac.compare_digest(x_metering_token, token):
+            raise HTTPException(status_code=403, detail="A configured metering token is required.")
+        community = database.community_details(str(batch.community_id))
+        if community.get("battery_meter_boundary") != "shared_meter":
+            raise HTTPException(status_code=409, detail="Verify the community's shared billing meter before ingesting readings.")
+        members = {p.id for p in database.participants(str(batch.community_id))}
+        if any(r.member_loads_kwh is not None and {str(k) for k in r.member_loads_kwh} != members for r in batch.readings):
+            raise HTTPException(status_code=422, detail="Per-member readings must cover every current member of this community.")
+        try:
+            rows = database.save_measurements(batch)
+            return {"stored_intervals": len(rows)}
+        except ValueError as error:
+            raise HTTPException(status_code=409, detail="One or more readings already exist; history was not overwritten.") from error
 
     @app.get("/api/battery/weather-outlook")
     def weather_outlook():

@@ -59,10 +59,11 @@ def verify_pod(db: Database, pod: str):
 
     if existing:
         raise HTTPException(status_code=409, detail="A participant with this POD is already registered.")
+    return approved[0].get("community_id")
 
 
 def register_participant(db: Database, form: SignupInput) -> Participant:
-    verify_pod(db, form.pod)
+    community_id = verify_pod(db, form.pod)
 
     row = {
         "name": form.name.strip(),
@@ -73,5 +74,7 @@ def register_participant(db: Database, form: SignupInput) -> Participant:
         "load_kw": form.load_kw,
         "solar_kwp": form.solar_kwp,
     }
+    if community_id:
+        row["community_id"] = community_id
 
     return db.insert_participant(row)
