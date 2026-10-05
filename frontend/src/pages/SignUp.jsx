@@ -92,6 +92,7 @@ export default function SignUp({ onJoined, onNavigate }) {
 
     try {
       const member = await api('signup', 'POST', payload);
+      localStorage.setItem('gridlink-token', member.access_token);
       setNotice('Welcome to GridLink!');
       if (onJoined) onJoined(member);
       onNavigate('home');

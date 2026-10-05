@@ -56,7 +56,7 @@ Frontend npm commands run from the repository root, where `package.json`, `packa
 - View grid and community buying/selling rates, energy flow, member bills, and savings for a 15-minute interval.
 - Tune grid tariffs, the price weight, transport fee, buyer/seller transport split, and estimated solar output.
 - Preview pricing without saving it, save it for the whole community, or discard changes.
-- Select any member in the ledger to inspect their individual bill comparison.
+- Sign in to inspect your own bill comparison. Individual community records are not public.
 
 The first local database includes six clearly labelled example members. Set `GRIDLINK_SEED_DEMO=0` before creating a new database to start empty. The database lives at `backend/data/gridlink.db`; override its path with `GRIDLINK_DB_PATH`.
 
@@ -64,7 +64,7 @@ The first local database includes six clearly labelled example members. Set `GRI
 
 A new member opens the join form, enters a home or business name, chooses a role, and provides their estimated average electricity demand. A prosumer also enters their installed solar capacity. The backend validates the submission, assigns an ID, and stores the participant.
 
-After joining, the dashboard recalculates the community and selects the new participant's bill. The member selection is also saved in browser local storage when available. Selecting another member in the ledger displays that member's comparison. This selection is a convenience for exploring the demo; it is not an authenticated account or proof of ownership.
+After joining, the backend issues a session and the account page shows the new participant's own bill. Sign-in also issues a session. Session tokens are random, expire after 24 hours, and are stored in browser local storage. Sessions currently live in a single backend process: restarting it requires signing in again, and multiple workers require shared session storage. Old `gridlink-<id>` tokens are rejected.
 
 The participant roles are:
 
@@ -81,7 +81,7 @@ The overview displays grid import, grid export, local buying, and local selling 
 
 The energy flow section shows estimated solar production, self-consumption, locally traded energy, community demand, grid imports, grid exports, and the transport amount collected. The community bill comparison shows the combined net cost with and without local sharing.
 
-The member ledger shows each participant's role, locally bought or sold energy, grid benchmark bill, GridLink bill, and benefit. Selecting a row opens an individual comparison above the ledger. All bill figures refer to the displayed interval; they are not daily or monthly forecasts.
+The community ledger is removed for everyone. The overview shows aggregate community figures; the account page shows only the signed-in member's role, energy, bills, and benefit. All bill figures refer to the displayed interval; they are not daily or monthly forecasts.
 
 The market settings section allows a user to change the pricing assumptions. Preview recalculates the displayed results without changing the stored configuration. Save persists the configuration for the whole community, and Discard returns to the saved values. Refreshing the market also loads the saved configuration.
 
@@ -220,7 +220,7 @@ grid-link/
 │   └── requirements.lock.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx         Dashboard, signup, ledger, and settings
+│   │   ├── App.jsx         Page routing, session state, and shared settings
 │   │   ├── index.css       Design tokens and responsive styling
 │   │   └── main.jsx        React entry point
 │   └── index.html          HTML entry point
@@ -233,7 +233,7 @@ grid-link/
 └── README.md
 ```
 
-The frontend requests data from `/api`. During development, Vite proxies those requests to FastAPI on port 8000. FastAPI validates inputs, reads the community and settings from storage, and calls the clearing engine. The returned summary contains the rates, aggregate energy and bill totals, and participant ledger used by the dashboard.
+The frontend requests data from `/api`. During development, Vite proxies those requests to FastAPI on port 8000. FastAPI validates inputs, reads the community and settings from storage, and calls the clearing engine. The returned summary contains rates and aggregate totals, plus only the signed-in member's own interval record.
 
 The clearing engine has no HTTP or database access. It receives participants, market settings, and an interval duration, then returns a result. Keeping this calculation separate allows future inputs from meters or forecasts to use the same accounting without depending on the current signup form or storage backend.
 
@@ -243,8 +243,11 @@ The current frontend uses React state and browser fetch requests. It does not re
 
 | Route | Purpose |
 | --- | --- |
-| `POST /api/signup` | Persist a participant: `name`, `type`, `load_kw`, `solar_kwp` |
-| `GET /api/community` | List participants |
+| `POST /api/signup` | Register a participant and issue a session |
+| `POST /api/login` | Verify credentials and issue a session |
+| `POST /api/logout` | Revoke the current session |
+| `GET /api/me` | Read the signed-in member's profile |
+| `GET /api/community` | Aggregate participant count; no member records |
 | `GET /api/clearing-summary` | Calculate the current simulated interval |
 | `GET /api/market-settings` | Read saved parameters |
 | `PUT /api/market-settings` | Validate and persist parameters |
@@ -254,13 +257,13 @@ The current frontend uses React state and browser fetch requests. It does not re
 
 The dashboard refreshes every 30 seconds while no settings are being edited. GET/preview calculations do not create settlement history. Local scheduled execution is disabled by default; the protected clearing endpoint is ready for a scheduler.
 
-The clearing summary includes the saved or preview settings, gross clearing price, effective buying and selling rates, fee shares, trade eligibility, totals, and one ledger entry per participant. It also identifies the storage mode, marks the result as a simulation, and includes the UTC interval start. The frontend displays interval times in the browser's local time zone.
+The clearing summary includes the saved or preview settings, gross clearing price, effective buying and selling rates, fee shares, trade eligibility, totals, and the aggregate participant count. Visitors receive no participant rows; an authenticated member receives only their own row. It also identifies the storage mode, marks the result as a simulation, and includes the UTC interval start. The frontend displays interval times in the browser's local time zone.
 
 Invalid participant or settings submissions return HTTP 422. Duplicate participant names return HTTP 409. The snapshot endpoint returns HTTP 403 if its configured secret is missing or incorrect. A Supabase HTTP failure is reported as HTTP 503 with a database-unavailable message.
 
 ## Persistence and clearing snapshots
 
-Local storage contains three tables: `participants`, `market_settings`, and `clearing_events`. Participant rows and the shared settings remain available after a process restart. Browser local storage holds only the selected member ID; it does not store the authoritative community or pricing settings.
+Local storage contains three tables: `participants`, `market_settings`, and `clearing_events`. Participant rows and the shared settings remain available after a process restart. Browser local storage holds the session token and account identifiers; it does not store the authoritative community or pricing settings.
 
 Viewing a dashboard summary calculates the interval from the current inputs. Refreshing it does not accumulate energy usage over time, generate an invoice, or settle a bill. Without changing demand or production assumptions, repeated intervals have the same modeled energy quantities even as their time labels advance.
 
@@ -344,7 +347,7 @@ The [Romanian PV-farm and apartment-building feasibility study](research/romania
 For a researched comparison of Romanian dynamic prices, weather, battery dispatch and EV charging, see [the Romanian market analysis](research/romania/REPORT.md). It includes 120 historical days, hourly price/weather data and a reproducible battery benchmark. The battery simulator uses these datasets; real battery control remains unimplemented.
 
 - The app uses assumed hourly demand/PV profiles and an advisory weather outlook. The separate research backtest uses public measured German demand, but there are no live participant smart-meter feeds or measured Romanian participant profiles.
-- Registration adds a member to a shared demo. There are no authenticated user accounts, private member views, or administrator permissions.
+- Registration adds a member to the shared simulation. Member profiles and interval bills require a session and are limited to the signed-in member. Administrator permissions for shared market settings are not implemented.
 - Saved market settings affect the entire community. The current UI has no role-based restriction on changing them.
 - Participants can be added, but the current public API does not offer editing or removal.
 - Local allocations are proportional. Community clearing does not model geography, congestion, storage or individual contracts. The separate battery simulator models one shared meter, storage losses and configurable tariff assumptions.

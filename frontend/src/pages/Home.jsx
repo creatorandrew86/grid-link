@@ -63,7 +63,7 @@ function GlobalStyles() {
   );
 }
 
-export default function Home({ summary, refresh, busy, error, setError, notice, setNotice, memberId, setMemberId, onNavigate }) {
+export default function Home({ summary, refresh, busy, error, setError, notice, setNotice, member, onNavigate }) {
   const [draft, setDraft] = useState(() => summary?.settings || null);
   const [dirty, setDirty] = useState(false);
   const [preview, setPreview] = useState(false);
@@ -75,7 +75,7 @@ export default function Home({ summary, refresh, busy, error, setError, notice, 
   }
 
   const totals = summary?.totals;
-  const selected = summary?.participants?.find((m) => m.id === memberId);
+  const selected = member;
   const change = (key, val) => {
     setDraft({ ...draft, [key]: val });
     setDirty(true);
@@ -171,7 +171,7 @@ export default function Home({ summary, refresh, busy, error, setError, notice, 
               <p className="eyebrow">VALUE KEPT IN THE COMMUNITY</p>
               <h2>{money(totals.benefit)}<span>saved this interval</span></h2>
             </div>
-            <p>{amount(totals.local_traded_kwh)} kWh traded locally.<br />{summary.participants.length} members sharing the benefit.</p>
+            <p>{amount(totals.local_traded_kwh)} kWh traded locally.<br />{summary.participant_count} members sharing the benefit.</p>
             {selected ? (
               <button
                 className="circle-link"
@@ -255,54 +255,6 @@ export default function Home({ summary, refresh, busy, error, setError, notice, 
                 </article>
               </div>
 
-              <div className="ledger-heading" id="ledger">
-                <div><p className="eyebrow">02 / COMMUNITY LEDGER</p><h2>Everyone's share.</h2></div>
-                <span className="muted">{summary.participants.length} members · EUR per interval</span>
-              </div>
-              <div className="table-scroll">
-                <table>
-                  <caption className="sr-only">Estimated member energy and bills for the current 15-minute interval</caption>
-                  <thead>
-                    <tr>
-                      <th scope="col">Member</th>
-                      <th scope="col">Role</th>
-                      <th scope="col">Local energy</th>
-                      <th scope="col">Grid bill</th>
-                      <th scope="col">GridLink bill</th>
-                      <th scope="col">Benefit</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {summary.participants.map((member) => (
-                      <tr key={member.id} className={member.id === memberId ? 'selected-row' : ''}>
-                        <th scope="row">
-                          <button
-                            className="member-button"
-                            onClick={() => {
-                              setMemberId(member.id);
-                              try { localStorage.setItem('gridlink-member', member.id); } catch {}
-                            }}
-                          >
-                            <span className="member-avatar">{member.name.slice(0, 2).toUpperCase()}</span>
-                            {member.name}
-                            {member.id === memberId && <span className="you-tag">selected</span>}
-                          </button>
-                        </th>
-                        <td><span className="role-label">{member.type === 'prosumer' ? 'Prosumer' : 'Consumer'}</span></td>
-                        <td>
-                          {amount(member.local_sold_kwh || member.local_bought_kwh)} kWh{' '}
-                          <span className="muted">{member.local_sold_kwh > 0 ? 'sold' : member.local_bought_kwh > 0 ? 'bought' : ''}</span>
-                        </td>
-                        <td>{money(member.benchmark_bill)}</td>
-                        <td>{money(member.optimized_bill)}</td>
-                        <td>+{money(member.benefit)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {!summary.participants.length && <p className="empty">The community is empty. Join to run the first interval.</p>}
-              </div>
-              <p className="ledger-note">Select a member to see their bill above. This is a shared demo; members are saved in the community database.</p>
               <div className="join-row">
                 <p>Producing solar? Buying electricity?<br />There's room for both.</p>
                 <button className="button black" onClick={() => onNavigate('signup')}>
@@ -315,7 +267,7 @@ export default function Home({ summary, refresh, busy, error, setError, notice, 
           {draft && (
             <section className="pricing dark" id="pricing">
               <div className="section-heading">
-                <div><p className="eyebrow">{selected ? '02 / MARKET SETTINGS' : '03 / MARKET SETTINGS'}</p><h2>Set the terms.</h2></div>
+                <div><p className="eyebrow">02 / MARKET SETTINGS</p><h2>Set the terms.</h2></div>
                 <span className="small-tag">{dirty ? 'UNSAVED CHANGES' : 'SAVED SETTINGS'}</span>
               </div>
               <div className="pricing-grid">

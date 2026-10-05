@@ -22,17 +22,9 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
-  const [memberId, setMemberId] = useState(() => {
+  const [sessionToken, setSessionToken] = useState(() => {
     try {
-      const stored = localStorage.getItem('gridlink-member');
-      if (stored) return stored;
-      const email = localStorage.getItem('gridlink-email');
-      if (email) return email;
-      const token = localStorage.getItem('gridlink-token');
-      if (token && token.startsWith('gridlink-')) {
-        return token.replace('gridlink-', '');
-      }
-      return '';
+      return localStorage.getItem('gridlink-token') || '';
     } catch {
       return '';
     }
@@ -63,6 +55,12 @@ export default function App() {
       const result = await api('clearing-summary');
       setSummary(result);
     } catch (err) {
+      if (err.status === 401) {
+        localStorage.removeItem('gridlink-token');
+        setSessionToken('');
+        setProfile(null);
+        setSummary(null);
+      }
       setError(err.message);
     } finally {
       setBusy(false);
@@ -79,52 +77,50 @@ export default function App() {
     return () => clearInterval(timer);
   }, [busy]);
 
-  const storedEmail = (() => {
-    try {
-      return localStorage.getItem('gridlink-email') || '';
-    } catch {
-      return '';
-    }
-  })();
-
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('gridlink-token');
-    if (token) {
-      api('me').then(setProfile).catch(() => setProfile(null));
+    let cancelled = false;
+    if (sessionToken) {
+      api('me').then((member) => {
+        if (!cancelled) setProfile(member);
+      }).catch(() => {
+        if (!cancelled) setProfile(null);
+      });
     } else {
       setProfile(null);
     }
-  }, [memberId]);
+    return () => { cancelled = true; };
+  }, [sessionToken]);
 
   const activeMember = summary?.participants?.find(
-    (m) =>
-      m.id === memberId ||
-      m.email?.toLowerCase() === memberId?.toLowerCase() ||
-      (storedEmail && m.email?.toLowerCase() === storedEmail.toLowerCase())
+    (m) => m.id === profile?.id
   );
 
   const currentMember = activeMember ? { ...activeMember, ...profile } : profile;
 
   const handleJoined = (newMember) => {
-    setMemberId(newMember.id);
     setProfile(newMember);
+    setSummary(null);
     try {
+      setSessionToken(localStorage.getItem('gridlink-token') || '');
       localStorage.setItem('gridlink-member', newMember.id);
       if (newMember.email) localStorage.setItem('gridlink-email', newMember.email);
     } catch {}
     refresh();
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try { await api('logout', 'POST'); } catch {}
     try {
       localStorage.removeItem('gridlink-member');
       localStorage.removeItem('gridlink-token');
       localStorage.removeItem('gridlink-email');
     } catch {}
-    setMemberId('');
+    setSessionToken('');
     setProfile(null);
+    setSummary(null);
+    refresh();
     navigate('home');
   };
 
@@ -146,8 +142,7 @@ export default function App() {
           setError={setError}
           notice={notice}
           setNotice={setNotice}
-          memberId={memberId}
-          setMemberId={setMemberId}
+          member={currentMember}
           onNavigate={navigate}
         />
       )}

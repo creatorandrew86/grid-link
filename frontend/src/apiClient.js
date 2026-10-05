@@ -12,13 +12,15 @@ export async function api(path, method = 'GET', body) {
   const data = await response.json().catch(() => null);
   if (!response.ok) {
     const detail = data?.detail;
-    throw new Error(
+    const error = new Error(
       typeof detail === 'string'
         ? detail
         : Array.isArray(detail)
         ? detail.map((item) => item.msg).join(' ')
         : 'Could not reach GridLink. Check that the backend is running.'
     );
+    error.status = response.status;
+    throw error;
   }
   return data;
 }

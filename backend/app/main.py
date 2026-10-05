@@ -1,5 +1,7 @@
 import hmac
 import os
+import secrets
+import time
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 
@@ -18,6 +20,26 @@ from .weather import live_outlook
 
 def create_app():
     database = Database()
+    # ponytail: sessions live in one process; use shared storage for multiple workers.
+    sessions = {}
+
+    def issue_session(participant_id):
+        now = time.time()
+        for token, (_, expires) in list(sessions.items()):
+            if expires <= now:
+                sessions.pop(token, None)
+        token = secrets.token_urlsafe(32)
+        sessions[token] = (participant_id, now + 86400)
+        return token
+
+    def session_member(authorization):
+        if not authorization:
+            return None
+        token = authorization.removeprefix("Bearer ")
+        session = sessions.get(token) if authorization.startswith("Bearer ") else None
+        if not session or session[1] <= time.time():
+            raise HTTPException(status_code=401, detail="Session expired or invalid. Please sign in again.")
+        return session[0]
 
     @asynccontextmanager
     async def lifespan(app):
@@ -42,12 +64,13 @@ def create_app():
 
     @app.get("/api/community")
     def community():
-        return database.participants()
+        return {"participant_count": len(database.participants())}
 
     @app.post("/api/signup", status_code=201)
     def signup(member: SignupInput):
         try:
-            return register_participant(database, member)
+            participant = register_participant(database, member)
+            return {**participant.model_dump(), "access_token": issue_session(participant.id)}
         except HTTPException:
             raise
         except ValueError as error:
@@ -75,16 +98,19 @@ def create_app():
             )
 
         safe_user = {k: v for k, v in participant.items() if k not in ("password_hash", "password")}
-        return {"access_token": f"gridlink-{participant['id']}", "user": safe_user}
+        return {"access_token": issue_session(participant['id']), "user": safe_user}
+
+    @app.post("/api/logout")
+    def logout(authorization: str = Header(default="")):
+        if authorization.startswith("Bearer "):
+            sessions.pop(authorization.removeprefix("Bearer "), None)
+        return {"status": "ok"}
 
     @app.get("/api/me")
     def me(authorization: str = Header(default="")):
-        if not authorization.startswith("Bearer "):
+        participant_id = session_member(authorization)
+        if not participant_id:
             raise HTTPException(status_code=401, detail="Authentication required.")
-        token = authorization.removeprefix("Bearer ").strip()
-        if not token.startswith("gridlink-"):
-            raise HTTPException(status_code=401, detail="Invalid session token.")
-        participant_id = token.removeprefix("gridlink-")
         rows = database.remote("GET", "participants", query=f"?id=eq.{participant_id}&limit=1")
         if not rows:
             raise HTTPException(status_code=404, detail="Member account not found.")
@@ -109,13 +135,20 @@ def create_app():
             "storage": database.mode,
         }
 
+    def member_summary(settings, authorization):
+        participant_id = session_member(authorization)
+        result = summary(settings)
+        result["participant_count"] = len(result["participants"])
+        result["participants"] = [row for row in result["participants"] if row["id"] == participant_id]
+        return result
+
     @app.get("/api/clearing-summary")
-    def clearing_summary():
-        return summary()
+    def clearing_summary(authorization: str = Header(default="")):
+        return member_summary(None, authorization)
 
     @app.post("/api/clearing-preview")
-    def clearing_preview(settings: MarketSettings):
-        return summary(settings)
+    def clearing_preview(settings: MarketSettings, authorization: str = Header(default="")):
+        return member_summary(settings, authorization)
 
     @app.get("/api/battery/dataset")
     def battery_dataset():

@@ -33,7 +33,7 @@ export default function Privacy({ onNavigate }) {
           </section>
 
           <section style={{ border: '1px solid var(--line)', borderRadius: '9px', padding: '28px', background: '#0d0d0d' }}>
-            <h2 style={{ fontSize: '20px', marginBottom: '12px' }}>4. Peer Transparency & Community Ledger</h2>
+            <h2 style={{ fontSize: '20px', marginBottom: '12px' }}>4. Community Totals & Private Member Records</h2>
             <p className="muted">[Privacy policy text will be placed here]</p>
           </section>
 
