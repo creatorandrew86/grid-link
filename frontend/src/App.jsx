@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { api } from './api';
+import { api } from './apiClient';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -87,6 +87,17 @@ export default function App() {
     }
   })();
 
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('gridlink-token');
+    if (token) {
+      api('me').then(setProfile).catch(() => setProfile(null));
+    } else {
+      setProfile(null);
+    }
+  }, [memberId]);
+
   const activeMember = summary?.participants?.find(
     (m) =>
       m.id === memberId ||
@@ -94,8 +105,11 @@ export default function App() {
       (storedEmail && m.email?.toLowerCase() === storedEmail.toLowerCase())
   );
 
+  const currentMember = activeMember ? { ...activeMember, ...profile } : profile;
+
   const handleJoined = (newMember) => {
     setMemberId(newMember.id);
+    setProfile(newMember);
     try {
       localStorage.setItem('gridlink-member', newMember.id);
       if (newMember.email) localStorage.setItem('gridlink-email', newMember.email);
@@ -110,6 +124,7 @@ export default function App() {
       localStorage.removeItem('gridlink-email');
     } catch {}
     setMemberId('');
+    setProfile(null);
     navigate('home');
   };
 
@@ -118,7 +133,7 @@ export default function App() {
       <Header
         page={page}
         onNavigate={navigate}
-        activeMember={activeMember}
+        activeMember={currentMember}
         busy={busy}
       />
 
@@ -146,7 +161,7 @@ export default function App() {
 
       {page === 'account' && (
         <Account
-          member={activeMember}
+          member={currentMember}
           summary={summary}
           loading={busy || !summary}
           refresh={refresh}

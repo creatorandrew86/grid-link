@@ -17,18 +17,14 @@ def hash_password(password: str) -> str:
 
 
 def verify_password(password: str, stored_hash: str) -> bool:
-    if not stored_hash:
+    if not stored_hash or not isinstance(password, str) or "$" not in stored_hash:
         return False
-    if secrets.compare_digest(password, stored_hash):
-        return True
     try:
-        if "$" in stored_hash:
-            salt, hash_val = stored_hash.split("$", 1)
-            dk = hashlib.pbkdf2_hmac("sha256", password.encode(), salt.encode(), 100_000)
-            return secrets.compare_digest(dk.hex(), hash_val)
+        salt, hash_val = stored_hash.split("$", 1)
+        dk = hashlib.pbkdf2_hmac("sha256", password.encode(), salt.encode(), 100_000)
+        return secrets.compare_digest(dk.hex(), hash_val)
     except Exception:
-        pass
-    return False
+        return False
 
 
 class SignupInput(BaseModel):
@@ -46,21 +42,23 @@ def verify_pod(db: Database, pod: str):
     clean_pod = pod.strip().upper()
     try:
         approved = db.remote("GET", "approved_pods", query=f"?pod=eq.{clean_pod}&is_active=eq.true")
-        if not approved:
-            raise HTTPException(status_code=400, detail="POD is invalid or not approved for this grid community.")
     except HTTPException:
         raise
-    except Exception:
-        pass
+    except Exception as err:
+        raise HTTPException(status_code=503, detail="The community database is unavailable. Try again shortly.") from err
+
+    if not approved:
+        raise HTTPException(status_code=400, detail="POD is invalid or not approved for this grid community.")
 
     try:
         existing = db.remote("GET", "participants", query=f"?pod=eq.{clean_pod}&select=id&limit=1")
-        if existing:
-            raise HTTPException(status_code=409, detail="A participant with this POD is already registered.")
     except HTTPException:
         raise
-    except Exception:
-        pass
+    except Exception as err:
+        raise HTTPException(status_code=503, detail="The community database is unavailable. Try again shortly.") from err
+
+    if existing:
+        raise HTTPException(status_code=409, detail="A participant with this POD is already registered.")
 
 
 def register_participant(db: Database, form: SignupInput) -> Participant:

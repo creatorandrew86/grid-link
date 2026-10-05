@@ -53,14 +53,15 @@ def create_app():
 
     @app.post("/api/login")
     def login(payload: dict):
-        email = payload.get("email", "").strip().lower()
-        password = payload.get("password", "")
-        if not email:
+        email = payload.get("email") if isinstance(payload, dict) else None
+        password = payload.get("password") if isinstance(payload, dict) else None
+        if not isinstance(email, str) or not email.strip():
             raise HTTPException(status_code=422, detail="Email is required.")
-        if not password:
+        if not isinstance(password, str) or not password:
             raise HTTPException(status_code=422, detail="Password is required.")
 
-        participant = database.get_participant_by_email(email)
+        clean_email = email.strip().lower()
+        participant = database.get_participant_by_email(clean_email)
         if not participant:
             raise HTTPException(status_code=404, detail="No account found with this email address.")
 
@@ -71,7 +72,21 @@ def create_app():
                 detail="Incorrect password. The introduced password does not match.",
             )
 
-        return {"access_token": f"gridlink-{participant['id']}", "user": participant}
+        safe_user = {k: v for k, v in participant.items() if k not in ("password_hash", "password")}
+        return {"access_token": f"gridlink-{participant['id']}", "user": safe_user}
+
+    @app.get("/api/me")
+    def me(authorization: str = Header(default="")):
+        if not authorization.startswith("Bearer "):
+            raise HTTPException(status_code=401, detail="Authentication required.")
+        token = authorization.removeprefix("Bearer ").strip()
+        if not token.startswith("gridlink-"):
+            raise HTTPException(status_code=401, detail="Invalid session token.")
+        participant_id = token.removeprefix("gridlink-")
+        rows = database.remote("GET", "participants", query=f"?id=eq.{participant_id}&limit=1")
+        if not rows:
+            raise HTTPException(status_code=404, detail="Member account not found.")
+        return {k: v for k, v in rows[0].items() if k not in ("password_hash", "password")}
 
     @app.get("/api/market-settings")
     def settings():

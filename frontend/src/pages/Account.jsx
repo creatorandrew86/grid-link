@@ -1,4 +1,4 @@
-import { money, amount } from '../api';
+import { money, amount } from '../apiClient';
 import { Arrow } from './Home';
 
 export default function Account({ member, summary, loading, refresh, busy, onNavigate, onLogout }) {

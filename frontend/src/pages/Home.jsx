@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { api, money, amount, percent } from '../api';
+import { api, money, amount, percent } from '../apiClient';
 
 export function Arrow({ diagonal = false }) {
   return (
