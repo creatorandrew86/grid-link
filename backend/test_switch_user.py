@@ -1,5 +1,6 @@
 """End-to-End Live Integration Test: Switch Bogdan Toma from Community B to Community A using real Supabase DB data."""
 import sys
+import os
 from pathlib import Path
 import unittest
 
@@ -11,6 +12,8 @@ from app.main import create_app
 from app.database import Database
 
 
+@unittest.skipUnless(os.getenv("GRIDLINK_RUN_LIVE_SWITCH_TEST") == "1",
+                     "Opt in with GRIDLINK_RUN_LIVE_SWITCH_TEST=1; this test changes a real user's membership.")
 class TestLiveCommunitySwitch(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
