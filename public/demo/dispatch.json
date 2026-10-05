@@ -1,0 +1,1279 @@
+{
+  "baseline": {
+    "label": "No battery",
+    "rows": [
+      {
+        "utc": "2026-07-14T21:00:00+00:00",
+        "bucharest_time": "2026-07-15T00:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.7879999999996699,
+        "pv_kwh": 0.0,
+        "import_price": 1.670895897,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.4339999999999691,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.2039999999997235,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14999999999997726
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.7879999999996699,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 1.3166659668354483,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-14T22:00:00+00:00",
+        "bucharest_time": "2026-07-15T01:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.8460000000004015,
+        "pv_kwh": 0.0,
+        "import_price": 1.6821761219999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.43000000000006366,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.25600000000031287,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.160000000000025
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.8460000000004015,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 1.4231209992126752,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-14T23:00:00+00:00",
+        "bucharest_time": "2026-07-15T02:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.7129999999992265,
+        "pv_kwh": 0.0,
+        "import_price": 1.626171272,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.38599999999996726,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.18399999999928696,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14299999999997226
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.7129999999992265,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 1.159460116934742,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T00:00:00+00:00",
+        "bucharest_time": "2026-07-15T03:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.6249999999998295,
+        "pv_kwh": 0.0,
+        "import_price": 1.5911447969999999,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.2599999999999909,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.2179999999998472,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14699999999999136
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.6249999999998295,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.9944654981247286,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T01:00:00+00:00",
+        "bucharest_time": "2026-07-15T04:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.58200000000096,
+        "pv_kwh": 0.0,
+        "import_price": 1.5700242469999999,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.24500000000011823,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.18700000000080763,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.1500000000000341
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.58200000000096,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.9137541117555071,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T02:00:00+00:00",
+        "bucharest_time": "2026-07-15T05:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.5599999999998886,
+        "pv_kwh": 0.016,
+        "import_price": 1.5947082469999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.12599999999997635,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.2139999999999418,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.21999999999997044
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.008,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.008
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.5439999999998886,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.8675212863678222,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T03:00:00+00:00",
+        "bucharest_time": "2026-07-15T06:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.5620000000005803,
+        "pv_kwh": 0.8960000000000001,
+        "import_price": 1.661128172,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.5550000000000637,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.8640000000004875,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.1430000000000291
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.44800000000000006,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.44800000000000006
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.6660000000005801,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 1.1063113625529637,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T04:00:00+00:00",
+        "bucharest_time": "2026-07-15T07:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.6499999999994657,
+        "pv_kwh": 3.104,
+        "import_price": 1.7644651969999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.3369999999999891,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.2429999999994834,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.06999999999999318
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.552,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 1.552
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 2.4540000000005344,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T05:00:00+00:00",
+        "bucharest_time": "2026-07-15T08:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.5000000000011937,
+        "pv_kwh": 5.808,
+        "import_price": 1.760033572,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.14299999999980173,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.23000000000138243,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.12700000000000955
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 2.904,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 2.904
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 5.307999999998806,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T06:00:00+00:00",
+        "bucharest_time": "2026-07-15T09:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.564999999996985,
+        "pv_kwh": 8.384,
+        "import_price": 1.5504676219999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.2350000000003547,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.17999999999665306,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14999999999997726
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 4.192,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 4.192
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 7.819000000003015,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T07:00:00+00:00",
+        "bucharest_time": "2026-07-15T10:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.2950000000031991,
+        "pv_kwh": 10.912,
+        "import_price": 1.4198813969999997,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.3429999999998472,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.8020000000033178,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.1500000000000341
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 5.456,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 5.456
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 9.616999999996802,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T08:00:00+00:00",
+        "bucharest_time": "2026-07-15T11:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.8719999999963193,
+        "pv_kwh": 12.112000000000002,
+        "import_price": 1.4010628719999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.43699999999989814,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.2949999999964348,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.13999999999998636
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 6.056000000000001,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 6.056000000000001
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 11.240000000003683,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T09:00:00+00:00",
+        "bucharest_time": "2026-07-15T12:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.447999999999979,
+        "pv_kwh": 13.536000000000001,
+        "import_price": 1.3533283719999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.6639999999999873,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.6340000000000146,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14999999999997726
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 6.768000000000001,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 6.768000000000001
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 12.088000000000022,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T10:00:00+00:00",
+        "bucharest_time": "2026-07-15T13:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.4509999999995102,
+        "pv_kwh": 13.344000000000001,
+        "import_price": 1.3218895469999996,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.956000000000131,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.3539999999993597,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14100000000001955
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 6.672000000000001,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 6.672000000000001
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 11.893000000000491,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T11:00:00+00:00",
+        "bucharest_time": "2026-07-15T14:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 3.7400000000035334,
+        "pv_kwh": 12.128,
+        "import_price": 1.3042628719999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.4839999999999236,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 3.107000000003609,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.1490000000000009
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 6.064,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 6.064
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 8.387999999996467,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T12:00:00+00:00",
+        "bucharest_time": "2026-07-15T15:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.876999999997338,
+        "pv_kwh": 11.424,
+        "import_price": 1.280059847,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.35599999999999454,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 1.370999999997366,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14999999999997726
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 5.712,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 5.712
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 9.547000000002662,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T13:00:00+00:00",
+        "bucharest_time": "2026-07-15T16:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.2040000000026794,
+        "pv_kwh": 9.520000000000001,
+        "import_price": 1.3372232720000001,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.40000000000009095,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.5840000000025611,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.22000000000002728
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 4.760000000000001,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 4.760000000000001
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 8.315999999997322,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T14:00:00+00:00",
+        "bucharest_time": "2026-07-15T17:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.489000000000317,
+        "pv_kwh": 5.936,
+        "import_price": 1.556166722,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.0219999999999345,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.23400000000037835,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.2330000000000041
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 2.968,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 2.968
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 4.446999999999683,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T15:00:00+00:00",
+        "bucharest_time": "2026-07-15T18:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.9270000000005894,
+        "pv_kwh": 3.568,
+        "import_price": 1.734892797,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.1970000000003438,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.2780000000002474,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.4519999999999982
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.784,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 1.784
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 1.6409999999994107,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T16:00:00+00:00",
+        "bucharest_time": "2026-07-15T19:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 3.1959999999996853,
+        "pv_kwh": 1.6,
+        "import_price": 1.9284171719999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.6539999999999964,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.36899999999968713,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 1.1730000000000018
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.8,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.8
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 1.5959999999996852,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 3.0777538065113927,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T17:00:00+00:00",
+        "bucharest_time": "2026-07-15T20:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 2.418999999998107,
+        "pv_kwh": 0.35200000000000004,
+        "import_price": 2.5340191469999995,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.8699999999996635,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.28699999999844295,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.26200000000000045
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.17600000000000002,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.17600000000000002
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 2.066999999998107,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 5.237817576844202,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T18:00:00+00:00",
+        "bucharest_time": "2026-07-15T21:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.8029999999994857,
+        "pv_kwh": 0.0,
+        "import_price": 2.204617822,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.1710000000000491,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.3319999999994252,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.30000000000001137
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 1.8029999999994857,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 3.974925933064866,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T19:00:00+00:00",
+        "bucharest_time": "2026-07-15T22:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 2.433000000000675,
+        "pv_kwh": 0.0,
+        "import_price": 2.002072897,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.9300000000000637,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.28000000000065484,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.22299999999995634
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 2.433000000000675,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 4.871043358402352,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T20:00:00+00:00",
+        "bucharest_time": "2026-07-15T23:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.886999999999432,
+        "pv_kwh": 0.0,
+        "import_price": 1.9043835470000001,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.4789999999998145,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.24799999999959255,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.160000000000025
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 1.886999999999432,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 3.5935717531879185,
+        "wear_cost_ron": 0.0
+      }
+    ],
+    "energy_cost_ron": 28.536411769794622,
+    "wear_cost_ron": 0.0,
+    "total_cost_ron": 28.536411769794622,
+    "grid_import_kwh": 14.54999999999794,
+    "grid_export_kwh": 0.0,
+    "curtailed_kwh": 92.75799999999889,
+    "charge_kwh": 0.0,
+    "discharge_kwh": 0.0,
+    "equivalent_cycles": 0.0
+  },
+  "optimised": {
+    "label": "Optimised",
+    "rows": [
+      {
+        "utc": "2026-07-14T21:00:00+00:00",
+        "bucharest_time": "2026-07-15T00:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.7879999999996699,
+        "pv_kwh": 0.0,
+        "import_price": 1.670895897,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.4339999999999691,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.2039999999997235,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14999999999997726
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.7879999999996699,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 1.3166659668354483,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-14T22:00:00+00:00",
+        "bucharest_time": "2026-07-15T01:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.8460000000004015,
+        "pv_kwh": 0.0,
+        "import_price": 1.6821761219999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.43000000000006366,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.25600000000031287,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.160000000000025
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": -0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.8460000000004015,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 1.4231209992126752,
+        "wear_cost_ron": -0.0
+      },
+      {
+        "utc": "2026-07-14T23:00:00+00:00",
+        "bucharest_time": "2026-07-15T02:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.7129999999992265,
+        "pv_kwh": 0.0,
+        "import_price": 1.626171272,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.38599999999996726,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.18399999999928696,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14299999999997226
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.7129999999992265,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 1.159460116934742,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T00:00:00+00:00",
+        "bucharest_time": "2026-07-15T03:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.6249999999998295,
+        "pv_kwh": 0.0,
+        "import_price": 1.5911447969999999,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.2599999999999909,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.2179999999998472,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14699999999999136
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.6249999999998295,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.9944654981247286,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T01:00:00+00:00",
+        "bucharest_time": "2026-07-15T04:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.58200000000096,
+        "pv_kwh": 0.0,
+        "import_price": 1.5700242469999999,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.24500000000011823,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.18700000000080763,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.1500000000000341
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.58200000000096,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.9137541117555071,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T02:00:00+00:00",
+        "bucharest_time": "2026-07-15T05:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.5599999999998886,
+        "pv_kwh": 0.016,
+        "import_price": 1.5947082469999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.12599999999997635,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.2139999999999418,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.21999999999997044
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.008,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.008
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.5439999999998886,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.8675212863678222,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T03:00:00+00:00",
+        "bucharest_time": "2026-07-15T06:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.5620000000005803,
+        "pv_kwh": 0.8960000000000001,
+        "import_price": 1.661128172,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.5550000000000637,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.8640000000004875,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.1430000000000291
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.44800000000000006,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.44800000000000006
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": -0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.6660000000005801,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 1.1063113625529637,
+        "wear_cost_ron": -0.0
+      },
+      {
+        "utc": "2026-07-15T04:00:00+00:00",
+        "bucharest_time": "2026-07-15T07:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.6499999999994657,
+        "pv_kwh": 3.104,
+        "import_price": 1.7644651969999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.3369999999999891,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.2429999999994834,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.06999999999999318
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.552,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 1.552
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 2.4540000000005344,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T05:00:00+00:00",
+        "bucharest_time": "2026-07-15T08:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.5000000000011937,
+        "pv_kwh": 5.808,
+        "import_price": 1.760033572,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.14299999999980173,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.23000000000138243,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.12700000000000955
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 2.904,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 2.904
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 5.307999999998806,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T06:00:00+00:00",
+        "bucharest_time": "2026-07-15T09:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.564999999996985,
+        "pv_kwh": 8.384,
+        "import_price": 1.5504676219999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.2350000000003547,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.17999999999665306,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14999999999997726
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 4.192,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 4.192
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 7.819000000003015,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T07:00:00+00:00",
+        "bucharest_time": "2026-07-15T10:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.2950000000031991,
+        "pv_kwh": 10.912,
+        "import_price": 1.4198813969999997,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.3429999999998472,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.8020000000033178,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.1500000000000341
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 5.456,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 5.456
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 9.616999999996802,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T08:00:00+00:00",
+        "bucharest_time": "2026-07-15T11:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 0.8719999999963193,
+        "pv_kwh": 12.112000000000002,
+        "import_price": 1.4010628719999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.43699999999989814,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.2949999999964348,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.13999999999998636
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 6.056000000000001,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 6.056000000000001
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 11.240000000003683,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T09:00:00+00:00",
+        "bucharest_time": "2026-07-15T12:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.447999999999979,
+        "pv_kwh": 13.536000000000001,
+        "import_price": 1.3533283719999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.6639999999999873,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.6340000000000146,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14999999999997726
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 6.768000000000001,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 6.768000000000001
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 12.088000000000022,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T10:00:00+00:00",
+        "bucharest_time": "2026-07-15T13:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.4509999999995102,
+        "pv_kwh": 13.344000000000001,
+        "import_price": 1.3218895469999996,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.956000000000131,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.3539999999993597,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14100000000001955
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 6.672000000000001,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 6.672000000000001
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 11.893000000000491,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T11:00:00+00:00",
+        "bucharest_time": "2026-07-15T14:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 3.7400000000035334,
+        "pv_kwh": 12.128,
+        "import_price": 1.3042628719999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.4839999999999236,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 3.107000000003609,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.1490000000000009
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 6.064,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 6.064
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 8.387999999996467,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T12:00:00+00:00",
+        "bucharest_time": "2026-07-15T15:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.876999999997338,
+        "pv_kwh": 11.424,
+        "import_price": 1.280059847,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.35599999999999454,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 1.370999999997366,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.14999999999997726
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 5.712,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 5.712
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 9.547000000002662,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T13:00:00+00:00",
+        "bucharest_time": "2026-07-15T16:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.2040000000026794,
+        "pv_kwh": 9.520000000000001,
+        "import_price": 1.3372232720000001,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.40000000000009095,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.5840000000025611,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.22000000000002728
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 4.760000000000001,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 4.760000000000001
+        },
+        "charge_kwh": 5.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 5.767416490252569,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 3.315999999997322,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T14:00:00+00:00",
+        "bucharest_time": "2026-07-15T17:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.489000000000317,
+        "pv_kwh": 5.936,
+        "import_price": 1.556166722,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.0219999999999345,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.23400000000037835,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.2330000000000041
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 2.968,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 2.968
+        },
+        "charge_kwh": 3.6351261973664557,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 9.216000000000001,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.8118738026332273,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T15:00:00+00:00",
+        "bucharest_time": "2026-07-15T18:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.9270000000005894,
+        "pv_kwh": 3.568,
+        "import_price": 1.734892797,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.1970000000003438,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.2780000000002474,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.4519999999999982
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.784,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 1.784
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 9.216000000000001,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 1.6409999999994107,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.0
+      },
+      {
+        "utc": "2026-07-15T16:00:00+00:00",
+        "bucharest_time": "2026-07-15T19:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 3.1959999999996853,
+        "pv_kwh": 1.6,
+        "import_price": 1.9284171719999998,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.6539999999999964,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.36899999999968713,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 1.1730000000000018
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.8,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.8
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 1.468613577631542,
+        "soc_kwh": 7.667945364011939,
+        "grid_import_kwh": 0.12738642236814313,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.2456541643743721,
+        "wear_cost_ron": 0.22029203664473132
+      },
+      {
+        "utc": "2026-07-15T17:00:00+00:00",
+        "bucharest_time": "2026-07-15T20:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 2.418999999998107,
+        "pv_kwh": 0.35200000000000004,
+        "import_price": 2.5340191469999995,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.8699999999996635,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.28699999999844295,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.26200000000000045
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.17600000000000002,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.17600000000000002
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 2.066999999998107,
+        "soc_kwh": 5.489136056157921,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.31004999999971605
+      },
+      {
+        "utc": "2026-07-15T18:00:00+00:00",
+        "bucharest_time": "2026-07-15T21:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.8029999999994857,
+        "pv_kwh": 0.0,
+        "import_price": 2.204617822,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.1710000000000491,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.3319999999994252,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.30000000000001137
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 1.8029999999994857,
+        "soc_kwh": 3.588607182397267,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.27044999999992286
+      },
+      {
+        "utc": "2026-07-15T19:00:00+00:00",
+        "bucharest_time": "2026-07-15T22:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 2.433000000000675,
+        "pv_kwh": 0.0,
+        "import_price": 2.002072897,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.9300000000000637,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.28000000000065484,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.22299999999995634
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 2.433000000000675,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 0.0,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 0.0,
+        "wear_cost_ron": 0.3649500000001012
+      },
+      {
+        "utc": "2026-07-15T20:00:00+00:00",
+        "bucharest_time": "2026-07-15T23:00:00+03:00",
+        "hours": 1.0,
+        "load_kwh": 1.886999999999432,
+        "pv_kwh": 0.0,
+        "import_price": 1.9043835470000001,
+        "export_price": 0.0,
+        "member_loads_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 1.4789999999998145,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.24799999999959255,
+          "299f8fd3-15e0-5b6a-b4ff-7c89df792274": 0.160000000000025
+        },
+        "member_generation_kwh": {
+          "6fcbaf3c-70d4-5e7c-9b43-7bcc2e60e8d9": 0.0,
+          "fb939e21-9256-522a-ae84-9bcbfce003a3": 0.0
+        },
+        "charge_kwh": 0.0,
+        "discharge_kwh": 0.0,
+        "soc_kwh": 1.024,
+        "grid_import_kwh": 1.886999999999432,
+        "grid_export_kwh": 0.0,
+        "curtailed_kwh": 0.0,
+        "energy_cost_ron": 3.5935717531879185,
+        "wear_cost_ron": 0.0
+      }
+    ],
+    "energy_cost_ron": 11.620525259346177,
+    "wear_cost_ron": 1.1657420366444715,
+    "total_cost_ron": 12.78626729599065,
+    "grid_import_kwh": 6.778386422368131,
+    "grid_export_kwh": 36.26099999999783,
+    "curtailed_kwh": 47.86187380263461,
+    "charge_kwh": 8.635126197366455,
+    "discharge_kwh": 7.771613577629809,
+    "equivalent_cycles": 0.8,
+    "solver": "SciPy / HiGHS mixed-integer optimisation"
+  }
+}

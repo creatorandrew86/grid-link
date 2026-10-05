@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "checks": [
+    "login",
+    "30-day labelled replay",
+    "nine sizes",
+    "saved interest",
+    "eligible invitations",
+    "destination ROI includes joiner",
+    "uneconomic purchase rejected",
+    "preview does not move membership",
+    "atomic Supabase switch",
+    "post-switch funding",
+    "same ROI before/after acceptance",
+    "membership persists after login"
+  ],
+  "transfer_id": "b15357d1-95b7-4053-b6a5-b6ec4b7e2718"
+}

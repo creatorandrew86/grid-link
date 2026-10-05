@@ -1,5 +1,6 @@
 """Supabase REST client for GridLink."""
 import os
+import json
 from datetime import datetime, timedelta, timezone
 from urllib.parse import quote
 from pathlib import Path
@@ -109,7 +110,35 @@ class Database:
         rows = self.remote("GET", "communities", query=f"?id=eq.{community_id}&limit=1")
         if not rows:
             raise ValueError("Community not found.")
-        return rows[0]
+        row = rows[0]
+        # Demo-only metadata uses the existing description column; no deployment migration required.
+        try:
+            demo = json.loads(row.get("description") or "")
+            if isinstance(demo, dict) and demo.get("gridlink_demo") is True:
+                row = {**row, "is_demo": True, "battery_analysis_config": demo["battery_analysis_config"]}
+        except (ValueError, KeyError):
+            pass
+        return row
+
+    def demo_history(self, community_id):
+        """Replay fixtures stay outside real meter history and follow the hypothetical demo roster."""
+        ids = {p.id for p in self.participants(community_id)}
+        rows = self.remote("GET", "clearing_events", query=(
+            f"?community_id=eq.{community_id}&summary->>mode=eq.demo_battery"
+            "&select=interval_start,summary&order=interval_start&limit=1000"))
+        result = []
+        for row in rows:
+            summary = row["summary"]
+            profiles = summary.get("demo_member_profiles", {})
+            if not ids <= set(profiles):
+                continue
+            loads = {pid: profiles[pid]["load_kwh"] for pid in ids}
+            solar = {pid: profiles[pid]["generation_kwh"] for pid in ids}
+            result.append({"interval_start": row["interval_start"], "summary": {
+                **summary, "measurement": {**summary["measurement"], "load_kwh": sum(loads.values()),
+                    "generation_kwh": sum(solar.values()), "member_loads_kwh": loads,
+                    "member_generation_kwh": solar}}})
+        return result
 
     def battery_interests(self, community_id):
         return self.remote("GET", "community_battery_interest",

@@ -15,12 +15,13 @@ export default function BatteryComparison({ result, stale = false, compact = fal
   return (
     <div className="community-battery-results">
         <h3>{result.community?.name}: {result.includes_joining_member ? "after you join" : "current community"}</h3>
-        <p className="small-tag">{result.source === 'planning' ? 'ILLUSTRATIVE SCENARIO' : 'MEASURED INPUTS / MODELLED RETURNS'}</p>
+        <p className="small-tag">{result.source === 'demo_replay' ? 'DEMO REPLAY / HYPOTHETICAL COMMUNITY' : result.source === 'planning' ? 'ILLUSTRATIVE SCENARIO' : 'MEASURED INPUTS / MODELLED RETURNS'}</p>
+        {result.source === 'demo_replay' && <p className="notice">Published household consumption is replayed with Romanian prices and modelled solar generation. These are hypothetical communities and conditional returns, not measured Romanian community performance.</p>}
         {stale && <p className="notice">Inputs changed. Compare again to update these results.</p>}
         {result.message && <p className="muted">{result.message}</p>}
-        {result.input_sources && <div className="planning-assumption"><p>Energy data: {result.input_sources.energy}.</p><p>Battery quotes: {result.input_sources.battery} ({result.input_sources.quote_date}).</p><p>Technical and financial assumptions: {result.input_sources.assumptions}.</p></div>}
+        {result.input_sources && <div className="planning-assumption"><p>Energy data: {result.input_sources.energy}.</p>{result.input_sources.dataset && <p>Dataset: {result.input_sources.dataset}.</p>}<p>Battery quotes: {result.input_sources.battery} ({result.input_sources.quote_date}).</p><p>Technical and financial assumptions: {result.input_sources.assumptions}.</p></div>}
         {result.coverage.replayed_days > 0 && <p className="muted">{result.coverage.replayed_days} complete days replayed · {new Date(result.coverage.from).toLocaleDateString('en-GB')} to {new Date(result.coverage.to).toLocaleDateString('en-GB')}</p>}
-        {result.status === 'limited_history' && <p className="notice">Historical replay savings are available. Annual ROI and payback stay unavailable until 30 complete measured days are recorded.</p>}
+        {result.status === 'limited_history' && <p className="notice">Historical replay savings are available. Annual ROI and payback stay unavailable until 30 complete days are available.</p>}
         {best != null && <div className="battery-best-option">
           <p className="eyebrow">{result.purchase_recommended ? 'BEST OPTION BY NPV' : 'BEST COMPARED BATTERY / NO PURCHASE PREFERRED'}</p>
           <strong>{recommended.design.chemistry} / {recommended.design.capacity_kwh} kWh / {number(recommended.design.power_kw)} kW</strong>

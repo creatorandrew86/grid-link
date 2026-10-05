@@ -187,6 +187,12 @@ def create_app():
             raise HTTPException(status_code=409, detail="Your account is not assigned to a community.")
         return member
 
+    def is_demo(community):
+        return community.get("is_demo") is True and community.get("battery_analysis_config", {}).get("data_mode") == "demo_replay"
+
+    def battery_history(community):
+        return database.demo_history(community["id"]) if is_demo(community) else database.measured_history(community["id"])
+
     @app.get("/api/community-battery")
     def community_battery(authorization: str = Header(default="")):
         member = community_member(authorization)
@@ -195,10 +201,10 @@ def create_app():
         participants = database.participants(cid)
         ids = {p.id for p in participants}
         interests = [r for r in database.battery_interests(cid) if r["participant_id"] in ids]
-        _, coverage = measured_days(database.measured_history(cid), community.get("timezone") or "Europe/Bucharest")
+        _, coverage = measured_days(battery_history(community), community.get("timezone") or "Europe/Bucharest", demo_mode=is_demo(community))
         return {"community": {"id": cid, "name": community["name"],
                     "battery_policy": community.get("battery_policy", "undecided"),
-                    "meter_boundary": community.get("battery_meter_boundary", "unverified")},
+                    "meter_boundary": community.get("battery_meter_boundary", "unverified"), "is_demo": is_demo(community)},
                 "member_count": len(participants), "interested_count": sum(r["interested"] for r in interests),
                 "answered_count": len(interests), "your_interest": next(
                     (r["interested"] for r in interests if r["participant_id"] == member["id"]), None),
@@ -211,8 +217,8 @@ def create_app():
         community = database.community_details(cid)
         try:
             result = compare_batteries(request, database.participants(cid),
-                database.measured_history(cid) if request.source == "measured" else [],
-                community.get("timezone") or "Europe/Bucharest", community.get("battery_meter_boundary", "unverified"), member["id"])
+                battery_history(community) if request.source == "measured" else [],
+                community.get("timezone") or "Europe/Bucharest", community.get("battery_meter_boundary", "unverified"), member["id"], demo_mode=is_demo(community))
             return {**result, "community": {"id": cid, "name": community["name"]}, "analysis_scope": "current_community"}
         except ValueError as error:
             raise HTTPException(status_code=422, detail=str(error)) from error
@@ -225,14 +231,16 @@ def create_app():
         if target not in {c["id"] for c in database.battery_candidates(origin, member)}:
             raise HTTPException(status_code=409, detail="This community is no longer eligible or accepting members.")
         destination = database.community_details(target)
+        if is_demo(origin) != is_demo(destination):
+            raise HTTPException(status_code=409, detail="Demo communities cannot be mixed with live communities.")
         try:
             result = compare_batteries(request, database.participants(target),
-                database.measured_history(target) if request.source == "measured" else [],
+                battery_history(destination) if request.source == "measured" else [],
                 destination.get("timezone") or "Europe/Bucharest",
                 destination.get("battery_meter_boundary", "unverified"), member["id"],
                 joining_member=Participant.model_validate(member),
-                joining_events=database.measured_history(member["community_id"]) if request.source == "measured" else [],
-                joining_timezone=origin.get("timezone") or "Europe/Bucharest")
+                joining_events=battery_history(origin) if request.source == "measured" else [],
+                joining_timezone=origin.get("timezone") or "Europe/Bucharest", demo_mode=is_demo(destination))
             return {**result, "community": {"id": target, "name": destination["name"]},
                     "analysis_scope": "destination_with_you",
                     "notes": ["Invitation estimates include you joining the destination; this is a hypothetical combined community.",
@@ -261,9 +269,9 @@ def create_app():
             result = battery_invitation(InvitationInput(**config.comparison.model_dump(), target_community_id=target), authorization)
         else:
             result = community_battery_compare(config.comparison, authorization)
-        return {**result, "input_sources": {"energy": "Community meter history and interval contract tariffs",
+        return {**result, "input_sources": {"energy": "Published-data demo replay, not live community measurements" if is_demo(community) else "Community meter history and interval contract tariffs",
                     "battery": config.quote_source, "quote_date": config.quote_date.isoformat(),
-                    "assumptions": config.assumptions_source},
+                    "assumptions": config.assumptions_source, "dataset": config.dataset_source},
                 "notes": [*result.get("notes", []),
                           "Equipment costs and specifications come from the community's stored quote catalogue; members do not enter them."]}
 
@@ -280,6 +288,8 @@ def create_app():
         target = str(request.target_community_id)
         if target not in {c["id"] for c in database.battery_candidates(community, member)}:
             raise HTTPException(status_code=409, detail="This community is no longer eligible or accepting members.")
+        if is_demo(community) != is_demo(database.community_details(target)):
+            raise HTTPException(status_code=409, detail="Demo communities cannot be mixed with live communities.")
         try:
             transfer = database.accept_battery_transfer(member["id"], target)
         except httpx.HTTPStatusError as error:

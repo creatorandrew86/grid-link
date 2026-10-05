@@ -103,6 +103,35 @@ class CommunityBatteryChecks(unittest.TestCase):
         for bad in (events[:-1], events + [events[0]]):
             self.assertEqual(measured_days(bad, "UTC")[1]["incomplete_days"], 1)
 
+    def test_demo_archives_are_explicit_and_never_count_as_measured_history(self):
+        demo = [{**r, "summary": {**r["summary"], "mode": "demo_battery"}} for r in measured_events(30)]
+        self.assertEqual(measured_days(demo, "UTC")[0], [])
+        self.assertEqual(len(measured_days(demo, "UTC", demo_mode=True)[0]), 30)
+        result = compare_batteries(ComparisonInput(designs=[design()]), participants(), demo,
+                                  "UTC", "shared_meter", ALICE, demo_mode=True)
+        self.assertEqual(result["source"], "demo_replay")
+        self.assertIsInstance(result["purchase_recommended"], bool)
+        json_safe = __import__("json").dumps(result)
+        self.assertIn('"source": "demo_replay"', json_safe)
+
+    def test_demo_database_uses_only_demo_metadata_and_rebuilds_hypothetical_roster(self):
+        with patch.object(Database, "__init__", return_value=None):
+            db = Database()
+        db.remote = MagicMock(return_value=[{"id": HOME, "description": __import__("json").dumps({
+            "gridlink_demo": True, "battery_analysis_config": {"data_mode": "demo_replay"}})}])
+        self.assertTrue(db.community_details(HOME)["is_demo"])
+        db.remote.return_value = [{"id": HOME, "description": "Real community"}]
+        self.assertNotIn("is_demo", db.community_details(HOME))
+        profile = {ALICE: {"load_kwh": .25, "generation_kwh": 0}, BOB: {"load_kwh": .75, "generation_kwh": .5}}
+        event = {"interval_start": "2025-01-01T00:00:00Z", "summary": {
+            "mode": "demo_battery", "demo_member_profiles": profile, "measurement": {}}}
+        db.remote.return_value = [event]
+        db.participants = MagicMock(return_value=[participants()[1]])
+        self.assertEqual(db.demo_history(HOME)[0]["summary"]["measurement"]["load_kwh"], .75)
+        db.participants.return_value = participants()
+        self.assertEqual(db.demo_history(HOME)[0]["summary"]["measurement"]["load_kwh"], 1)
+        self.assertIn("summary->>mode=eq.demo_battery", db.remote.call_args.kwargs["query"])
+
     def test_dst_day_is_complete_without_inventing_a_missing_hour(self):
         zone = ZoneInfo("Europe/Bucharest")
         start = datetime(2025, 3, 30, tzinfo=zone).astimezone(timezone.utc)

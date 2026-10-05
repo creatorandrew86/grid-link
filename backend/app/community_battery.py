@@ -54,9 +54,13 @@ class StoredAnalysisConfig(BaseModel):
     quote_source: str = Field(min_length=3)
     quote_date: date
     assumptions_source: str = Field(min_length=3)
+    data_mode: Literal["measured", "demo_replay"] = "measured"
+    dataset_source: str | None = None
 
     @model_validator(mode="after")
     def check_sources(self):
+        if self.data_mode == "demo_replay" and not self.dataset_source:
+            raise ValueError("Demo replay must disclose its dataset sources.")
         required = {"designs", "horizon_years", "discount_rate", "connection_import_kw",
                     "connection_export_kw", "dispatch_wear_ron_per_kwh"}
         if self.comparison.source != "measured" or not required <= self.comparison.model_fields_set:
@@ -143,13 +147,13 @@ def financial_projection(annual_cash_saving, design, request, factor=1.):
             "timeline": timeline}
 
 
-def measured_days(events, community_timezone):
+def measured_days(events, community_timezone, *, demo_mode=False):
     zone = ZoneInfo(community_timezone)
     grouped = defaultdict(list)
     excluded = 0
     for event in events:
         s = event.get("summary", {})
-        if (s.get("mode") != "measured" or s.get("currency") != "RON"
+        if (s.get("mode") != ("demo_battery" if demo_mode else "measured") or s.get("currency") != "RON"
                 or s.get("meter_boundary") != "shared_meter"
                 or s.get("battery_free_baseline") is not True):
             excluded += 1
@@ -198,9 +202,9 @@ def planning_days(participants):
     return result
 
 
-def include_joining_member(days, source_events, source_timezone, member):
+def include_joining_member(days, source_events, source_timezone, member, *, demo_mode=False):
     """Build a hypothetical combined history without storing it as a measurement."""
-    source_days, _ = measured_days(source_events, source_timezone)
+    source_days, _ = measured_days(source_events, source_timezone, demo_mode=demo_mode)
     source = {(datetime.fromisoformat(r["utc"]), r["hours"]): r for day in source_days for r in day}
     combined = []
     for day in days:
@@ -223,14 +227,14 @@ def include_joining_member(days, source_events, source_timezone, member):
 
 
 def compare_batteries(request, participants, events, community_timezone, meter_boundary, member_id=None,
-                      *, joining_member=None, joining_events=None, joining_timezone="UTC"):
+                      *, joining_member=None, joining_events=None, joining_timezone="UTC", demo_mode=False):
     if joining_member is not None:
         if any(p.id == joining_member.id for p in participants):
             raise ValueError("The member already belongs to this destination community.")
         participants = [*participants, joining_member]
     if not participants:
         raise ValueError("The community needs at least one member.")
-    metadata = {"source": request.source, "member_count": len(participants),
+    metadata = {"source": "demo_replay" if demo_mode else request.source, "member_count": len(participants),
                 "funding_rule": request.funding_rule, "currency": "RON", "includes_joining_member": joining_member is not None}
     if request.source == "planning":
         if not request.shared_meter_confirmed:
@@ -239,13 +243,13 @@ def compare_batteries(request, participants, events, community_timezone, meter_b
         coverage = {"complete_days": len(days), "incomplete_days": 0, "excluded_intervals": 0,
                     "valid_intervals": sum(map(len, days))}
     else:
-        days, coverage = measured_days(events, community_timezone)
+        days, coverage = measured_days(events, community_timezone, demo_mode=demo_mode)
         if meter_boundary != "shared_meter":
             return {**metadata, "status": "meter_boundary_unconfirmed", "coverage": coverage, "designs": [],
                     "message": "A shared billing meter must be verified before estimating community battery returns."}
         if days and joining_member is not None:
             destination_days = len(days)
-            days = include_joining_member(days, joining_events or [], joining_timezone, joining_member)
+            days = include_joining_member(days, joining_events or [], joining_timezone, joining_member, demo_mode=demo_mode)
             coverage = {**coverage, "destination_complete_days": destination_days,
                         "complete_days": len(days), "valid_intervals": sum(map(len, days)),
                         "unmatched_destination_days": destination_days - len(days)}
@@ -293,6 +297,7 @@ def compare_batteries(request, participants, events, community_timezone, meter_b
         except ValueError as error:
             results.append({"design": design.model_dump(), "error": str(error)})
             continue
+        cash, wear, base_bill = float(cash), float(wear), float(base_bill)
         annual_cash = cash / len(sampled) * 365
         # Dispatch wear guides cycling; capex is counted once in cash projections.
         projections = {name: financial_projection(annual_cash, design, request, factor)

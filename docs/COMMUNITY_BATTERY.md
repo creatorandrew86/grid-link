@@ -2,6 +2,8 @@
 
 Open **Account → A battery for your community** after signing in. The community ledger remains removed. The member sees aggregate community economics and only their own contribution; other members' readings are never returned to the browser.
 
+For the isolated hackathon replay account, see [the pitch guide](../demo/PITCH_GUIDE.md). Demo metadata is explicitly marked and stored in the existing community description; replay fixtures use `clearing_events` with `mode=demo_battery`, never the real measured-data table. Ordinary measured analysis excludes those fixtures. For demo communities only, the replay roster is rebuilt after a voluntary switch so the same hypothetical combined community is used before/after acceptance. Live community history is never rewritten this way.
+
 The initial comparison is scoped to the signed-in member's current community and names it in the results. Members see an automatic analysis; they do not enter demand, tariffs, solar output, equipment costs or connection limits. The community's stored quote catalogue supplies up to 30 technology/size options, with explicit specifications and installed costs. To compare the previously supported 27 options, supply sourced entries for LFP, NMC and lead-acid at 5, 10, 15, 20, 30, 40, 60, 80 and 100 kWh. Only options for which sourced specifications/costs are available should be included.
 
 Once sufficient history exists, each comparison highlights the battery with the highest base-case NPV, with ROI, payback and the member's contribution. If no compared battery has positive NPV, the interface explains that keeping no battery is financially preferable under those assumptions. The full size/type table and individual projections remain available.

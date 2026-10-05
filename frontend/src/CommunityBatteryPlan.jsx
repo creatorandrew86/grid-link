@@ -60,12 +60,13 @@ export default function CommunityBatteryPlan({ memberId, onSwitched }) {
     {!context ? <p className="muted">{error ? 'Planning is unavailable until the connection or database setup is fixed.' : 'Loading your community…'}</p> : <>
       <div className="community-battery-status">
         <div><span className="eyebrow">YOUR COMMUNITY</span><strong>{context.community.name}</strong><p className="muted">Battery plan: {context.community.battery_policy}</p></div>
-        <div><span className="eyebrow">MEASURED HISTORY</span><strong>{context.coverage.complete_days} complete days</strong><p className="muted">{context.coverage.incomplete_days} incomplete days excluded. ROI needs 30 complete days.</p></div>
+        <div><span className="eyebrow">{context.community.is_demo ? 'DEMO REPLAY HISTORY' : 'MEASURED HISTORY'}</span><strong>{context.coverage.complete_days} complete days</strong><p className="muted">{context.coverage.incomplete_days} incomplete days excluded. ROI needs 30 complete days.</p></div>
         <div><span className="eyebrow">SHARED FUNDING</span><strong>{context.member_count} members</strong><p className="muted">{context.interested_count} interested · {context.answered_count} answered</p></div>
       </div>
 
       <p className="muted">Measurements, contract tariffs, battery quotes and connection limits are supplied by the system and your community operator. You do not need to enter analysis parameters.</p>
       <button className="button outline" disabled={busy} onClick={compare}>{busy ? 'Updating analysis...' : 'Refresh analysis'}</button>
+      {context.community.is_demo && <p><a href="/demo/index.html" target="_blank" rel="noreferrer">Open pitch cases and algorithm charts</a></p>}
       {result && <BatteryComparison result={result} />}
 
       <div className="battery-community-choice">
