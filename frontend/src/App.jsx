@@ -51,7 +51,7 @@ export default function App() {
     setBusy(true);
     setError('');
     try {
-      const result = await api('community');
+      const result = await api('clearing-summary');
       setSummary(result);
     } catch (err) {
       if (err.status === 401) {
@@ -92,7 +92,8 @@ export default function App() {
     return () => { cancelled = true; };
   }, [sessionToken]);
 
-  const currentMember = profile;
+  const activeMember = summary?.participants?.find((member) => member.id === profile?.id);
+  const currentMember = activeMember ? { ...activeMember, ...profile } : profile;
 
   const handleJoined = (newMember) => {
     setProfile(newMember);
@@ -149,6 +150,9 @@ export default function App() {
       {page === 'account' && (
         <Account
           member={currentMember}
+          summary={summary}
+          refresh={refresh}
+          busy={busy}
           loading={busy || !summary}
           onNavigate={navigate}
           onLogout={handleLogout}
