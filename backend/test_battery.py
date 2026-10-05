@@ -1,16 +1,15 @@
 """Run with the existing unittest command; no network is required."""
 import math
-import os
-import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
 from app.battery import BatteryScenario, history, make_intervals, optimise, simulate
-from app.main import create_app
+# App construction must not require credentials during test discovery.
+with patch("app.database.Database.__init__", return_value=None):
+    from app.main import create_app
 from app.weather import historical_estimates, wind_proxy
 
 
@@ -77,10 +76,7 @@ class BatteryChecks(unittest.TestCase):
         self.assertEqual(wind_proxy(26), 0)
 
     def test_api_validation_serialisation_and_provider_failure(self):
-        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {
-            "GRIDLINK_DB_PATH": str(Path(directory) / "test.db"), "GRIDLINK_SEED_DEMO": "0",
-            "SUPABASE_URL": "", "SUPABASE_SECRET_KEY": "", "SUPABASE_SERVICE_ROLE_KEY": "",
-        }):
+        with patch("app.main.Database", autospec=True):
             with TestClient(create_app()) as client:
                 self.assertEqual(len(client.get("/api/battery/dataset").json()["days"]), 120)
                 response = client.post("/api/battery/simulate", json={})
