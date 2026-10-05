@@ -95,6 +95,31 @@ class BatteryChecks(unittest.TestCase):
                 with patch("app.main.live_outlook", side_effect=ValueError("missing forecast")):
                     self.assertEqual(client.get("/api/battery/weather-outlook").status_code, 503)
 
+    def test_contract_prices_control_dispatch_and_settlement(self):
+        config = BatteryScenario(capacity_kwh=5, charge_kw=5, discharge_kw=5,
+                                 reserve_fraction=0, initial_soc_fraction=0, max_soc_fraction=1,
+                                 round_trip_efficiency=1, wear_ron_per_kwh=0)
+        stamp = datetime(2026, 1, 1, tzinfo=timezone.utc)
+        intervals = [{"utc": (stamp + timedelta(hours=i)).isoformat(),
+                      "bucharest_time": (stamp + timedelta(hours=i)).isoformat(), "hours": 1,
+                      "price_lei_kwh": 10, "import_price": 1, "export_price": credit,
+                      "pv_kwh": pv, "load_kwh": load}
+                     for i, (pv, load, credit) in enumerate(((5, 0, .4), (0, 5, .4)))]
+        plan = optimise(intervals, config)
+        self.check_physics(plan, config)
+        self.assertAlmostEqual(plan["charge_kwh"], 5)
+        self.assertAlmostEqual(plan["energy_cost_ron"], 0)
+        # Exporting valuable solar and later buying cheap imports beats storing it.
+        intervals[0]["export_price"] = 2
+        plan = optimise(intervals, config)
+        self.assertAlmostEqual(plan["charge_kwh"], 0)
+        self.assertAlmostEqual(plan["energy_cost_ron"], -5)
+        with self.assertRaises(ValueError):
+            optimise(intervals, config, planning_prices=[1, 1])
+        intervals[0]["export_price"] = float("nan")
+        with self.assertRaises(ValueError):
+            optimise(intervals, config)
+
     def test_estimate_training_excludes_future_prices_and_weather(self):
         config = BatteryScenario()
         intervals = make_intervals(config)

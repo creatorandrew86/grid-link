@@ -325,6 +325,20 @@ The [measured-consumption backtest](research/romania/CONSUMER_BACKTEST.md) uses 
 .\.tools\venv\Scripts\python.exe research/romania/backtest_consumers.py
 ```
 
+## Battery product scope and shared-storage ROI
+
+Decision, 5 October 2026: GridLink will offer shared community storage only. Buying a personal battery is excluded from the prosumer product and roadmap. Prosumers can join with their PV; membership does not require buying a battery. The simulator already represents shared storage behind one billing meter and has no personal-battery enrolment option.
+
+The [shared community comparison](research/romania/CONSUMER_BACKTEST.md#shared-community-results) and its reproducible ROI calculations remain part of the project. For four homes behind one meter with existing 20 kWp PV, the 10.24 kWh scenario projects 4,728 RON annual energy-bill cash savings, 2.38-year simple payback and +284.05% ten-year undiscounted cash ROI. Without PV, that size projects 2,851 RON annual savings and 4.00-year simple payback. Assumed installed cost is 11,000.42 RON with an existing compatible inverter; operating cost is 100 RON/year and projected savings fade by 2% annually.
+
+These are conditional research results using an illustrative export tariff, known demand and modelled PV over four sampled seasons. They require validation against the community's actual contract, full installed cost and forecast errors. They do not establish returns for separately billed members or guarantee a profitable shared installation.
+
+The [personal-battery study](research/romania/PROSUMER_BATTERY_ROI.md) and [per-design results](research/romania/prosumer-designs.csv) are retained as the research record supporting exclusion. At published base costs, none of its 840 main designs has positive ten-year ROI. A few optimistic multi-day cases recover nominal cost but still have negative NPV at 6%. Personal storage is not an available or planned GridLink offering.
+
+## PV farms and apartment buildings
+
+The [Romanian PV-farm and apartment-building feasibility study](research/romania/PV_FARMS_AND_APARTMENTS.md), checked on 5 October 2026, documents merchant solar cases, producer membership restrictions, licensed-supplier alternatives and the workflow for separately enrolled apartment meters. It distinguishes adopted community rules from the billing draft still under consultation, and explains how tariffs, matching demand, batteries and EV charging affect the business case. The current prototype does not perform real supplier/distributor settlement.
+
 ## Current limitations
 
 For a researched comparison of Romanian dynamic prices, weather, battery dispatch and EV charging, see [the Romanian market analysis](research/romania/REPORT.md). It includes 120 historical days, hourly price/weather data and a reproducible battery benchmark. The battery simulator uses these datasets; real battery control remains unimplemented.

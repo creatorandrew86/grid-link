@@ -2,6 +2,8 @@
 
 Computed 5 October 2026. Results and daily cases: [consumer-backtest.json](consumer-backtest.json) and [consumer-backtest.csv](consumer-backtest.csv). Reproduce with [backtest_consumers.py](backtest_consumers.py).
 
+Product decision, 5 October 2026: GridLink keeps shared community storage as its only battery offering. The [shared community results](#shared-community-results) below remain the investment comparison for that scope. Household battery scenarios are retained as historical benchmarks, not product recommendations. The newer [contract-specific personal-battery study](PROSUMER_BATTERY_ROI.md) supports excluding personal purchases. This report's solar results use an illustrative wholesale-linked export price, and the shared four-home results assume one billing meter. Their ROI needs validation against an actual shared installation and settlement contract.
+
 The household reference achieved a **9.82% reduction in the modelled bill after losses and wear with a 5.12 kWh battery**, versus no battery under the same dynamic tariff. It saved more than 0.01 RON on 513 of 548 household-days, or **93.61%**. The remaining 35 cases were effectively idle. The conditional simple payback is **8.09 years**, assuming an existing compatible inverter. A 10.24 kWh battery makes more sense in the tested shared community than in an individual household.
 
 These are simulations combining measured German consumption with Romanian prices and weather. Demand is known in advance in every replay; PV is modelled. The results estimate an opportunity under those inputs. They do not establish live controller performance or an average saving for Romanian households. Annual ROI extrapolates four sampled seasons, rather than testing a full year of prices.

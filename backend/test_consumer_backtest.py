@@ -8,9 +8,21 @@ from pathlib import Path
 from research.romania.backtest_consumers import (
     HOUSE_FEEDS, INSTALL_RON, UNIT_COST_RON, measured_days, summarise,
 )
+from research.romania.backtest_prosumers import finances
 
 
 class ConsumerBacktestTests(unittest.TestCase):
+    def test_prosumer_projection_stops_quantitative_compensation_in_2030(self):
+        result = finances(1000, 0, 1)
+        self.assertAlmostEqual(result["yearly_net_cashflows_ron"][0], 900)
+        self.assertAlmostEqual(result["yearly_net_cashflows_ron"][4], 130.59204)
+        self.assertEqual(result["yearly_net_cashflows_ron"][5], -100)
+        self.assertIsNone(result["projected_payback_within_10_years"])
+        self.assertLess(result["ten_year_npv_ron_at_6pct"], 0)
+        zero = finances(0, 0, 1)
+        self.assertAlmostEqual(zero["ten_year_cash_roi_pct"],
+                               -100 * (UNIT_COST_RON + INSTALL_RON + 1000) / (UNIT_COST_RON + INSTALL_RON))
+
     def meter_fixture(self, flagged=False):
         fields = ["utc_timestamp", "cet_cest_timestamp", "interpolated"]
         fields += [f"DE_KN_residential{house}_{feed}"

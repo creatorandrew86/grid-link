@@ -86,10 +86,22 @@ def tariffs(price, config):
             price * config.export_price_factor - config.export_fee_ron_per_kwh)
 
 
+def interval_tariffs(interval, config, planning_price=None):
+    """Research replays may supply final contract prices, including caps and export credits."""
+    explicit = "import_price" in interval or "export_price" in interval
+    if explicit:
+        if planning_price is not None:
+            raise ValueError("Explicit contract tariffs cannot be combined with raw planning prices.")
+        if not all(key in interval and math.isfinite(interval[key]) for key in ("import_price", "export_price")):
+            raise ValueError("Supply both finite import and export contract prices.")
+        return interval["import_price"], interval["export_price"]
+    return tariffs(interval["price_lei_kwh"] if planning_price is None else planning_price, config)
+
+
 def describe_schedule(intervals, config, charges, discharges, states, label, flows=None):
     rows = []
     for i, interval in enumerate(intervals):
-        buy, sell = tariffs(interval["price_lei_kwh"], config)
+        buy, sell = interval_tariffs(interval, config)
         net = interval["load_kwh"] + charges[i] - interval["pv_kwh"] - discharges[i]
         imported = max(0., net)
         exported = min(max(0., -net), config.grid_export_kw * interval["hours"]) if sell > 0 else 0.
@@ -150,7 +162,7 @@ def optimise(intervals, config, *, night_only=False, planning_prices=None, label
             export_max, interval["pv_kwh"], config.capacity_kwh * config.max_soc_fraction, 1, 1]
         lower[soc] = config.capacity_kwh * config.reserve_fraction
         integral[[mode, grid]] = 1
-        buy, sell = tariffs(planning_prices[t] if planning_prices is not None else interval["price_lei_kwh"], config)
+        buy, sell = interval_tariffs(interval, config, planning_prices[t] if planning_prices is not None else None)
         objective[imp], objective[exp], objective[d] = buy, -sell, config.wear_ron_per_kwh
         constraint({imp: 1, d: 1, c: -1, exp: -1, spill: -1},
                    interval["load_kwh"] - interval["pv_kwh"], interval["load_kwh"] - interval["pv_kwh"])

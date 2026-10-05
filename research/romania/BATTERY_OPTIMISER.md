@@ -2,6 +2,8 @@
 
 Implemented 4 October 2026. Open the application at `http://127.0.0.1:5173/#battery`.
 
+Product decision, 5 October 2026: the battery optimiser is for shared community storage. Personal battery purchases are excluded from the prosumer offering and roadmap following the [individual investment study](PROSUMER_BATTERY_ROI.md). The [shared-storage analysis and ROI](CONSUMER_BACKTEST.md#shared-community-results) remain in scope. The present simulator represents one shared billing meter; operation across separately billed members still requires a confirmed settlement arrangement.
+
 The follow-up [measured-consumption backtest](CONSUMER_BACKTEST.md) evaluates the same solver on five public household meter profiles, with daily success/loss rates and conditional battery ROI. It also compares the price-estimation variants on a common sample.
 
 ## What runs now
@@ -79,6 +81,8 @@ Wind is requested in m/s at 100 metres. Radiation at timestamp t+1 describes the
 The historical mismatch signal is illustrative: local scenario surplus plus coastal wind proxy below 20% and coastal radiation below 70% of local radiation. It identifies a candidate situation for investigation, not a measured national shortage or calibrated shortage probability. Strong coastal wind above 50% or radiation above 500 W/m² produces a broad-renewable-availability label. Labels do not override the optimiser's prices.
 
 ## What is needed before using this to trade
+
+For a PV field serving apartments through the public network, use a separate settlement model from this simulator's shared-meter assumption. The [PV-farm and apartment feasibility study](PV_FARMS_AND_APARTMENTS.md) covers producer eligibility, licensed-supplier routes and the community billing draft still under consultation on 5 October 2026. A registered community's optimiser must also respect the statutory priority for member consumption and the conditions for selling surplus.
 
 1. Confirm our import/export contract, settlement interval, connection limits and whether stored/grid-charged energy may be exported.
 2. Add measured demand/PV and battery telemetry. Calibrate the PV model, which currently scales horizontal GHI by capacity and performance ratio, without tilt, module temperature or detailed inverter modelling.
