@@ -10,7 +10,7 @@ from fastapi.testclient import TestClient
 from pydantic import ValidationError
 
 from app.community_battery import (BatteryDesign, ComparisonInput, Measurement, MeasurementBatch,
-                                   compare_batteries, financial_projection, measured_days)
+                                   compare_batteries, financial_projection, measured_days, include_joining_member)
 from app.models import MarketSettings, Participant
 from app.sign_up import SignupInput, hash_password, register_participant
 from app.database import Database
@@ -124,11 +124,11 @@ class CommunityBatteryChecks(unittest.TestCase):
             MeasurementBatch(community_id=HOME, shared_meter_confirmed=True,
                              battery_free_baseline_confirmed=True, readings=[payload, payload])
 
-    def test_quarter_hour_meter_data_and_all_nine_technology_size_options(self):
+    def test_quarter_hour_meter_data_and_all_twenty_seven_technology_size_options(self):
         designs = [design().model_copy(update={"chemistry": chemistry, "capacity_kwh": capacity,
                    "power_kw": capacity / 2, "efficiency": efficiency, "usable_fraction": usable})
                    for chemistry, efficiency, usable in (("LFP", .92, .9), ("NMC", .9, .85), ("Lead-acid", .8, .5))
-                   for capacity in (5, 10, 20)]
+                   for capacity in (5, 10, 15, 20, 30, 40, 60, 80, 100)]
         events = []
         start = datetime(2025, 1, 1, tzinfo=timezone.utc)
         for i in range(96):
@@ -138,12 +138,63 @@ class CommunityBatteryChecks(unittest.TestCase):
                     "load_kwh": .25, "generation_kwh": 0, "import_price_ron": .1 if i < 24 else 1,
                     "export_price_ron": 0, "member_loads_kwh": {ALICE: .0625, BOB: .1875}}}})
         result = compare_batteries(ComparisonInput(designs=designs), participants(), events, "UTC", "shared_meter", ALICE)
-        self.assertEqual(len(result["designs"]), 9)
+        self.assertEqual(len(result["designs"]), 27)
         self.assertEqual(result["coverage"]["valid_intervals"], 96)
         for row in result["designs"]:
             self.assertNotIn("error", row)
             self.assertGreater(row["sample_cash_saving_ron"], 0)
             self.assertGreaterEqual(row["sample_saving_after_wear_ron"], -1e-5)
+
+    def test_best_size_uses_npv_and_negative_options_do_not_recommend_purchase(self):
+        designs = [design().model_copy(update={"capacity_kwh": capacity, "power_kw": capacity / 2,
+                   "installed_cost_ron": cost}) for capacity, cost in ((5, 1000), (10, 3000), (40, 40000))]
+        request = ComparisonInput(designs=designs, dispatch_wear_ron_per_kwh=0)
+        result = compare_batteries(request, participants(), measured_events(), "UTC", "shared_meter", ALICE)
+        self.assertEqual(result["best_design_index"], 1)
+        self.assertTrue(result["purchase_recommended"])
+        expensive = request.model_copy(update={"designs": [design().model_copy(update={"installed_cost_ron": 1000000})]})
+        result = compare_batteries(expensive, participants(), measured_events(), "UTC", "shared_meter", ALICE)
+        self.assertEqual(result["best_design_index"], 0)
+        self.assertFalse(result["purchase_recommended"])
+
+    def test_invitation_combines_your_readings_with_destination_tariffs_and_population(self):
+        origin = measured_events()
+        target = measured_events()
+        for event in target:
+            event["summary"]["measurement"]["member_loads_kwh"] = {BOB: 1}
+            event["summary"]["measurement"]["import_price_ron"] *= 2
+        request = ComparisonInput(designs=[design()], dispatch_wear_ron_per_kwh=0)
+        current = compare_batteries(request, participants(), origin, "UTC", "shared_meter", ALICE)
+        result = compare_batteries(request, [participants()[1]], target, "UTC", "shared_meter", ALICE,
+                                  joining_member=participants()[0], joining_events=origin)
+        row = result["designs"][0]
+        self.assertTrue(result["includes_joining_member"])
+        self.assertEqual(result["member_count"], 2)
+        self.assertAlmostEqual(row["sample_baseline_bill_ron"], 30 * 1.25 * (6 * .2 + 18 * 2))
+        self.assertAlmostEqual(row["annual_cash_saving_ron"], 2 * current["designs"][0]["annual_cash_saving_ron"])
+        self.assertEqual(row["member_allocations"]["equal_share"]["contribution_ron"], 1500)
+        self.assertEqual(row["member_allocations"]["consumption_share"]["contribution_ron"], 600)
+        self.assertEqual(target[0]["summary"]["measurement"]["load_kwh"], 1)
+        self.assertNotIn("member_loads_kwh", str(result))
+
+    def test_prosumer_invitation_requires_measured_solar_and_excludes_unmatched_days(self):
+        incoming = participants()[0].model_copy(update={"type": "prosumer", "solar_kwp": 5})
+        target_days, _ = measured_days(measured_events(1), "UTC")
+        source = measured_events(1)
+        self.assertEqual(include_joining_member(target_days, source, "UTC", incoming), [])
+        for event in source:
+            m = event["summary"]["measurement"]
+            m["generation_kwh"] = .5
+            m["member_generation_kwh"] = {ALICE: .5, BOB: 0}
+        combined = include_joining_member(target_days, source, "UTC", incoming)
+        self.assertEqual(combined[0][0]["load_kwh"], 1.25)
+        self.assertEqual(combined[0][0]["pv_kwh"], .5)
+        shifted = [{**event, "interval_start": (datetime.fromisoformat(event["interval_start"]) + timedelta(days=1)).isoformat()} for event in source]
+        self.assertEqual(include_joining_member(target_days, shifted, "UTC", incoming), [])
+        result = compare_batteries(ComparisonInput(designs=[design()]), [participants()[1]], measured_events(1),
+                                  "UTC", "shared_meter", ALICE, joining_member=incoming, joining_events=measured_events(1))
+        self.assertEqual(result["status"], "joining_history_unavailable")
+        self.assertEqual(result["designs"], [])
 
     def test_signup_and_insert_keep_the_pods_approved_community(self):
         db = MagicMock()
@@ -237,6 +288,43 @@ class CommunityBatteryApiChecks(unittest.TestCase):
         self.assertEqual(response.json()["user"]["community_id"], OTHER)
         self.assertNotIn("password_hash", response.text)
         self.assertEqual(self.client.post("/api/community-battery/switch", json={"target_community_id": OTHER}).status_code, 401)
+
+    def test_invitation_is_destination_scoped_read_only_and_checks_eligibility(self):
+        def community(cid):
+            return {"id": cid, "name": "Destination" if cid == OTHER else "Origin",
+                    "timezone": "UTC", "battery_meter_boundary": "shared_meter"}
+        self.db.community_details.side_effect = community
+        self.db.participants.side_effect = lambda cid: [participants()[1]] if cid == OTHER else participants()
+        destination = measured_events(1)
+        for event in destination:
+            event["summary"]["measurement"]["member_loads_kwh"] = {BOB: 1}
+        self.db.measured_history.side_effect = lambda cid: destination if cid == OTHER else measured_events(1)
+        payload = {"target_community_id": OTHER, "designs": [design().model_dump()]}
+        self.assertEqual(self.client.post("/api/community-battery/invitation", json=payload).status_code, 401)
+        response = self.client.post("/api/community-battery/invitation", headers=self.headers, json=payload)
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json()["community"], {"id": OTHER, "name": "Destination"})
+        self.assertEqual(response.json()["analysis_scope"], "destination_with_you")
+        self.assertEqual(response.json()["member_count"], 2)
+        self.assertNotIn(BOB, response.text)
+        self.assertNotIn("password_hash", response.text)
+        self.db.accept_battery_transfer.assert_not_called()
+        self.assertEqual(self.member["community_id"], HOME)
+        self.db.battery_candidates.return_value = []
+        self.assertEqual(self.client.post("/api/community-battery/invitation", headers=self.headers, json=payload).status_code, 409)
+
+    def test_planning_invitation_includes_you_without_reading_measured_history(self):
+        self.db.participants.return_value = [participants()[1]]
+        self.db.community_details.return_value = {"id": OTHER, "name": "Destination", "timezone": "UTC"}
+        days, _ = measured_days(measured_events(1), "UTC")
+        with patch("app.community_battery.planning_days", return_value=days) as planner:
+            response = self.client.post("/api/community-battery/invitation", headers=self.headers, json={
+                "target_community_id": OTHER, "designs": [design().model_dump()],
+                "source": "planning", "shared_meter_confirmed": True})
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual({p.id for p in planner.call_args.args[0]}, {ALICE, BOB})
+        self.db.measured_history.assert_not_called()
+        self.assertEqual(response.json()["source"], "planning")
 
     def test_ineligible_or_changed_destinations_do_not_switch_members(self):
         self.db.battery_candidates.return_value = []

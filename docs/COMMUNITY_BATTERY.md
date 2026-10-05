@@ -2,7 +2,9 @@
 
 Open **Account → A battery for your community** after signing in. The community ledger remains removed. The member sees aggregate community economics and only their own contribution; other members' readings are never returned to the browser.
 
-The view compares LFP, NMC and lead-acid scenarios at up to three chosen capacities. Equipment cost per kWh, fixed installation/inverter cost, power, efficiency, usable capacity, service life, operating costs, degradation allowance, discount rate and connection limits are editable. Initial values are illustrative assumptions, not product specifications or supplier quotes.
+The initial comparison is scoped to the signed-in member's current community and names it in the results. The view compares LFP, NMC and lead-acid scenarios at nine default capacities (5, 10, 15, 20, 30, 40, 60, 80 and 100 kWh); members can enter up to ten capacities. Equipment cost per kWh, fixed installation/inverter cost, power, efficiency, usable capacity, service life, operating costs, degradation allowance, discount rate and connection limits are editable. Initial values are illustrative assumptions, not product specifications or supplier quotes.
+
+Once sufficient history exists, each comparison highlights the battery with the highest base-case NPV, with ROI, payback and the member's contribution. If no compared battery has positive NPV, the interface explains that keeping no battery is financially preferable under those assumptions. The full size/type table and individual projections remain available.
 
 ## Measurement and prediction boundaries
 
@@ -41,9 +43,11 @@ References: [NREL SAM battery modelling](https://sam.nrel.gov/battery-storage.ht
 
 ## Voluntary community switch
 
-Suggestions are communities that are interested in or approved for shared storage, have opened admissions, share the member's configured network zone, have a verified shared billing boundary and are explicitly allowed for the member's POD. Approved plans appear before interested plans. Suggestions match battery intention and admissions; they are not ranked by a fabricated destination ROI.
+Suggestions appear when the member wants a battery and their community has declined or has members who oppose buying one (unless its plan is already approved). Destinations must be interested in or approved for shared storage, have opened admissions, share the member's configured network zone, have a verified shared billing boundary and be explicitly allowed for the member's POD. Approved plans appear before interested plans.
 
-The member selects **Review suggestion**, then explicitly selects **Accept and switch community**. Merely expressing interest or viewing a suggestion never moves membership. The SQL function locks and rechecks the member, both communities and the POD approval. It atomically updates membership, POD community approval and the member's interest, and records the accepted switch. A failed check rolls back the entire operation. The account then reloads its new community. Historical readings stay in their original community.
+Each invitation independently recalculates the same battery sizes and cost assumptions for the destination **including the joining member**. Measured previews add the member's individual gross demand and, for a prosumer, individual generation to the destination's aggregate history at matching UTC timestamps and interval lengths. The destination's own import/export tariffs are retained. Only complete combined days count towards the 30-day minimum for ROI. Missing individual readings or unmatched histories yield an explanation, not the original community's ROI. Illustrative previews use the destination roster's entered demand/PV plus the joining member instead. Funding shares use the combined roster and demand. These are hypothetical invitation estimates; no synthetic measurements are stored, and viewing them never changes membership.
+
+The member selects **Review invitation and switch**, then explicitly selects **Accept and switch community**. Merely expressing interest or viewing a suggestion never moves membership. The SQL function locks and rechecks the member, both communities and the POD approval. It atomically updates membership, POD community approval and the member's interest, and records the accepted switch. A failed check rolls back the entire operation. The account then reloads its new community. Historical readings stay in their original community.
 
 The receiving operator gives advance admission consent by opening admissions and approving the POD for that destination. This is a membership change; it does not physically relocate a meter, approve a battery purchase or commit a payment.
 
@@ -69,14 +73,15 @@ Payload shape (values are placeholders; send actual measured values):
     "generation_kwh": <community generation>,
     "import_price_ron": <final contract import price per kWh>,
     "export_price_ron": <final export credit per kWh>,
-    "member_loads_kwh": {"<member UUID>": <gross demand>, "<member UUID>": <gross demand>}
+    "member_loads_kwh": {"<member UUID>": <gross demand>, "<member UUID>": <gross demand>},
+    "member_generation_kwh": {"<member UUID>": <generation>, "<member UUID>": <generation>}
   }]
 }
 ```
 
-`member_loads_kwh` is optional for community ROI but mandatory for measured consumption-based funding. If supplied, it must contain exactly all current community members, with finite nonnegative values summing to total demand. The collector's identity and accuracy must be established before accepting its readings; the metering secret only protects ingestion access.
+`member_loads_kwh` is optional for current-community ROI but mandatory for measured consumption-based funding and for adding a member to an invitation preview. `member_generation_kwh` is also optional for current-community ROI, but required in the origin's history for a prosumer invitation. If either map is supplied, it must contain exactly all current community members, with finite nonnegative values summing to the corresponding aggregate. Consumers can have zero generation. Both maps are stored in the existing interval JSON; this extension needs no additional migration. The collector's identity and accuracy must be established before accepting its readings; the metering secret only protects ingestion access.
 
-API routes: `GET /api/community-battery`, `POST /api/community-battery/compare`, `PUT /api/community-battery/interest`, `POST /api/community-battery/switch`, and the server-only measurements endpoint above. Member routes infer community and participant IDs from the authenticated session. Aggregate pricing and settlement requests also follow the signed-in member's community; signup follows the POD's approved community.
+API routes: `GET /api/community-battery`, `POST /api/community-battery/compare`, `POST /api/community-battery/invitation`, `PUT /api/community-battery/interest`, `POST /api/community-battery/switch`, and the server-only measurements endpoint above. Member routes infer community and participant IDs from the authenticated session. Invitation requests specify an eligible destination, which the server checks before reading its data; responses contain only aggregate economics and the requesting member's contribution. Aggregate pricing and settlement requests also follow the signed-in member's community; signup follows the POD's approved community.
 
 ## Validation
 
@@ -85,4 +90,4 @@ API routes: `GET /api/community-battery`, `POST /api/community-battery/compare`,
 npm.cmd run build
 ```
 
-The tests exercise real optimiser dispatch, hand-calculated finance, both contribution rules, incomplete/DST data, privacy, community isolation, ingestion authentication and member acceptance. Applying the migration and testing the PostgreSQL transfer transaction against a configured Supabase project remain deployment steps.
+The tests exercise real optimiser dispatch, 27 technology/size options, NPV selection, hand-calculated finance, both contribution rules, incomplete/DST data, invitation history alignment and destination tariffs, privacy, community isolation, ingestion authentication and member acceptance. Applying the migration and testing the PostgreSQL transfer transaction against a configured Supabase project remain deployment steps.

@@ -12,11 +12,11 @@ from fastapi.responses import JSONResponse
 
 from .database import Database
 from .engine import clear_market
-from .models import MarketSettings, ParticipantInput
+from .models import MarketSettings, Participant, ParticipantInput
 from .sign_up import SignupInput, register_participant, verify_password
 from .battery import BatteryScenario, dataset_info, simulate
 from .weather import live_outlook
-from .community_battery import (BatteryInterest, ComparisonInput, MeasurementBatch, TransferRequest,
+from .community_battery import (BatteryInterest, ComparisonInput, InvitationInput, MeasurementBatch, TransferRequest,
                                 compare_batteries, measured_days)
 
 
@@ -203,9 +203,33 @@ def create_app():
         cid = member["community_id"]
         community = database.community_details(cid)
         try:
-            return compare_batteries(request, database.participants(cid),
+            result = compare_batteries(request, database.participants(cid),
                 database.measured_history(cid) if request.source == "measured" else [],
                 community.get("timezone") or "Europe/Bucharest", community.get("battery_meter_boundary", "unverified"), member["id"])
+            return {**result, "community": {"id": cid, "name": community["name"]}, "analysis_scope": "current_community"}
+        except ValueError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+
+    @app.post("/api/community-battery/invitation")
+    def battery_invitation(request: InvitationInput, authorization: str = Header(default="")):
+        member = community_member(authorization)
+        origin = database.community_details(member["community_id"])
+        target = str(request.target_community_id)
+        if target not in {c["id"] for c in database.battery_candidates(origin, member)}:
+            raise HTTPException(status_code=409, detail="This community is no longer eligible or accepting members.")
+        destination = database.community_details(target)
+        try:
+            result = compare_batteries(request, database.participants(target),
+                database.measured_history(target) if request.source == "measured" else [],
+                destination.get("timezone") or "Europe/Bucharest",
+                destination.get("battery_meter_boundary", "unverified"), member["id"],
+                joining_member=Participant.model_validate(member),
+                joining_events=database.measured_history(member["community_id"]) if request.source == "measured" else [],
+                joining_timezone=origin.get("timezone") or "Europe/Bucharest")
+            return {**result, "community": {"id": target, "name": destination["name"]},
+                    "analysis_scope": "destination_with_you",
+                    "notes": ["Invitation estimates include you joining the destination; this is a hypothetical combined community.",
+                              *result.get("notes", [])]}
         except ValueError as error:
             raise HTTPException(status_code=422, detail=str(error)) from error
 
@@ -239,7 +263,8 @@ def create_app():
         if community.get("battery_meter_boundary") != "shared_meter":
             raise HTTPException(status_code=409, detail="Verify the community's shared billing meter before ingesting readings.")
         members = {p.id for p in database.participants(str(batch.community_id))}
-        if any(r.member_loads_kwh is not None and {str(k) for k in r.member_loads_kwh} != members for r in batch.readings):
+        if any(values is not None and {str(k) for k in values} != members
+               for r in batch.readings for values in (r.member_loads_kwh, r.member_generation_kwh)):
             raise HTTPException(status_code=422, detail="Per-member readings must cover every current member of this community.")
         try:
             rows = database.save_measurements(batch)

@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { api } from './apiClient';
+import BatteryComparison from './BatteryComparison';
+import CommunityBatteryInvitation from './CommunityBatteryInvitation';
 
 const presets = [
   { chemistry: 'LFP', cost: 1000, efficiency: .92, usable_fraction: .9, service_years: 12 },
   { chemistry: 'NMC', cost: 1200, efficiency: .9, usable_fraction: .85, service_years: 10 },
   { chemistry: 'Lead-acid', cost: 700, efficiency: .8, usable_fraction: .5, service_years: 5 },
 ];
-const number = (v, digits = 1) => Number(v).toLocaleString('en-GB', { maximumFractionDigits: digits });
-const ron = v => `${number(v, 0)} RON`;
-const payback = v => v == null ? 'Not recovered in service life' : `${number(v)} years`;
 
 export default function CommunityBatteryPlan({ memberId, onSwitched }) {
   const [context, setContext] = useState(null);
@@ -17,7 +16,7 @@ export default function CommunityBatteryPlan({ memberId, onSwitched }) {
   const [fundingRule, setFundingRule] = useState('equal_share');
   const [destination, setDestination] = useState(null);
   const [types, setTypes] = useState(presets);
-  const [sizes, setSizes] = useState('5, 10, 20');
+  const [sizes, setSizes] = useState('5, 10, 15, 20, 30, 40, 60, 80, 100');
   const [fixedCost, setFixedCost] = useState(1500);
   const [maintenance, setMaintenance] = useState(100);
   const [horizon, setHorizon] = useState(10);
@@ -28,7 +27,7 @@ export default function CommunityBatteryPlan({ memberId, onSwitched }) {
   const [exportLimit, setExportLimit] = useState(100);
   const [wear, setWear] = useState(.15);
   const [result, setResult] = useState(null);
-  const [selection, setSelection] = useState(0);
+  const [comparison, setComparison] = useState(null);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [busy, setBusy] = useState(false);
@@ -41,6 +40,11 @@ export default function CommunityBatteryPlan({ memberId, onSwitched }) {
     return () => { active = false; };
   }, [memberId]);
 
+  useEffect(() => { if (context?.community.id) compare(); }, [context?.community.id]);
+
+  const communityDisagrees = context && (context.community.battery_policy === 'declined' ||
+    (context.community.battery_policy !== 'approved' && context.answered_count > context.interested_count));
+
   const change = (setter, value) => { setter(value); setStale(true); };
   const updateType = (index, key, value) => {
     setTypes(current => current.map((t, i) => i === index ? { ...t, [key]: Number(value) } : t));
@@ -48,12 +52,12 @@ export default function CommunityBatteryPlan({ memberId, onSwitched }) {
   };
 
   async function compare(event) {
-    event.preventDefault();
-    setError(''); setNotice(''); setBusy(true);
+    event?.preventDefault();
+    setError(''); setNotice(''); setDestination(null); setBusy(true);
     try {
       const capacities = [...new Set(sizes.split(',').map(s => Number(s.trim())))];
-      if (!capacities.length || capacities.length > 3 || capacities.some(c => !Number.isFinite(c) || c <= 0 || c > 1000)) {
-        throw new Error('Enter one to three battery sizes between 0 and 1000 kWh, separated by commas.');
+      if (!capacities.length || capacities.length > 10 || capacities.some(c => !Number.isFinite(c) || c <= 0 || c > 1000)) {
+        throw new Error('Enter one to ten battery sizes between 0 and 1000 kWh, separated by commas.');
       }
       const designs = types.flatMap(t => capacities.map(capacity => ({
         chemistry: t.chemistry, capacity_kwh: capacity, power_kw: capacity * Number(powerRatio),
@@ -61,12 +65,13 @@ export default function CommunityBatteryPlan({ memberId, onSwitched }) {
         usable_fraction: t.usable_fraction, service_years: t.service_years, annual_fade: Number(fade) / 100,
         annual_maintenance_ron: Number(maintenance),
       })));
-      const data = await api('community-battery/compare', 'POST', {
+      const payload = {
         source, shared_meter_confirmed: confirmed, funding_rule: fundingRule, designs, horizon_years: Number(horizon),
         discount_rate: Number(discount) / 100, connection_import_kw: Number(importLimit),
         connection_export_kw: Number(exportLimit), dispatch_wear_ron_per_kwh: Number(wear),
-      });
-      setResult(data); setSelection(0); setStale(false);
+      };
+      const data = await api('community-battery/compare', 'POST', payload);
+      setResult(data); setComparison(payload); setStale(false);
     } catch (err) { setError(err.message); }
     finally { setBusy(false); }
   }
@@ -89,16 +94,9 @@ export default function CommunityBatteryPlan({ memberId, onSwitched }) {
     } catch (err) { setError(err.message); }
     finally { setBusy(false); }
   }
-
-  const chosen = result?.designs?.[selection];
-  const finance = chosen?.projections?.base;
-  const chosenAllocation = chosen?.member_allocations?.[result?.funding_rule];
-  const best = result?.designs?.reduce((current, d, index) => d.projections &&
-    (current == null || d.projections.base.npv_ron > result.designs[current].projections.base.npv_ron) ? index : current, null);
-
   return <section className="community-battery-plan" aria-labelledby="community-battery-title">
     <p className="eyebrow">SHARED STORAGE / COMMUNITY INVESTMENT</p>
-    <h2 id="community-battery-title">A battery for your community.</h2>
+    <h2 id="community-battery-title">A battery for {context?.community.name || 'your current community'}.</h2>
     <p className="muted">Compare whole-community savings and two ways to share the cost. Member records stay private.</p>
     {error && <p className="error" role="alert">{error}</p>}
     {notice && <p className="notice" role="status">{notice}</p>}
@@ -115,7 +113,7 @@ export default function CommunityBatteryPlan({ memberId, onSwitched }) {
             <label>Data used<select value={source} onChange={e => change(setSource, e.target.value)}>
               <option value="measured">My community’s measured history</option><option value="planning">Illustrative planning preview</option>
             </select></label>
-            <label>Battery sizes (kWh)<input value={sizes} required onChange={e => change(setSizes, e.target.value)} placeholder="5, 10, 20" /></label>
+            <label>Battery sizes (kWh)<input value={sizes} required onChange={e => change(setSizes, e.target.value)} placeholder="5, 10, 15, 20, 30, 40, 60, 80, 100" /></label>
             <label>Funding scenario<select value={fundingRule} onChange={e => change(setFundingRule, e.target.value)}>
               <option value="equal_share">Equal contribution and ownership</option><option value="consumption_share">Contribution proportional to consumption</option>
             </select></label>
@@ -150,55 +148,17 @@ export default function CommunityBatteryPlan({ memberId, onSwitched }) {
         </fieldset>
       </form>
 
-      {result && <div className="community-battery-results">
-        <p className="small-tag">{result.source === 'planning' ? 'ILLUSTRATIVE SCENARIO' : 'MEASURED INPUTS / MODELLED RETURNS'}</p>
-        {stale && <p className="notice">Inputs changed. Compare again to update these results.</p>}
-        {result.message && <p className="muted">{result.message}</p>}
-        {result.coverage.replayed_days > 0 && <p className="muted">{result.coverage.replayed_days} complete days replayed · {new Date(result.coverage.from).toLocaleDateString('en-GB')} to {new Date(result.coverage.to).toLocaleDateString('en-GB')}</p>}
-        {result.status === 'limited_history' && <p className="notice">Observed replay savings are available. Annual ROI and payback stay unavailable until 30 complete measured days are recorded.</p>}
-        {best != null && <p className="form-note">Highest modelled NPV: {result.designs[best].design.chemistry} / {result.designs[best].design.capacity_kwh} kWh.{result.designs[best].projections.base.npv_ron < 0 ? ' All compared options have negative NPV under these assumptions.' : ''}</p>}
-        {!!result.designs.length && <div className="table-scroll"><table className="community-battery-table"><caption className="sr-only">Community battery investment comparison in RON</caption>
-          <thead><tr><th>Battery</th><th>Installed cost</th><th>Your share</th><th>Sample cash savings</th><th>Year 1 net savings</th><th>Payback</th><th>Cash ROI</th><th>NPV</th></tr></thead>
-          <tbody>{result.designs.map((d, i) => <tr key={`${d.design.chemistry}-${d.design.capacity_kwh}`} className={selection === i ? 'selected-row' : ''}>
-            <th scope="row"><button type="button" className="text-button" onClick={() => setSelection(i)}>{d.design.chemistry} · {d.design.capacity_kwh} kWh / {number(d.design.power_kw)} kW</button></th>
-            {d.error ? <td colSpan="7">Unavailable: {d.error}</td> : <><td>{ron(d.design.installed_cost_ron)}</td><td>{d.member_allocations[result.funding_rule].contribution_ron == null ? 'Needs member readings' : ron(d.member_allocations[result.funding_rule].contribution_ron)}</td><td>{ron(d.sample_cash_saving_ron)}</td>
-              <td>{d.projections ? ron(d.projections.base.first_year_net_saving_ron) : '—'}</td><td>{d.projections ? payback(d.projections.base.payback_years) : '—'}</td>
-              <td>{d.projections ? `${number(d.projections.base.roi_pct)}% / ${d.projections.base.years} years` : '—'}</td><td>{d.projections ? ron(d.projections.base.npv_ron) : '—'}</td></>}
-          </tr>)}</tbody>
-        </table></div>}
-        {chosen?.member_allocations && <div className="funding-comparison">
-          <h3>Which contribution is fairer?</h3>
-          <div className="table-scroll"><table><caption>Your funding options for {chosen.design.chemistry} / {chosen.design.capacity_kwh} kWh</caption><thead><tr><th>Rule</th><th>Your ownership share</th><th>Your contribution</th><th>Your allocated year 1 savings</th></tr></thead>
-            <tbody>{Object.entries(chosen.member_allocations).map(([rule, a]) => <tr key={rule}><th scope="row">{rule === 'equal_share' ? 'Equal shares' : 'Consumption shares'}</th><td>{a.share == null ? 'Needs member readings' : `${number(a.share * 100)}%`}</td><td>{a.contribution_ron == null ? '—' : ron(a.contribution_ron)}</td><td>{a.first_year_saving_ron == null ? '—' : ron(a.first_year_saving_ron)}</td></tr>)}</tbody>
-          </table></div>
-          <p className="muted">Equal shares are simple and fit equal ownership and similar usage. Consumption shares ask higher-use members to pay more, which can be fairer when demand differs, but gross consumption does not measure each member’s actual battery benefit.</p>
-          <p className="muted">Both scenarios allocate savings using the same shares as the costs, so they have the same percentage return and payback. The group must agree on ownership, savings, exits and contributions before purchase. Existing owners’ shares should stay fixed after purchase rather than change with each new reading.</p>
-          {chosen.member_allocations.consumption_share.share == null && <p className="form-note">Consumption allocation needs complete readings for every current member. No missing share is guessed.</p>}
-        </div>}
-        {finance && <div className="battery-projection">
-          <h3>{chosen.design.chemistry} · {chosen.design.capacity_kwh} kWh: your community’s projection</h3>
-          <p className="muted">Your allocated first-year net savings: {chosenAllocation?.first_year_saving_ron == null ? 'unavailable until member readings are complete' : ron(chosenAllocation.first_year_saving_ron)}. Funding scenario: {result.funding_rule === 'equal_share' ? 'equal shares' : 'consumption shares'}.</p>
-          <div className="projection-bars" role="img" aria-label={`Projected cumulative community cash flow over ${finance.years} years`}>
-            {finance.timeline.map(row => <div key={row.year}><span>Year {row.year}</span><div><i style={{ width: `${Math.max(1, Math.abs(row.cumulative_ron) / Math.max(...finance.timeline.map(r => Math.abs(r.cumulative_ron))) * 100)}%`, background: row.cumulative_ron < 0 ? '#777' : 'var(--yellow)' }} /></div><strong>{ron(row.cumulative_ron)}</strong></div>)}
-          </div>
-          <div className="table-scroll"><table><caption>Savings sensitivity for the selected battery</caption><thead><tr><th>Scenario</th><th>Year 1 net savings</th><th>Payback</th><th>NPV</th></tr></thead>
-            <tbody>{Object.entries(chosen.projections).map(([name, p]) => <tr key={name}><th scope="row">{name}</th><td>{ron(p.first_year_net_saving_ron)}</td><td>{payback(p.payback_years)}</td><td>{ron(p.npv_ron)}</td></tr>)}</tbody>
-          </table></div>
-        </div>}
-        {!!result.notes?.length && <details><summary>How to read these estimates</summary><ul>{result.notes.map(note => <li key={note}>{note}</li>)}</ul>
-          <p><a href="https://sam.nrel.gov/battery-storage.html" target="_blank" rel="noreferrer">NREL SAM battery modelling</a> · <a href="https://sam.nrel.gov/financial-models.html" target="_blank" rel="noreferrer">Financial metrics reference</a></p>
-        </details>}
-      </div>}
+      {result && <BatteryComparison result={result} stale={stale} />}
 
       <div className="battery-community-choice">
         <h3>Would you fund a shared battery?</h3>
         <p className="muted">Your current preference: {context.your_interest == null ? 'Not answered' : context.your_interest ? 'Interested' : 'Not interested'}. The community must agree on the purchase before anyone pays.</p>
         <div className="battery-preference-actions"><button className="button primary" disabled={busy} onClick={() => saveInterest(true)}>I’m interested</button><button className="button outline" disabled={busy} onClick={() => saveInterest(false)}>Not interested</button></div>
-        {context.your_interest && <>
+        {context.your_interest && communityDisagrees && <>
           <h3>Find a community planning shared storage</h3>
           <p className="muted">These communities want shared storage and have opened admissions in your network zone. Review a suggestion, then choose whether to switch. Your home and meter stay where they are; joining does not commit a payment.</p>
-          {context.candidates.length ? context.candidates.map(c => <div className="battery-transfer-option" key={c.id}><div><strong>{c.name}</strong><p className="muted">Battery plan: {c.battery_policy} · eligible for your meter</p></div><button className="button outline" disabled={busy} onClick={() => setDestination(c)}>Review suggestion</button></div>) : <p className="muted">No eligible community is accepting members yet. Your operator can review communities and your meter’s eligibility.</p>}
-          {destination && <div className="planning-assumption" role="region" aria-label="Review community switch"><h3>Switch to {destination.name}?</h3><p>You will leave {context.community.name} and join {destination.name}, which is planning shared storage. The server checks admissions and meter eligibility again before moving your membership.</p><div className="battery-preference-actions"><button className="button primary" disabled={busy} onClick={() => acceptSwitch(destination.id)}>Accept and switch community</button><button className="button outline" disabled={busy} onClick={() => setDestination(null)}>Stay in my community</button></div></div>}
+          {context.candidates.length ? context.candidates.map(c => <CommunityBatteryInvitation key={c.id} community={c} comparison={comparison} stale={stale} busy={busy} onReview={() => setDestination(c)} />) : <p className="muted">No eligible community is accepting members yet. Your operator can review communities and your meter’s eligibility.</p>}
+          {destination && <div className="planning-assumption" role="region" aria-label="Review community switch"><h3>Switch to {destination.name}?</h3><p>You will leave {context.community.name} and join {destination.name}, which is planning shared storage. The server checks admissions and meter eligibility again before moving your membership.</p><div className="battery-preference-actions"><button className="button primary" disabled={busy || stale} onClick={() => acceptSwitch(destination.id)}>Accept and switch community</button><button className="button outline" disabled={busy} onClick={() => setDestination(null)}>Stay in my community</button></div></div>}
         </>}
       </div>
     </>}

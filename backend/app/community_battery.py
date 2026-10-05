@@ -30,12 +30,16 @@ class ComparisonInput(BaseModel):
     source: Literal["measured", "planning"] = "measured"
     shared_meter_confirmed: bool = False
     funding_rule: Literal["equal_share", "consumption_share"] = "equal_share"
-    designs: list[BatteryDesign] = Field(min_length=1, max_length=9)
+    designs: list[BatteryDesign] = Field(min_length=1, max_length=30)
     horizon_years: int = Field(default=10, ge=1, le=30)
     discount_rate: float = Field(default=.06, ge=0, le=.5)
     connection_import_kw: float = Field(default=100, gt=0, le=2000)
     connection_export_kw: float = Field(default=100, ge=0, le=2000)
     dispatch_wear_ron_per_kwh: float = Field(default=.15, ge=0, le=10)
+
+
+class InvitationInput(ComparisonInput):
+    target_community_id: UUID
 
 
 class Measurement(BaseModel):
@@ -47,6 +51,7 @@ class Measurement(BaseModel):
     import_price_ron: float = Field(ge=-100, le=100)
     export_price_ron: float = Field(ge=-100, le=100)
     member_loads_kwh: dict[UUID, float] | None = None
+    member_generation_kwh: dict[UUID, float] | None = None
 
     @model_validator(mode="after")
     def check_time(self):
@@ -55,12 +60,15 @@ class Measurement(BaseModel):
             raise ValueError("Readings need a timezone and cannot be in the future.")
         if t.second or t.microsecond or int(t.timestamp()) % (self.interval_minutes * 60):
             raise ValueError("Align readings to the stated interval boundary.")
-        if self.member_loads_kwh is not None:
-            values = self.member_loads_kwh.values()
+        for readings, total in ((self.member_loads_kwh, self.load_kwh),
+                                (self.member_generation_kwh, self.generation_kwh)):
+            if readings is None:
+                continue
+            values = readings.values()
             if any(not math.isfinite(v) or v < 0 for v in values):
-                raise ValueError("Member consumption must be finite and nonnegative.")
-            if abs(sum(values) - self.load_kwh) > max(1e-4, self.load_kwh * 1e-6):
-                raise ValueError("Member consumption must add up to the community's gross demand.")
+                raise ValueError("Member readings must be finite and nonnegative.")
+            if abs(sum(values) - total) > max(1e-4, total * 1e-6):
+                raise ValueError("Member readings must add up to the corresponding community total.")
         return self
 
 
@@ -143,7 +151,9 @@ def measured_days(events, community_timezone):
                           "pv_kwh": r.generation_kwh, "import_price": r.import_price_ron,
                           "export_price": r.export_price_ron,
                           "member_loads_kwh": {str(k): v for k, v in r.member_loads_kwh.items()}
-                              if r.member_loads_kwh is not None else None} for r in readings])
+                              if r.member_loads_kwh is not None else None,
+                          "member_generation_kwh": {str(k): v for k, v in r.member_generation_kwh.items()}
+                              if r.member_generation_kwh is not None else None} for r in readings])
     return complete, {"complete_days": len(complete), "incomplete_days": incomplete,
                       "excluded_intervals": excluded, "valid_intervals": sum(map(len, complete))}
 
@@ -162,9 +172,40 @@ def planning_days(participants):
     return result
 
 
-def compare_batteries(request, participants, events, community_timezone, meter_boundary, member_id=None):
+def include_joining_member(days, source_events, source_timezone, member):
+    """Build a hypothetical combined history without storing it as a measurement."""
+    source_days, _ = measured_days(source_events, source_timezone)
+    source = {(datetime.fromisoformat(r["utc"]), r["hours"]): r for day in source_days for r in day}
+    combined = []
+    for day in days:
+        merged = []
+        for row in day:
+            incoming = source.get((datetime.fromisoformat(row["utc"]), row["hours"]))
+            loads = incoming.get("member_loads_kwh") if incoming else None
+            generation = incoming.get("member_generation_kwh") if incoming else None
+            if loads is None or member.id not in loads or (member.type == "prosumer" and
+                    (generation is None or member.id not in generation)):
+                break
+            pv = generation[member.id] if member.type == "prosumer" else 0.
+            merged.append({**row, "load_kwh": row["load_kwh"] + loads[member.id],
+                           "pv_kwh": row["pv_kwh"] + pv,
+                           "member_loads_kwh": {**row["member_loads_kwh"], member.id: loads[member.id]}
+                               if row.get("member_loads_kwh") is not None else None})
+        if len(merged) == len(day):
+            combined.append(merged)
+    return combined
+
+
+def compare_batteries(request, participants, events, community_timezone, meter_boundary, member_id=None,
+                      *, joining_member=None, joining_events=None, joining_timezone="UTC"):
+    if joining_member is not None:
+        if any(p.id == joining_member.id for p in participants):
+            raise ValueError("The member already belongs to this destination community.")
+        participants = [*participants, joining_member]
     if not participants:
         raise ValueError("The community needs at least one member.")
+    metadata = {"source": request.source, "member_count": len(participants),
+                "funding_rule": request.funding_rule, "currency": "RON", "includes_joining_member": joining_member is not None}
     if request.source == "planning":
         if not request.shared_meter_confirmed:
             raise ValueError("Confirm the shared billing meter assumption for this planning preview.")
@@ -174,11 +215,20 @@ def compare_batteries(request, participants, events, community_timezone, meter_b
     else:
         days, coverage = measured_days(events, community_timezone)
         if meter_boundary != "shared_meter":
-            return {"status": "meter_boundary_unconfirmed", "coverage": coverage, "designs": [],
+            return {**metadata, "status": "meter_boundary_unconfirmed", "coverage": coverage, "designs": [],
                     "message": "A shared billing meter must be verified before estimating community battery returns."}
+        if days and joining_member is not None:
+            destination_days = len(days)
+            days = include_joining_member(days, joining_events or [], joining_timezone, joining_member)
+            coverage = {**coverage, "destination_complete_days": destination_days,
+                        "complete_days": len(days), "valid_intervals": sum(map(len, days)),
+                        "unmatched_destination_days": destination_days - len(days)}
+            if not days:
+                return {**metadata, "status": "joining_history_unavailable", "coverage": coverage, "designs": [],
+                        "message": "The invitation needs your consumption readings aligned with the destination's history. Prosumers also need individual solar readings. Choose an illustrative planning preview while these are unavailable."}
     sampled = days[-30:]
     if not sampled:
-        return {"status": "no_measured_history", "coverage": coverage, "designs": [],
+        return {**metadata, "status": "no_measured_history", "coverage": coverage, "designs": [],
                 "message": "No complete measured days yet. Simulated settlements are excluded from measured ROI."}
     if request.source == "planning":
         loads = {p.id: p.load_kw for p in participants}
@@ -229,10 +279,14 @@ def compare_batteries(request, participants, events, community_timezone, meter_b
                             "first_year_saving_ron": projections["base"]["first_year_net_saving_ron"] * share
                                 if projections and share is not None else None}
                             for rule, share in allocations.items()}, "projections": projections})
-    return {"status": "ready" if len(sampled) >= 30 else "limited_history", "source": request.source,
-            "currency": "RON", "coverage": {**coverage, "replayed_days": len(sampled),
+    best = max((i for i, row in enumerate(results) if row.get("projections")),
+               key=lambda i: results[i]["projections"]["base"]["npv_ron"], default=None)
+    return {**metadata, "status": "ready" if len(sampled) >= 30 else "limited_history",
+            "best_design_index": best,
+            "purchase_recommended": best is not None and results[best]["projections"]["base"]["npv_ron"] > 0,
+            "coverage": {**coverage, "replayed_days": len(sampled),
                 "from": sampled[0][0]["utc"], "to": sampled[-1][-1]["utc"]},
-            "member_count": len(participants), "funding_rule": request.funding_rule, "designs": results,
+            "designs": results,
             "notes": ["Historical optimal dispatch is an upper-bound reference, not a live forecast.",
                       "Annual savings extend the recent daily average to 365 days; seasonal coverage may be limited.",
                       "Lower/base/higher use 70%, 100%, and 130% of savings; these are sensitivity scenarios, not confidence intervals.",
