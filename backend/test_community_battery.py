@@ -254,11 +254,70 @@ class CommunityBatteryApiChecks(unittest.TestCase):
         self.assertNotIn("password_hash", response.text)
         self.db.participants.assert_called_with(HOME)
         self.db.measured_history.assert_called_with(HOME)
+        self.client.get("/api/community", headers=self.headers)
+        self.db.participants.assert_called_with(HOME)
         self.client.get("/api/clearing-summary", headers=self.headers)
         self.db.settings.assert_called_with(HOME)
         self.db.participants.assert_called_with(HOME)
-        self.client.put("/api/market-settings", json={}, headers=self.headers)
+        self.assertEqual(self.client.put("/api/market-settings", json={}, headers=self.headers).status_code, 403)
+        self.db.save_settings.assert_not_called()
+        with patch.dict("os.environ", {"CLEARING_TOKEN": "operator-secret"}):
+            response = self.client.put("/api/market-settings", json={},
+                headers={**self.headers, "x-clearing-token": "operator-secret"})
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(self.db.save_settings.call_args.args[1], HOME)
+
+    def test_automatic_analysis_requires_sourced_config_and_rejects_member_overrides(self):
+        self.assertEqual(self.client.post("/api/community-battery/analysis", json={}).status_code, 401)
+        response = self.client.post("/api/community-battery/analysis", headers=self.headers, json={})
+        self.assertEqual(response.json()["status"], "analysis_configuration_missing")
+        self.assertEqual(response.json()["designs"], [])
+        self.assertEqual(self.client.post("/api/community-battery/analysis", headers=self.headers,
+            json={"designs": [design().model_dump()], "source": "planning"}).status_code, 422)
+
+    def test_automatic_analysis_uses_each_communitys_stored_catalogue(self):
+        def configured(cid):
+            battery = design().model_dump()
+            battery.update(capacity_kwh=5 if cid == HOME else 20, installed_cost_ron=5000 if cid == HOME else 15000)
+            return {"id": cid, "name": "Origin" if cid == HOME else "Destination", "timezone": "UTC",
+                    "battery_meter_boundary": "shared_meter", "battery_analysis_config": {
+                        "comparison": ComparisonInput(designs=[battery]).model_dump(),
+                        "quote_source": "Test supplier quote", "quote_date": "2025-01-01",
+                        "assumptions_source": "Test connection contract and approved financial policy"}}
+        self.db.community_details.side_effect = configured
+        response = self.client.post("/api/community-battery/analysis", headers=self.headers, json={})
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json()["designs"][0]["design"]["capacity_kwh"], 5)
+        self.assertEqual(response.json()["input_sources"]["battery"], "Test supplier quote")
+        self.db.participants.side_effect = lambda cid: participants() if cid == HOME else [participants()[1]]
+        events = measured_events(1)
+        target_events = [{**r, "summary": {**r["summary"], "measurement": {
+            **r["summary"]["measurement"], "member_loads_kwh": {BOB: r["summary"]["measurement"]["load_kwh"]}}}}
+            for r in events]
+        self.db.measured_history.side_effect = lambda cid: events if cid == HOME else target_events
+        response = self.client.post("/api/community-battery/analysis", headers=self.headers,
+                                    json={"target_community_id": OTHER})
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json()["community"]["name"], "Destination")
+        self.assertEqual(response.json()["designs"][0]["design"]["capacity_kwh"], 20)
+        self.assertEqual(response.json()["member_count"], 2)
+        self.db.accept_battery_transfer.assert_not_called()
+        self.db.battery_candidates.return_value = []
+        self.assertEqual(self.client.post("/api/community-battery/analysis", headers=self.headers,
+            json={"target_community_id": OTHER}).status_code, 409)
+
+    def test_automatic_analysis_does_not_use_incomplete_or_planning_configuration(self):
+        community = self.db.community_details.return_value
+        config = {"comparison": ComparisonInput(designs=[design()]).model_dump(),
+                  "quote_source": "Test quote", "quote_date": "2025-01-01", "assumptions_source": "Test policy"}
+        community["battery_analysis_config"] = config
+        config["comparison"]["source"] = "planning"
+        response = self.client.post("/api/community-battery/analysis", headers=self.headers, json={})
+        self.assertEqual(response.json()["status"], "analysis_configuration_missing")
+        config["comparison"]["source"] = "measured"
+        del config["comparison"]["connection_import_kw"]
+        response = self.client.post("/api/community-battery/analysis", headers=self.headers, json={})
+        self.assertEqual(response.json()["designs"], [])
 
     def test_preferences_and_roi_cannot_target_someone_elses_community(self):
         response = self.client.put("/api/community-battery/interest", headers=self.headers, json={"interested": False})

@@ -1,7 +1,7 @@
 """Shared-meter battery comparisons; measured inputs never fall back to scenarios."""
 import math
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from typing import Literal
 from uuid import UUID
 from zoneinfo import ZoneInfo
@@ -40,6 +40,32 @@ class ComparisonInput(BaseModel):
 
 class InvitationInput(ComparisonInput):
     target_community_id: UUID
+
+
+class AutomaticAnalysisInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    target_community_id: UUID | None = None
+
+
+class StoredAnalysisConfig(BaseModel):
+    """Operator-sourced quotes and explicit technical/financial assumptions."""
+    model_config = ConfigDict(extra="forbid")
+    comparison: ComparisonInput
+    quote_source: str = Field(min_length=3)
+    quote_date: date
+    assumptions_source: str = Field(min_length=3)
+
+    @model_validator(mode="after")
+    def check_sources(self):
+        required = {"designs", "horizon_years", "discount_rate", "connection_import_kw",
+                    "connection_export_kw", "dispatch_wear_ron_per_kwh"}
+        if self.comparison.source != "measured" or not required <= self.comparison.model_fields_set:
+            raise ValueError("Automatic analysis requires measured data and explicit analysis settings.")
+        if self.quote_date > datetime.now(timezone.utc).date():
+            raise ValueError("Quote date cannot be in the future.")
+        if any(set(BatteryDesign.model_fields) - design.model_fields_set for design in self.comparison.designs):
+            raise ValueError("Every battery specification and cost assumption must be supplied.")
+        return self
 
 
 class Measurement(BaseModel):
@@ -225,7 +251,7 @@ def compare_batteries(request, participants, events, community_timezone, meter_b
                         "unmatched_destination_days": destination_days - len(days)}
             if not days:
                 return {**metadata, "status": "joining_history_unavailable", "coverage": coverage, "designs": [],
-                        "message": "The invitation needs your consumption readings aligned with the destination's history. Prosumers also need individual solar readings. Choose an illustrative planning preview while these are unavailable."}
+                        "message": "The invitation needs your consumption readings aligned with the destination's history. Prosumers also need individual solar readings. Your operator must connect these readings before measured returns are available."}
     sampled = days[-30:]
     if not sampled:
         return {**metadata, "status": "no_measured_history", "coverage": coverage, "designs": [],

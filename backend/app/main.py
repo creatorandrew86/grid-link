@@ -16,7 +16,8 @@ from .models import MarketSettings, Participant, ParticipantInput
 from .sign_up import SignupInput, register_participant, verify_password
 from .battery import BatteryScenario, dataset_info, simulate
 from .weather import live_outlook
-from .community_battery import (BatteryInterest, ComparisonInput, InvitationInput, MeasurementBatch, TransferRequest,
+from .community_battery import (AutomaticAnalysisInput, BatteryInterest, ComparisonInput, InvitationInput,
+                                MeasurementBatch, StoredAnalysisConfig, TransferRequest,
                                 compare_batteries, measured_days)
 
 
@@ -73,8 +74,10 @@ def create_app():
         return {"status": "ok", "storage": database.mode, "mode": "simulation"}
 
     @app.get("/api/community")
-    def community():
-        return {"participant_count": len(database.participants())}
+    def community(authorization: str = Header(default="")):
+        member = me(authorization) if session_member(authorization) else None
+        return {"participant_count": len(database.participants(member.get("community_id") if member else None)),
+                "storage": database.mode}
 
     @app.post("/api/signup", status_code=201)
     def signup(member: SignupInput):
@@ -132,7 +135,11 @@ def create_app():
         return database.settings(member.get("community_id") if member else None)
 
     @app.put("/api/market-settings")
-    def save_settings(settings: MarketSettings, authorization: str = Header(default="")):
+    def save_settings(settings: MarketSettings, authorization: str = Header(default=""),
+                      x_clearing_token: str = Header(default="")):
+        secret = os.getenv("CLEARING_TOKEN", "")
+        if not secret or not hmac.compare_digest(secret, x_clearing_token):
+            raise HTTPException(status_code=403, detail="Only the operator can update community market terms.")
         member = me(authorization) if session_member(authorization) else None
         database.save_settings(settings, member.get("community_id") if member else None)
         return settings
@@ -232,6 +239,33 @@ def create_app():
                               *result.get("notes", [])]}
         except ValueError as error:
             raise HTTPException(status_code=422, detail=str(error)) from error
+
+    @app.post("/api/community-battery/analysis")
+    def automatic_battery_analysis(request: AutomaticAnalysisInput, authorization: str = Header(default="")):
+        member = community_member(authorization)
+        origin = database.community_details(member["community_id"])
+        target = str(request.target_community_id) if request.target_community_id else member["community_id"]
+        invitation = target != member["community_id"]
+        if invitation and target not in {c["id"] for c in database.battery_candidates(origin, member)}:
+            raise HTTPException(status_code=409, detail="This community is no longer eligible or accepting members.")
+        community = database.community_details(target) if invitation else origin
+        try:
+            config = StoredAnalysisConfig.model_validate(community.get("battery_analysis_config"))
+        except ValueError:
+            return {"status": "analysis_configuration_missing", "source": "measured", "currency": "RON",
+                    "community": {"id": target, "name": community["name"]}, "coverage": {}, "designs": [],
+                    "includes_joining_member": invitation,
+                    "analysis_scope": "destination_with_you" if invitation else "current_community",
+                    "message": "Battery analysis is awaiting sourced equipment quotes and verified community connection and financial settings. Your operator supplies these; no member input is needed."}
+        if invitation:
+            result = battery_invitation(InvitationInput(**config.comparison.model_dump(), target_community_id=target), authorization)
+        else:
+            result = community_battery_compare(config.comparison, authorization)
+        return {**result, "input_sources": {"energy": "Community meter history and interval contract tariffs",
+                    "battery": config.quote_source, "quote_date": config.quote_date.isoformat(),
+                    "assumptions": config.assumptions_source},
+                "notes": [*result.get("notes", []),
+                          "Equipment costs and specifications come from the community's stored quote catalogue; members do not enter them."]}
 
     @app.put("/api/community-battery/interest")
     def battery_interest(request: BatteryInterest, authorization: str = Header(default="")):

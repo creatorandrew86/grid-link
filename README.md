@@ -22,7 +22,10 @@ The current application is a simulation using entered demand, installed solar ca
 
 On this workspace, dependencies are installed. From the repository root:
 
+The backend requires Supabase credentials. On a fresh checkout, copy `.env.example` to `.env.local` in the repository root and fill in `SUPABASE_URL` and `SUPABASE_SECRET_KEY` (or the legacy `SUPABASE_SERVICE_ROLE_KEY`). Use plain values without quotation marks. The backend loads this file; Git ignores it.
+
 ```powershell
+Copy-Item .env.example .env.local # First setup only; then fill in your credentials.
 .\dev.cmd
 ```
 
@@ -305,9 +308,9 @@ Other possible extensions include measured consumption and production, multiple 
 
 ## Battery simulator
 
-Open `http://127.0.0.1:5173/#battery` after starting the local servers. The new screen compares no storage, night-only scheduling and a day-ahead battery optimiser using the collected Romanian prices and weather. It also compares calendar, local-weather and local-plus-coastal price estimates, with all resulting schedules billed at actual historical prices.
+The battery simulator is retained as research code/API and is no longer rendered on the member-facing site. It compares no storage, night-only scheduling and a day-ahead battery optimiser using the collected Romanian prices and weather. It also compares calendar, local-weather and local-plus-coastal price estimates, with all resulting schedules billed at actual historical prices.
 
-Choose a research date or an example preset, adjust demand/PV/battery settings, then press **Run comparison**. “Surplus for export” demonstrates storing solar for later sales under an illustrative wholesale-linked export contract. Expand the contract settings to adjust import charges, VAT, export remuneration and connection limits. Results use RON and represent one shared billing meter; the existing community trading screen retains its separate EUR demonstration settings.
+Research simulations accept a historical date and explicit demand/PV/battery assumptions through `POST /api/battery/simulate`. “Surplus for export” demonstrates storing solar for later sales under an illustrative wholesale-linked export contract. Expand the contract settings to adjust import charges, VAT, export remuneration and connection limits. Results use RON and represent one shared billing meter; the existing community trading screen retains its separate EUR demonstration settings.
 
 Install the updated backend dependencies if using another environment:
 
@@ -330,7 +333,7 @@ The [measured-consumption backtest](research/romania/CONSUMER_BACKTEST.md) uses 
 
 ## Battery product scope and shared-storage ROI
 
-Signed-in members now have **Account → A battery for your community**, with comparisons for their current community across three battery chemistries and nine default sizes, measured-data coverage, cash ROI/payback/NPV, equal versus consumption-based contributions and a highest-NPV option. If their community opposes buying a battery, invitations to eligible battery-willing communities independently recalculate the options for the destination including the joining member, before an optional switch. Real community measurements are separate from simulated history; an explicit planning preview is available while readings are missing. See [setup, formulas and funding fairness](docs/COMMUNITY_BATTERY.md) and apply the new Supabase migration before using the feature.
+Signed-in members have **Account ? A battery for your community**, with automatic measured-data analysis, battery technology/size comparisons, coverage, cash ROI/payback/NPV, both contribution rules and the highest-NPV option. Members do not enter tariffs, demand, solar output, quotes or technical constraints. The system reads measured intervals and the selected community's sourced battery catalogue and analysis configuration. Invitations independently recalculate for the destination including the joining member. Missing data/configuration is reported, with no simulation fallback. Forecast-based ROI remains unconnected. See [setup, formulas and funding fairness](docs/COMMUNITY_BATTERY.md); apply both battery migrations and populate sourced configuration before using the analysis.
 
 Decision, 5 October 2026: GridLink will offer shared community storage only. Buying a personal battery is excluded from the prosumer product and roadmap. Prosumers can join with their PV; membership does not require buying a battery. The simulator already represents shared storage behind one billing meter and has no personal-battery enrolment option.
 

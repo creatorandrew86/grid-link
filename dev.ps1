@@ -20,7 +20,11 @@ foreach ($port in @(8000, 5173)) {
     } else {
         $process = Start-Process -FilePath $node -ArgumentList @('node_modules\vite\bin\vite.js', '--host', '127.0.0.1', '--port', '5173', '--strictPort') -WorkingDirectory $root -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $root '.tools\frontend.log') -RedirectStandardError (Join-Path $root '.tools\frontend-error.log')
     }
-    if ($process.WaitForExit(1500)) { throw "Server on port $port exited. See the error log in .tools." }
+    if ($process.WaitForExit(1500)) {
+        $errorLog = Join-Path $root $(if ($port -eq 8000) { '.tools\backend-error.log' } else { '.tools\frontend-error.log' })
+        $failure = Get-Content -LiteralPath $errorLog -Tail 1 -ErrorAction SilentlyContinue
+        throw "Server on port $port exited. $failure Full log: $errorLog"
+    }
     Write-Output "Started port $port (PID $($process.Id))."
 }
 Write-Output 'GridLink: http://127.0.0.1:5173'

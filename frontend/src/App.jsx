@@ -21,7 +21,6 @@ export default function App() {
   const [summary, setSummary] = useState(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const [notice, setNotice] = useState('');
   const [sessionToken, setSessionToken] = useState(() => {
     try {
       return localStorage.getItem('gridlink-token') || '';
@@ -52,7 +51,7 @@ export default function App() {
     setBusy(true);
     setError('');
     try {
-      const result = await api('clearing-summary');
+      const result = await api('community');
       setSummary(result);
     } catch (err) {
       if (err.status === 401) {
@@ -93,11 +92,7 @@ export default function App() {
     return () => { cancelled = true; };
   }, [sessionToken]);
 
-  const activeMember = summary?.participants?.find(
-    (m) => m.id === profile?.id
-  );
-
-  const currentMember = activeMember ? { ...activeMember, ...profile } : profile;
+  const currentMember = profile;
 
   const handleJoined = (newMember) => {
     setProfile(newMember);
@@ -139,9 +134,6 @@ export default function App() {
           refresh={refresh}
           busy={busy}
           error={error}
-          setError={setError}
-          notice={notice}
-          setNotice={setNotice}
           member={currentMember}
           onNavigate={navigate}
         />
@@ -157,10 +149,7 @@ export default function App() {
       {page === 'account' && (
         <Account
           member={currentMember}
-          summary={summary}
           loading={busy || !summary}
-          refresh={refresh}
-          busy={busy}
           onNavigate={navigate}
           onLogout={handleLogout}
           onCommunitySwitched={handleJoined}

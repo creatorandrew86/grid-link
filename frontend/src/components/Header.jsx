@@ -44,15 +44,13 @@ export default function Header({ page, onNavigate, activeMember, busy }) {
             if (page !== 'home') onNavigate('home');
           }}
         >
-          Market settings
+          Data sources
         </a>
         <a
-          href="#battery"
-          onClick={() => {
-            if (page !== 'home') onNavigate('home');
-          }}
+          href="#account"
+          onClick={(e) => { e.preventDefault(); onNavigate(activeMember ? 'account' : 'signup'); }}
         >
-          Battery simulator
+          Battery analysis
         </a>
       </nav>
 

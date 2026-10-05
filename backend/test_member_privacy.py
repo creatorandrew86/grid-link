@@ -48,7 +48,7 @@ class MemberPrivacyChecks(unittest.TestCase):
         self.assertEqual(result["participant_count"], 2)
         self.assertGreater(result["totals"]["load_kwh"], 0)
         self.assertNotIn("PRIVATE", response.text)
-        self.assertEqual(self.client.get("/api/community").json(), {"participant_count": 2})
+        self.assertEqual(self.client.get("/api/community").json(), {"participant_count": 2, "storage": "test"})
         self.assertEqual(self.client.post("/api/clearing-preview", json={}).json()["participants"], [])
         self.assertEqual(self.client.get("/api/me").status_code, 401)
 
